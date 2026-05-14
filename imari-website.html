@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imari · Private Estate Hospitality by LXIV Group</title>
+  <link rel="icon" type="image/svg+xml" href="./logos/imari-gingko.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #000000;
+      --ember:    #1C1A15;
+      --tobacco:  #6B5E4E;
+      --lichen:   #8A9A7A;
+      --ochre:    #B8922E;
+      --stone:    #C8BFB0;
+      --parchment:#F0EBE3;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--ember);
+      color: var(--parchment);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 28px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, padding 0.3s ease;
+    }
+    nav.scrolled {
+      background: rgba(28,26,21,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 18px 64px;
+    }
+    .nav-logo img { height: 24px; width: auto; display: block; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-phone {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: rgba(240,235,227,0.75);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-phone:hover { color: var(--parchment); }
+    .btn-nav {
+      padding: 11px 26px;
+      border: 1px solid var(--ochre);
+      color: var(--ochre);
+      text-decoration: none;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+    }
+    .btn-nav:hover { background: var(--ochre); color: var(--ember); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: -12% 0;
+      background: url('./photos/Dining_Room_170.jpeg') center 65%/cover no-repeat;
+      will-change: transform;
+    }
+    /* Gradient at top for nav legibility */
+    .hero-top-fade {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, rgba(28,26,21,0.72) 0%, transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(28,26,21,0.1) 0%,
+        rgba(28,26,21,0.55) 45%,
+        rgba(28,26,21,0.65) 65%,
+        rgba(28,26,21,0.88) 100%
+      );
+    }
+    .hero-content {
+      position: relative;
+      text-align: center;
+      max-width: 860px;
+      padding: 0 40px;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--ochre);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(56px, 8vw, 108px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.05;
+      color: var(--parchment);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.65s forwards;
+    }
+    .hero-sub {
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      color: var(--stone);
+      line-height: 1.85;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+    .hero-ctas {
+      opacity: 0;
+      animation: fadeUp 1s ease 1.1s forwards;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 16px 44px;
+      background: var(--ochre);
+      color: var(--ember);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .btn-primary:hover { background: var(--parchment); transform: translateY(-2px); }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.8s forwards;
+      z-index: 2;
+    }
+    .scroll-indicator span { font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(200,191,176,0.55); }
+    .scroll-line {
+      width: 1px; height: 44px;
+      background: linear-gradient(to bottom, var(--ochre), transparent);
+      animation: scrollPulse 2.2s ease infinite;
+      transform-origin: top center;
+    }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s ease, transform 0.75s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.42s; }
+
+    /* ── POSITIONING ── */
+    .position-wrap { background: var(--ember); padding: 120px 64px; }
+    .position-inner { max-width: 1360px; margin: 0 auto; }
+    .position-statement {
+      max-width: 760px;
+      margin: 0 auto 80px;
+      text-align: center;
+    }
+    .position-statement p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 2.8vw, 38px);
+      font-weight: 300;
+      line-height: 1.45;
+      color: var(--parchment);
+    }
+    .position-statement p em { color: var(--ochre); font-style: italic; }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(200,191,176,0.1);
+      border: 1px solid rgba(200,191,176,0.1);
+    }
+    .value-cell {
+      background: var(--ember);
+      padding: 44px 36px;
+    }
+    .value-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--parchment);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .value-desc { font-size: 12px; color: var(--stone); line-height: 1.7; }
+
+    /* ── CAROUSEL ── */
+    .carousel-wrap { position: relative; background: var(--ink); overflow: hidden; }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+    .carousel-slide {
+      flex: 0 0 100%;
+      height: 80vh;
+      min-height: 660px;
+      position: relative;
+      overflow: hidden;
+    }
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-slide.exterior img { object-position: center bottom; }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(28,26,21,0.5);
+      border: 1px solid rgba(200,191,176,0.2);
+      color: var(--parchment);
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s, border-color 0.3s;
+      backdrop-filter: blur(8px);
+    }
+    .carousel-btn:hover { background: rgba(28,26,21,0.85); border-color: var(--ochre); color: var(--ochre); }
+    .carousel-btn.prev { left: 28px; }
+    .carousel-btn.next { right: 28px; }
+    .carousel-dots {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+    .carousel-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(200,191,176,0.3);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .carousel-dot.active { background: var(--ochre); transform: scale(1.3); }
+
+    /* ── ESTATE ── */
+    .estate-wrap { background: rgba(0,0,0,0.25); padding: 120px 64px; }
+    .estate-inner { max-width: 1360px; margin: 0 auto; }
+    .section-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--ochre);
+      display: block;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(34px, 4vw, 58px);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--parchment);
+    }
+    .estate-feature {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 0;
+      margin-top: 52px;
+    }
+    .estate-img { position: relative; overflow: hidden; min-height: 580px; }
+    .estate-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s ease; }
+    .estate-img:hover img { transform: scale(1.04); }
+    .estate-body {
+      background: rgba(0,0,0,0.3);
+      padding: 56px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .estate-loc { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 18px; }
+    .estate-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 3vw, 44px);
+      font-weight: 300;
+      color: var(--parchment);
+      margin-bottom: 6px;
+    }
+    .estate-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ochre);
+      margin-bottom: 28px;
+    }
+    .ochre-line { width: 32px; height: 1px; background: var(--ochre); margin-bottom: 28px; }
+    .estate-desc { font-size: 13px; color: var(--stone); line-height: 1.85; margin-bottom: 28px; }
+    .estate-features {
+      list-style: none;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .estate-features li {
+      font-size: 12px;
+      color: var(--stone);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .estate-features li::before { content: ''; display: block; width: 16px; height: 1px; background: var(--ochre); flex-shrink: 0; }
+    .btn-inquire {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 36px;
+      border: 1px solid var(--ochre);
+      color: var(--ochre);
+      text-decoration: none;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      align-self: flex-start;
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+    }
+    .btn-inquire:hover { background: var(--ochre); color: var(--ember); transform: translateY(-2px); }
+    .btn-inquire .arrow { transition: transform 0.3s; }
+    .btn-inquire:hover .arrow { transform: translateX(5px); }
+
+    .coming-soon { margin-top: 52px; padding-top: 48px; border-top: 1px solid rgba(200,191,176,0.1); }
+    .cs-label { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--tobacco); margin-bottom: 20px; display: block; }
+    .cs-cities { display: flex; flex-wrap: wrap; gap: 0; }
+    .cs-city {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(20px, 2.2vw, 30px);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(200,191,176,0.32);
+      padding-right: 32px;
+      margin-right: 32px;
+      border-right: 1px solid rgba(200,191,176,0.1);
+      line-height: 1.3;
+    }
+    .cs-city:last-child { border-right: none; }
+
+    /* ── HOW IT WORKS ── */
+    .how-wrap {
+      background: var(--ink);
+      padding: 120px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .gingko-bg {
+      position: absolute;
+      right: -50px; top: 50%;
+      transform: translateY(-50%);
+      width: 360px; height: auto;
+      opacity: 0.035;
+      pointer-events: none;
+      filter: saturate(0) brightness(8);
+    }
+    .how-inner { max-width: 1360px; margin: 0 auto; position: relative; z-index: 1; }
+    .how-header { margin-bottom: 24px; }
+    .how-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(20px, 2vw, 28px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--stone);
+      margin-bottom: 72px;
+    }
+    .how-steps { display: flex; align-items: flex-start; }
+    .how-step { flex: 1; }
+    .how-arrow {
+      width: 52px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 54px;
+      color: rgba(200,191,176,0.14);
+      font-size: 18px;
+    }
+    .ghost-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 100px;
+      font-weight: 300;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(200,191,176,0.09);
+      display: block;
+      margin-bottom: 16px;
+    }
+    .how-title { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--parchment); margin-bottom: 12px; }
+    .how-desc { font-size: 13px; color: var(--tobacco); line-height: 1.75; }
+
+    /* ── AMENITIES ── */
+    .amenities-wrap { background: var(--ember); padding: 120px 64px; }
+    .amenities-inner { max-width: 1360px; margin: 0 auto; }
+    .amenities-header { margin-bottom: 60px; }
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(200,191,176,0.1);
+      border: 1px solid rgba(200,191,176,0.1);
+    }
+    .amenity-card {
+      background: var(--ember);
+      padding: 44px 40px;
+      transition: background 0.3s;
+    }
+    .amenity-card:hover { background: rgba(0,0,0,0.2); }
+    .amenity-icon {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--ochre);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .amenity-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--parchment);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .amenity-desc { font-size: 12px; color: var(--stone); line-height: 1.75; }
+
+    /* ── SECURITY ── */
+    .security-wrap { background: var(--ink); padding: 120px 64px; }
+    .security-inner { max-width: 1360px; margin: 0 auto; }
+    .security-header { margin-bottom: 60px; }
+    .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 56px; }
+    .security-block {}
+    .security-block-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--parchment);
+      margin-bottom: 20px;
+    }
+    .security-block-text { font-size: 13px; color: var(--stone); line-height: 1.85; }
+    .security-divider { width: 32px; height: 1px; background: var(--ochre); margin-bottom: 20px; }
+
+    /* ── PULL QUOTE ── */
+    .pullquote-wrap {
+      padding: 140px 64px;
+      text-align: center;
+      background: var(--ember);
+      border-top: 1px solid rgba(200,191,176,0.07);
+      border-bottom: 1px solid rgba(200,191,176,0.07);
+    }
+    .pq-gingko { display: block; width: 48px; height: auto; margin: 0 auto 40px; opacity: 0.55; }
+    .pq-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 4vw, 52px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--parchment);
+      max-width: 880px;
+      margin: 0 auto 28px;
+      line-height: 1.28;
+    }
+    .pq-attr { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--tobacco); }
+
+    /* ── INQUIRY ── */
+    .inquiry-wrap { padding: 120px 64px; }
+    .inquiry-inner { max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+    .inq-intro { font-size: 14px; color: var(--stone); line-height: 1.85; margin: 28px 0 44px; }
+    .contact-block { margin-bottom: 22px; }
+    .contact-lbl { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--tobacco); display: block; margin-bottom: 5px; }
+    .contact-val { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--parchment); text-decoration: none; transition: color 0.2s; }
+    .contact-val:hover { color: var(--ochre); }
+
+    /* Form */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
+    .form-field {
+      border-bottom: 1px solid rgba(200,191,176,0.18);
+      padding: 18px 0;
+      transition: border-color 0.3s;
+    }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field:focus-within { border-color: var(--ochre); }
+    .form-field label { display: block; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--tobacco); margin-bottom: 8px; transition: color 0.3s; }
+    .form-field:focus-within label { color: var(--ochre); }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%; background: transparent; border: none; outline: none;
+      font-family: 'Cormorant Garamond', serif; font-size: 18px;
+      color: var(--parchment); -webkit-appearance: none; appearance: none;
+    }
+    .form-field input::placeholder, .form-field textarea::placeholder { color: rgba(200,191,176,0.3); }
+    .form-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
+    .form-field select option { background: var(--ember); color: var(--parchment); }
+    .form-field textarea { resize: none; min-height: 64px; line-height: 1.6; }
+    .form-submit { padding-top: 40px; }
+    .btn-submit {
+      padding: 17px 52px; background: transparent; border: 1px solid var(--ochre);
+      color: var(--ochre); font-family: 'Montserrat', sans-serif; font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer;
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+    }
+    .btn-submit:hover { background: var(--ochre); color: var(--ember); transform: translateY(-2px); }
+    .form-confirm { display: none; padding: 52px 0; }
+    .confirm-line { width: 1px; height: 52px; background: var(--ochre); margin-bottom: 32px; }
+    .confirm-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-style: italic; font-weight: 300; color: var(--parchment); margin-bottom: 14px; }
+    .confirm-text { font-size: 13px; color: var(--stone); line-height: 1.85; }
+
+    /* ── FOOTER ── */
+    footer { padding: 48px 64px; border-top: 1px solid rgba(200,191,176,0.09); display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo img { height: 20px; opacity: 0.6; display: block; }
+    .footer-right { display: flex; align-items: center; gap: 40px; }
+    .footer-links { display: flex; gap: 28px; list-style: none; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tobacco); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--parchment); }
+    .footer-copy { font-size: 10px; color: rgba(107,94,78,0.6); letter-spacing: 0.04em; }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scrollPulse { 0%, 100% { transform: scaleY(1); opacity: 0.9; } 50% { transform: scaleY(0.45); opacity: 0.35; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .value-grid { grid-template-columns: repeat(2, 1fr); }
+      .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+      .how-steps { flex-direction: column; gap: 36px; }
+      .how-arrow { display: none; }
+      .security-grid { grid-template-columns: 1fr; gap: 44px; }
+      .estate-feature { grid-template-columns: 1fr; }
+      .estate-img { min-height: 420px; }
+      .estate-body { padding: 44px 36px; }
+    }
+    @media (max-width: 768px) {
+      nav, nav.scrolled { padding: 18px 24px; }
+      .nav-phone { display: none; }
+      .position-wrap, .estate-wrap, .how-wrap, .amenities-wrap, .security-wrap, .pullquote-wrap, .inquiry-wrap { padding: 80px 24px; }
+      .carousel-slide { height: 60vh; }
+      .carousel-btn { width: 40px; height: 40px; font-size: 14px; }
+      .value-grid, .amenities-grid { grid-template-columns: 1fr; }
+      .inquiry-inner { grid-template-columns: 1fr; gap: 52px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { padding: 36px 24px; flex-direction: column; gap: 24px; align-items: flex-start; }
+      .cs-cities { flex-direction: column; }
+      .cs-city { border-right: none; padding-right: 0; margin-right: 0; margin-bottom: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#top" class="nav-logo"><img src="./logos/imari-parchment.svg" alt="Imari"></a>
+    <div class="nav-right">
+      <a href="tel:+12028686945" class="nav-phone">+1 (202) 868-6945</a>
+      <a href="#inquiry" class="btn-nav">Inquire</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-top-fade"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">LXIV Group &nbsp;·&nbsp; Private Estate Hospitality</p>
+      <h1 class="hero-headline">The Art of Arrival</h1>
+      <p class="hero-sub">
+        Seven-star service behind the gates of a meticulously designed and appointed private estate.
+      </p>
+      <div class="hero-ctas">
+        <a href="#inquiry" class="btn-primary">Inquire</a>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- POSITIONING -->
+  <section class="position-wrap">
+    <div class="position-inner">
+      <div class="position-statement reveal">
+        <p>Imari is a private estate available for the <em>exclusive occupancy of a single party.</em> Full staff. Complete security. Seven-star service from arrival to departure.</p>
+      </div>
+      <div class="value-grid">
+        <div class="value-cell reveal">
+          <p class="value-title">Entirely Yours</p>
+          <p class="value-desc">The estate is yours for the duration. No shared spaces, no other guests. Every room, the garden, the spa, the pool, the guest house: yours to use however you like, whenever you like.</p>
+        </div>
+        <div class="value-cell reveal d1">
+          <p class="value-title">Expansive</p>
+          <p class="value-desc">Six bedrooms across three floors. A private acre of manicured grounds. A separate three-bedroom guest house for staff or additional guests. Space that performs at every scale.</p>
+        </div>
+        <div class="value-cell reveal d2">
+          <p class="value-title">The Seat of Operations</p>
+          <p class="value-desc">Private meeting spaces, secure communications, in-house event production, and a concierge who makes things happen before you ask.</p>
+        </div>
+        <div class="value-cell reveal d3">
+          <p class="value-title">Completely Secure</p>
+          <p class="value-desc">Designed with heads of state and CEOs in mind. Guests arrive and depart within the grounds, out of view. Every staff member signs a confidentiality agreement before entering the property.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY (carousel, no labels) -->
+  <div class="carousel-wrap" id="gallery">
+    <div class="carousel-track" id="carousel-track">
+      <div class="carousel-slide exterior"><img src="./photos/LXIVDC_GARDENS184.jpg" alt="" loading="lazy"></div>
+      <div class="carousel-slide exterior"><img src="./photos/LXIVDC_GARDENS046.jpg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Parlor_390.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Yard_045.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Living_Room_344.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Spahouse_1058.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide exterior"><img src="./photos/LXIVDC_GARDENS125.jpg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Dining_Room_451.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Foyer_479.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Georgetown_Suite_245.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide exterior"><img src="./photos/LXIVDC_GARDENS169.jpg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Living_Room_306.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Sunroom_179.jpeg" alt="" loading="lazy"></div>
+      <div class="carousel-slide"><img src="./photos/Georgetown_Bath_505.jpeg" alt="" loading="lazy"></div>
+    </div>
+    <button class="carousel-btn prev" id="carousel-prev" aria-label="Previous">&#8592;</button>
+    <button class="carousel-btn next" id="carousel-next" aria-label="Next">&#8594;</button>
+    <div class="carousel-dots" id="carousel-dots"></div>
+  </div>
+
+  <!-- IMARI GEORGETOWN -->
+  <section class="estate-wrap" id="imari-georgetown">
+    <div class="estate-inner">
+      <div class="reveal">
+        <span class="section-eyebrow">The Estate</span>
+        <h2 class="section-title">Imari Georgetown</h2>
+      </div>
+      <div class="estate-feature">
+        <div class="estate-img reveal">
+          <img src="./photos/Georgetown_Suite_263.jpeg" alt="Imari Georgetown" loading="lazy">
+        </div>
+        <div class="estate-body reveal d2">
+          <p class="estate-loc">Georgetown &nbsp;·&nbsp; Washington, D.C.</p>
+          <h3 class="estate-name">Entirely Yours</h3>
+          <p class="estate-tagline">For the duration of your stay</p>
+          <div class="ochre-line"></div>
+          <p class="estate-desc">
+            A beautifully restored villa in the heart of Georgetown. Federal-period architecture, original details, and every room considered with care.
+          </p>
+          <p class="estate-desc">
+            A personal concierge is on-site throughout the stay. Share your preferences in advance and the house is ready for them. Anything else that comes up is handled the moment you ask.
+          </p>
+          <ul class="estate-features">
+            <li>Six bedrooms across three floors</li>
+            <li>Separate three-bedroom guest house for staff or additional guests</li>
+            <li>Private acre of manicured gardens with pool</li>
+            <li>Full chef's kitchen and formal dining room</li>
+            <li>Gym on property</li>
+            <li>Spa with hot tub, cold plunge, steam shower, and sauna</li>
+            <li>On-site concierge and butler service</li>
+            <li>Complete privacy, vehicles welcomed on-site</li>
+            <li>All staff bound by confidentiality agreement</li>
+          </ul>
+          <a href="#inquiry" class="btn-inquire">Request Access <span class="arrow">&#8594;</span></a>
+        </div>
+      </div>
+
+      <div class="coming-soon reveal">
+        <span class="cs-label">Coming Soon</span>
+        <div class="cs-cities">
+          <span class="cs-city">New York</span>
+          <span class="cs-city">Los Angeles</span>
+          <span class="cs-city">San Francisco</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-wrap">
+    <img src="./logos/imari-gingko.svg" class="gingko-bg" aria-hidden="true" alt="">
+    <div class="how-inner">
+      <div class="how-header reveal">
+        <span class="section-eyebrow">The Process</span>
+        <h2 class="section-title">How Imari works.</h2>
+      </div>
+      <p class="how-lead reveal">Your stay starts before you arrive.</p>
+      <div class="how-steps">
+        <div class="how-step reveal">
+          <span class="ghost-num">01</span>
+          <p class="how-title">Inquire</p>
+          <p class="how-desc">Start the conversation. We work fluidly with you or your travel planner as the details of your stay come into focus.</p>
+        </div>
+        <div class="how-arrow" aria-hidden="true">&#8594;</div>
+        <div class="how-step reveal d1">
+          <span class="ghost-num">02</span>
+          <p class="how-title">Arrange</p>
+          <p class="how-desc">We customize everything around your preferences: dietary needs, transportation, in-house experiences, event production. You arrive to a house that was prepared for you specifically.</p>
+        </div>
+        <div class="how-arrow" aria-hidden="true">&#8594;</div>
+        <div class="how-step reveal d2">
+          <span class="ghost-num">03</span>
+          <p class="how-title">Arrive</p>
+          <p class="how-desc">A concierge team welcomes you, walks you through the property to the extent that you'd like, and remains available for the duration of your stay.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AMENITIES -->
+  <section class="amenities-wrap">
+    <div class="amenities-inner">
+      <div class="amenities-header reveal">
+        <span class="section-eyebrow">Ask for Anything</span>
+        <h2 class="section-title">What Imari makes possible.</h2>
+      </div>
+      <div class="amenities-grid">
+
+        <div class="amenity-card reveal">
+          <span class="amenity-icon">01</span>
+          <p class="amenity-name">Bespoke Gastronomy</p>
+          <p class="amenity-desc">A Michelin-starred chef for lunch, a dinner party, or a midnight snack. The kitchen is yours. The talent arrives when you want it.</p>
+        </div>
+
+        <div class="amenity-card reveal d1">
+          <span class="amenity-icon">02</span>
+          <p class="amenity-name">Transportation for the Duration</p>
+          <p class="amenity-desc">A private car and driver, ready when you are. For business or for pleasure, we can take you anywhere.</p>
+        </div>
+
+        <div class="amenity-card reveal d2">
+          <span class="amenity-icon">03</span>
+          <p class="amenity-name">Private Aviation</p>
+          <p class="amenity-desc">A spontaneous trip to New York or Paris is not a complicated thing to arrange. Say the word and wheels are up.</p>
+        </div>
+
+        <div class="amenity-card reveal d1">
+          <span class="amenity-icon">04</span>
+          <p class="amenity-name">Event Services</p>
+          <p class="amenity-desc">A C-suite off-site or a birthday dinner. Our event team handles every detail so you do not have to think about a single one.</p>
+        </div>
+
+        <div class="amenity-card reveal d2">
+          <span class="amenity-icon">05</span>
+          <p class="amenity-name">Your Wardrobe, Ready</p>
+          <p class="amenity-desc">A personal stylist assembles a full wardrobe to your specifications before you arrive. No stores, no lines, no waiting.</p>
+        </div>
+
+        <div class="amenity-card reveal d3">
+          <span class="amenity-icon">06</span>
+          <p class="amenity-name">Wellness within Reach</p>
+          <p class="amenity-desc">An IV infusion, acupuncture, massage, contrast therapy, or simply an hour of meditation in the greenhouse. Recovery and care on your schedule, within the estate.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFETY & SECURITY -->
+  <section class="security-wrap">
+    <div class="security-inner">
+      <div class="security-header reveal">
+        <span class="section-eyebrow">Privacy and Security</span>
+        <h2 class="section-title">Built for those who<br>require it most.</h2>
+      </div>
+      <div class="security-grid">
+        <div class="security-block reveal">
+          <div class="security-divider"></div>
+          <p class="security-block-title">Safety and Security</p>
+          <p class="security-block-text">
+            The property is designed and vetted with heads of state and CEOs in mind. Guests arrive and depart within the grounds of the residence, completely out of public view. Perimeter cameras, alarm systems, and tailored access control are standard. The house is safe, private, and secure.
+          </p>
+        </div>
+        <div class="security-block reveal d2">
+          <div class="security-divider"></div>
+          <p class="security-block-title">Confidentiality and Discretion</p>
+          <p class="security-block-text">
+            Every staff member and vendor who enters the property is bound by a confidentiality agreement. No photography, video, or audio recording by our team, ever. We ask guests to exercise similar discretion. Our goal is to protect your privacy and the integrity of the estate for every guest who stays here.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PULL QUOTE -->
+  <section class="pullquote-wrap">
+    <div class="reveal">
+      <img src="./logos/imari-gingko.svg" class="pq-gingko" aria-hidden="true" alt="">
+      <p class="pq-text">The privacy of a grand estate. The service and amenities of a seven-star hotel.</p>
+      <p class="pq-attr">Imari &nbsp;·&nbsp; LXIV Group</p>
+    </div>
+  </section>
+
+  <!-- INQUIRY -->
+  <section class="inquiry-wrap" id="inquiry">
+    <div class="inquiry-inner">
+      <div class="reveal">
+        <span class="section-eyebrow">Get in Touch</span>
+        <h2 class="section-title">Begin a<br>conversation.</h2>
+        <div class="ochre-line" style="margin-top:22px;"></div>
+        <p class="inq-intro">
+          Our reservations team is here to handle every detail from the first conversation. We work directly with travel advisors, executive assistants, and guests planning on their own behalf.
+        </p>
+        <div class="contact-block">
+          <span class="contact-lbl">Call Us</span>
+          <a href="tel:+12028686945" class="contact-val">+1 (202) 868-6945</a>
+        </div>
+        <div class="contact-block">
+          <span class="contact-lbl">Email</span>
+          <a href="mailto:info@lxivgroup.com" class="contact-val">info@lxivgroup.com</a>
+        </div>
+      </div>
+
+      <div class="reveal d2">
+        <form id="inquiry-form" novalidate>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="f-fname">First Name</label>
+              <input type="text" id="f-fname" name="fname" autocomplete="given-name">
+            </div>
+            <div class="form-field">
+              <label for="f-lname">Last Name</label>
+              <input type="text" id="f-lname" name="lname" autocomplete="family-name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="f-email">Email</label>
+              <input type="email" id="f-email" name="email" autocomplete="email">
+            </div>
+            <div class="form-field">
+              <label for="f-phone">Phone</label>
+              <input type="tel" id="f-phone" name="phone" autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-field full">
+            <label for="f-purpose">Tell us about your visit</label>
+            <textarea id="f-purpose" name="purpose" rows="3" placeholder="Approximate dates, party size, what you have in mind."></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn-submit">Send Inquiry</button>
+          </div>
+        </form>
+        <div class="form-confirm" id="form-confirm" aria-live="polite">
+          <div class="confirm-line"></div>
+          <p class="confirm-title">We have your inquiry.</p>
+          <p class="confirm-text">Someone from the Imari team will be in touch within 24 hours.<br>We look forward to the conversation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#top" class="footer-logo"><img src="./logos/imari-parchment.svg" alt="Imari"></a>
+    <div class="footer-right">
+      <ul class="footer-links">
+        <li><a href="#inquiry">Inquire</a></li>
+        <li><a href="mailto:info@lxivgroup.com">Contact</a></li>
+      </ul>
+      <span class="footer-copy">&copy; 2025 LXIV Group. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── Nav scroll ──
+    const nav = document.getElementById('main-nav');
+    const heroBg = document.getElementById('hero-bg');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('scrolled', y > 60);
+      if (heroBg) heroBg.style.transform = `translateY(${y * 0.25}px)`;
+    }, { passive: true });
+
+    // ── Carousel ──
+    const track = document.getElementById('carousel-track');
+    const slides = track.querySelectorAll('.carousel-slide');
+    const dotsContainer = document.getElementById('carousel-dots');
+    let current = 0;
+    const total = slides.length;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
+    });
+
+    function goTo(n) {
+      current = (n + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    document.getElementById('carousel-prev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('carousel-next').addEventListener('click', () => goTo(current + 1));
+
+    // Auto-advance
+    let autoTimer = setInterval(() => goTo(current + 1), 5500);
+    track.parentElement.addEventListener('mouseenter', () => clearInterval(autoTimer));
+    track.parentElement.addEventListener('mouseleave', () => {
+      autoTimer = setInterval(() => goTo(current + 1), 5500);
+    });
+
+    // Touch swipe
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    });
+
+    // ── Scroll reveal ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+    revealEls.forEach(el => obs.observe(el));
+
+    // ── Form ──
+    const form = document.getElementById('inquiry-form');
+    const confirm = document.getElementById('form-confirm');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      form.style.transition = 'opacity 0.45s ease';
+      form.style.opacity = '0';
+      setTimeout(() => {
+        form.style.display = 'none';
+        confirm.style.display = 'block';
+        confirm.style.opacity = '0';
+        confirm.style.transition = 'opacity 0.55s ease';
+        requestAnimationFrame(() => requestAnimationFrame(() => { confirm.style.opacity = '1'; }));
+      }, 460);
+    });
+  </script>
+
+</body>
+</html>
