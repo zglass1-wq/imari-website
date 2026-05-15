@@ -570,6 +570,36 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scrollPulse { 0%, 100% { transform: scaleY(1); opacity: 0.9; } 50% { transform: scaleY(0.45); opacity: 0.35; } }
 
+    /* ── LOCATION PILLS ── */
+    .location-pills { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 52px; }
+    .pill {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      padding: 10px 26px;
+      border: 1px solid rgba(184,146,46,0.45);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      line-height: 1;
+    }
+    .pill-active { color: var(--parchment); border-color: var(--ochre); text-decoration: none; transition: background 0.3s, color 0.3s; }
+    .pill-active:hover { background: var(--ochre); color: var(--ember); }
+    .pill-soon { color: rgba(240,235,227,0.28); border-color: rgba(184,146,46,0.15); }
+    .cs-tag { font-family: 'Montserrat', sans-serif; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(107,94,78,0.45); }
+
+    /* ── PRIVATE ACCESS ── */
+    .private-access-wrap { background: var(--ink); padding: 80px 64px; border-top: 1px solid rgba(200,191,176,0.07); }
+    .private-access-inner { max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .pa-eyebrow { font-size: 9px; letter-spacing: 0.38em; text-transform: uppercase; color: var(--ochre); display: block; margin-bottom: 16px; }
+    .pa-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 3vw, 42px); font-weight: 300; color: var(--parchment); line-height: 1.2; margin-bottom: 20px; }
+    .pa-desc { font-size: 13px; color: var(--stone); line-height: 1.85; margin-bottom: 36px; }
+    .pa-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .pa-link { padding: 13px 32px; border: 1px solid rgba(184,146,46,0.5); color: var(--ochre); text-decoration: none; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+    .pa-link:hover { background: var(--ochre); color: var(--ember); border-color: var(--ochre); }
+    .pa-right { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2vw, 26px); font-style: italic; font-weight: 300; color: rgba(200,191,176,0.3); line-height: 1.5; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .value-grid { grid-template-columns: repeat(2, 1fr); }
@@ -589,6 +619,9 @@
       .carousel-btn { width: 40px; height: 40px; font-size: 14px; }
       .value-grid, .amenities-grid { grid-template-columns: 1fr; }
       .inquiry-inner { grid-template-columns: 1fr; gap: 52px; }
+      .private-access-inner { grid-template-columns: 1fr; gap: 36px; }
+      .pa-links { flex-direction: column; }
+      .private-access-wrap { padding: 60px 24px; }
       .form-row { grid-template-columns: 1fr; }
       footer { padding: 36px 24px; flex-direction: column; gap: 24px; align-items: flex-start; }
       .cs-cities { flex-direction: column; }
@@ -614,9 +647,9 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">LXIV Group &nbsp;·&nbsp; Private Estate Hospitality</p>
-      <h1 class="hero-headline">The Art of Arrival</h1>
+      <h1 class="hero-headline">Your seat of power.</h1>
       <p class="hero-sub">
-        Seven-star service behind the gates of a meticulously designed and appointed private estate.
+        A private estate in Georgetown, D.C. Entirely yours. Full staff, complete privacy, and a city that moves at your pace.
       </p>
       <div class="hero-ctas">
         <a href="#inquiry" class="btn-primary">Inquire</a>
@@ -641,7 +674,7 @@
         </div>
         <div class="value-cell reveal d1">
           <p class="value-title">Expansive</p>
-          <p class="value-desc">Six bedrooms across three floors. A private acre of manicured grounds. A separate three-bedroom guest house for staff or additional guests. Space that performs at every scale.</p>
+          <p class="value-desc">A main residence and a separate guest house on a private acre in the heart of Georgetown. Space that expands to meet the scale of your stay.</p>
         </div>
         <div class="value-cell reveal d2">
           <p class="value-title">The Seat of Operations</p>
@@ -649,7 +682,7 @@
         </div>
         <div class="value-cell reveal d3">
           <p class="value-title">Completely Secure</p>
-          <p class="value-desc">Designed with heads of state and CEOs in mind. Guests arrive and depart within the grounds, out of view. Every staff member signs a confidentiality agreement before entering the property.</p>
+          <p class="value-desc">Guests arrive and depart within the grounds, out of view. Every staff member signs a confidentiality agreement before entering the property. Designed from the ground up for privacy.</p>
         </div>
       </div>
     </div>
@@ -681,6 +714,12 @@
   <!-- IMARI GEORGETOWN -->
   <section class="estate-wrap" id="imari-georgetown">
     <div class="estate-inner">
+      <div class="location-pills reveal">
+        <a href="#imari-georgetown" class="pill pill-active">Georgetown, D.C.</a>
+        <span class="pill pill-soon">New York <span class="cs-tag">Coming Soon</span></span>
+        <span class="pill pill-soon">Los Angeles <span class="cs-tag">Coming Soon</span></span>
+        <span class="pill pill-soon">San Francisco <span class="cs-tag">Coming Soon</span></span>
+      </div>
       <div class="reveal">
         <span class="section-eyebrow">The Estate</span>
         <h2 class="section-title">Imari Georgetown</h2>
@@ -715,14 +754,6 @@
         </div>
       </div>
 
-      <div class="coming-soon reveal">
-        <span class="cs-label">Coming Soon</span>
-        <div class="cs-cities">
-          <span class="cs-city">New York</span>
-          <span class="cs-city">Los Angeles</span>
-          <span class="cs-city">San Francisco</span>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -811,7 +842,7 @@
     <div class="security-inner">
       <div class="security-header reveal">
         <span class="section-eyebrow">Privacy and Security</span>
-        <h2 class="section-title">Built for those who<br>require it most.</h2>
+        <h2 class="section-title">Privacy and discretion,<br>by design.</h2>
       </div>
       <div class="security-grid">
         <div class="security-block reveal">
@@ -900,12 +931,29 @@
     </div>
   </section>
 
+  <!-- PRIVATE ACCESS -->
+  <section class="private-access-wrap">
+    <div class="private-access-inner reveal">
+      <div>
+        <span class="pa-eyebrow">Private Access</span>
+        <h2 class="pa-title">For partners and<br>institutional guests.</h2>
+        <p class="pa-desc">Detailed property information, pricing, and availability are shared privately. Travel professionals, family offices, event planners, and corporate partners can request access or explore our partner materials directly.</p>
+        <div class="pa-links">
+          <a href="./corporate.html" class="pa-link">Corporate &amp; Institutional</a>
+          <a href="./agents.html" class="pa-link">Trade &amp; Planning Partners</a>
+        </div>
+      </div>
+      <p class="pa-right">Some things are better discussed in private. Reach out and we'll share what's relevant to your situation.</p>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <a href="#top" class="footer-logo"><img src="./logos/imari-parchment.svg" alt="Imari"></a>
     <div class="footer-right">
       <ul class="footer-links">
         <li><a href="#inquiry">Inquire</a></li>
+        <li><a href="./private-access.html">Private Access</a></li>
         <li><a href="mailto:info@lxivgroup.com">Contact</a></li>
       </ul>
       <span class="footer-copy">&copy; 2025 LXIV Group. All rights reserved.</span>

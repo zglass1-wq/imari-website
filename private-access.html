@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imari · Private Access</title>
+  <link rel="icon" type="image/svg+xml" href="./logos/imari-gingko.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1712;
+      --parchment: #f5f0e8;
+      --parchment-dark: #ede6d6;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --warm-mid: #8c7b60;
+    }
+    body {
+      background: var(--ink);
+      color: var(--parchment);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    nav {
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo { height: 22px; width: auto; display: block; opacity: 0.85; }
+    .nav-back { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm-mid); text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--gold); }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 3rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .eyebrow { font-size: 0.58rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; display: block; }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--parchment);
+      margin-bottom: 2rem;
+    }
+    .page-title em { font-style: italic; color: var(--gold-light); }
+    .rule { width: 40px; height: 1px; background: var(--gold); margin-bottom: 2rem; opacity: 0.6; }
+    .page-desc {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: rgba(245,240,232,0.55);
+      max-width: 540px;
+      margin-bottom: 4rem;
+    }
+
+    .access-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(184,151,90,0.12); border: 1px solid rgba(184,151,90,0.12); margin-bottom: 5rem; }
+    .access-card {
+      background: rgba(26,23,18,0.6);
+      padding: 3rem;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s;
+      position: relative;
+    }
+    .access-card:hover { background: rgba(184,151,90,0.06); }
+    .card-eyebrow { font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; display: block; }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 300;
+      color: var(--parchment);
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+    .card-desc { font-size: 0.78rem; line-height: 1.85; color: rgba(245,240,232,0.45); margin-bottom: 2rem; }
+    .card-audience { list-style: none; border-top: 1px solid rgba(184,151,90,0.15); padding-top: 1.25rem; }
+    .card-audience li { font-size: 0.72rem; line-height: 1.7; color: var(--warm-mid); padding: 0.25rem 0; display: flex; gap: 0.6rem; }
+    .card-audience li::before { content: '—'; color: var(--gold); flex-shrink: 0; opacity: 0.6; }
+    .card-cta { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 2rem; display: flex; align-items: center; gap: 0.5rem; transition: gap 0.2s; }
+    .access-card:hover .card-cta { gap: 0.85rem; }
+
+    .access-note {
+      font-size: 0.75rem;
+      line-height: 1.85;
+      color: rgba(245,240,232,0.25);
+      max-width: 480px;
+      text-align: center;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+    }
+    .access-note a { color: var(--gold); opacity: 0.7; text-decoration: none; transition: opacity 0.2s; }
+    .access-note a:hover { opacity: 1; }
+
+    footer {
+      padding: 1.5rem 3rem;
+      border-top: 1px solid rgba(184,151,90,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo { height: 16px; opacity: 0.3; }
+    .footer-copy { font-size: 0.55rem; letter-spacing: 0.12em; color: rgba(245,240,232,0.15); text-transform: uppercase; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.5rem; }
+      main { padding: 3rem 1.5rem; }
+      .access-cards { grid-template-columns: 1fr; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <img class="nav-logo" src="./logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <a href="./imari-website.html" class="nav-back">← Back</a>
+  </nav>
+
+  <main>
+    <span class="eyebrow">Private Access</span>
+    <h1 class="page-title">For those who<br>work with <em>Imari.</em></h1>
+    <div class="rule"></div>
+    <p class="page-desc">Detailed property information, pricing, floor plans, and availability are shared privately. Select the section that best matches your role.</p>
+
+    <div class="access-cards">
+      <a href="./corporate.html" class="access-card">
+        <span class="card-eyebrow">Corporate &amp; Institutional</span>
+        <h2 class="card-title">Business &amp;<br>Executive Stays</h2>
+        <p class="card-desc">For organizations, leadership teams, and principals who need a private base of operations in Washington, D.C.</p>
+        <ul class="card-audience">
+          <li>Corporate travel coordinators</li>
+          <li>Executive assistants &amp; chiefs of staff</li>
+          <li>Event planners &amp; producers</li>
+          <li>C-suite principals</li>
+        </ul>
+        <p class="card-cta">View details →</p>
+      </a>
+      <a href="./agents.html" class="access-card">
+        <span class="card-eyebrow">Trade &amp; Planning Partners</span>
+        <h2 class="card-title">Partner &amp;<br>Agent Materials</h2>
+        <p class="card-desc">For advisors placing high-net-worth clients, managing family travel, or sourcing exceptional private properties.</p>
+        <ul class="card-audience">
+          <li>Luxury travel agents</li>
+          <li>Family office managers</li>
+          <li>Wealth managers &amp; private bankers</li>
+          <li>Concierge &amp; lifestyle services</li>
+        </ul>
+        <p class="card-cta">View details →</p>
+      </a>
+    </div>
+
+    <p class="access-note">Each section is password protected. If you don't have an access code, <a href="mailto:info@lxivgroup.com">contact us</a> and we'll be in touch promptly.</p>
+  </main>
+
+  <footer>
+    <img class="footer-logo" src="./logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <span class="footer-copy">© 2025 LXIV Group · Confidential</span>
+  </footer>
+
+</body>
+</html>
