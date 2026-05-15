@@ -105,7 +105,7 @@
 
     /* PHOTO BAND */
     .photo-band { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 0.9fr; height: 340px; overflow: hidden; }
-    .photo-band img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.9); transition: filter 0.5s; }
+    .photo-band img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.9); transition: filter 0.5s; }
     .photo-band img:hover { filter: brightness(1.02); }
 
     /* PROPERTY */
@@ -119,7 +119,7 @@
     .prop-list li { font-size: 0.8rem; line-height: 1.7; color: rgba(245,240,232,0.65); padding: 0.55rem 0; border-bottom: 1px solid rgba(184,151,90,0.08); display: flex; gap: 0.75rem; }
     .prop-list li::before { content: '·'; color: var(--gold); font-size: 1.2rem; line-height: 1.3; flex-shrink: 0; }
     .prop-photos { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 300px; gap: 4px; margin-top: 4px; }
-    .prop-photos img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.82) saturate(0.85); transition: filter 0.4s; }
+    .prop-photos img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.82) saturate(0.85); transition: filter 0.4s; }
     .prop-photos img:hover { filter: brightness(0.95) saturate(1); }
 
     /* AGENDA */
@@ -410,7 +410,7 @@
     <img class="inquiry-bg" src="https://imari-website-beta.vercel.app/photos/Yard_045.jpeg" alt="Estate grounds" />
     <div class="inquiry-content">
       <p class="section-eyebrow">Begin a conversation</p>
-      <h2 class="section-title" style="color:var(--parchment)">Reserved for Spring<br>and Fall 2026.</h2>
+      <h2 class="section-title" style="color:var(--parchment)">Reserve for Summer<br>and Fall 2026.</h2>
       <p class="inquiry-body">Our team works directly with corporate travel coordinators, event planners, executive assistants, and C-suite principals. Availability is limited and held for confirmed parties only.</p>
       <div class="inquiry-contacts">
         <div><p class="contact-label">Call</p><a class="contact-val" href="tel:+12028686945">+1 (202) 868-6945</a></div>
