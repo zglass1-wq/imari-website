@@ -56,8 +56,8 @@
     main.visible { opacity: 1; }
 
     /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; transition: background 0.3s; }
-    .nav-logo { width: 88px; transition: opacity 0.3s; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; transition: background 0.3s, padding 0.3s; }
+    .nav-logo { width: 88px; transition: opacity 0.3s, width 0.3s; }
     .nav-right { display: flex; align-items: center; gap: 2rem; }
     .nav-link { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment); text-decoration: none; transition: color 0.2s, opacity 0.2s; }
     .nav-link:hover { opacity: 0.6; }
@@ -208,7 +208,7 @@
 
   <!-- HERO -->
   <div class="hero">
-    <img class="hero-img" src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS035.jpg" alt="Imari Georgetown" />
+    <img class="hero-img" src="https://imari-website-beta.vercel.app/photos/Parlor_373.jpeg" alt="Imari Georgetown" />
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">Imari Georgetown · Corporate &amp; Institutional</p>
@@ -286,7 +286,7 @@
   <!-- USE CASE 04 -->
   <div class="use-case reverse alt">
     <div class="uc-image-wrap">
-      <img src="https://imari-website-beta.vercel.app/photos/Parlor_427.jpg" alt="Parlor" />
+      <img src="https://imari-website-beta.vercel.app/photos/Living_Room_280.jpg" alt="Living Room" />
     </div>
     <div class="uc-body-wrap">
       <p class="uc-num">04</p>
@@ -305,7 +305,7 @@
   <div class="photo-band">
     <img src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS064.jpg" alt="Gardens" />
     <img src="https://imari-website-beta.vercel.app/photos/Dining_Room_105.jpg" alt="Dining Room" />
-    <img src="https://imari-website-beta.vercel.app/photos/Living_Room_280.jpg" alt="Living Room" />
+    <img src="https://imari-website-beta.vercel.app/photos/Parlor_427.jpg" alt="Parlor" />
     <img src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS147.jpg" alt="Gardens" />
   </div>
 
@@ -461,12 +461,16 @@
     if (window.scrollY > heroH - 80) {
       nav.style.background = 'rgba(245,240,232,0.97)';
       nav.style.boxShadow = '0 1px 0 rgba(184,151,90,0.15)';
+      nav.style.padding = '0.6rem 3rem';
       navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-gingko.svg';
+      navLogo.style.width = '56px';
       nl1.classList.add('dark'); nl2.classList.add('dark');
     } else {
       nav.style.background = 'transparent';
       nav.style.boxShadow = 'none';
+      nav.style.padding = '1.5rem 3rem';
       navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-parchment.svg';
+      navLogo.style.width = '88px';
       nl1.classList.remove('dark'); nl2.classList.remove('dark');
     }
   });
