@@ -79,6 +79,18 @@
     .footer-copy { font-size: 0.58rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.15); text-transform: uppercase; }
     .footer-conf { font-size: 0.58rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.28); text-transform: uppercase; }
 
+    /* LIGHTBOX */
+    #lightbox { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(20,18,14,0.97); align-items: center; justify-content: center; }
+    #lightbox.active { display: flex; }
+    #lb-img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; user-select: none; }
+    .lb-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; background: transparent; border: 1px solid rgba(184,151,90,0.3); color: var(--gold); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; font-family: 'Jost', sans-serif; }
+    .lb-arrow:hover { background: rgba(184,151,90,0.12); border-color: var(--gold); }
+    #lb-prev { left: 1.5rem; }
+    #lb-next { right: 1.5rem; }
+    .lb-close { position: fixed; top: 1.25rem; right: 1.25rem; background: none; border: none; color: rgba(245,240,232,0.4); font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0.5rem; transition: color 0.2s; }
+    .lb-close:hover { color: var(--parchment); }
+    .lb-counter { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-size: 0.58rem; letter-spacing: 0.22em; color: rgba(245,240,232,0.25); text-transform: uppercase; white-space: nowrap; }
+
     @media (max-width: 900px) {
       nav { padding: 1.25rem 1.5rem; }
       .page-header { padding: 7rem 1.5rem 3rem; }
@@ -246,6 +258,64 @@
   document.getElementById('pw-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') checkPassword();
   });
+
+  // LIGHTBOX
+  (function() {
+    const lb = document.createElement('div'); lb.id = 'lightbox';
+    lb.innerHTML = '<button class="lb-close" onclick="closeLightbox()">✕</button><button class="lb-arrow" id="lb-prev" onclick="lightboxNav(-1)">←</button><img id="lb-img" src="" alt="" /><button class="lb-arrow" id="lb-next" onclick="lightboxNav(1)">→</button><span class="lb-counter" id="lb-counter"></span>';
+    document.body.appendChild(lb);
+  })();
+
+  let lbImages = [], lbIndex = 0;
+
+  function initLightbox() {
+    lbImages = [...document.querySelectorAll('.plan-item img, .config-item img')];
+    lbImages.forEach((img, i) => {
+      img.parentElement.style.cursor = 'zoom-in';
+      img.parentElement.addEventListener('click', () => openLightbox(i));
+    });
+  }
+
+  function openLightbox(i) {
+    lbIndex = i;
+    updateLightbox();
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function lightboxNav(dir) {
+    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+    updateLightbox();
+  }
+
+  function updateLightbox() {
+    document.getElementById('lb-img').src = lbImages[lbIndex].src;
+    document.getElementById('lb-counter').textContent = (lbIndex + 1) + ' · ' + lbImages.length;
+  }
+
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === document.getElementById('lightbox') || e.target === document.getElementById('lb-img')) closeLightbox();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'ArrowLeft')  lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+    if (e.key === 'Escape')     closeLightbox();
+  });
+
+  if (sessionStorage.getItem(SESSION_KEY) === '1') initLightbox();
+
+  const _origCheck = window.checkPassword;
+  window.checkPassword = function() {
+    _origCheck && _origCheck();
+    setTimeout(initLightbox, 1100);
+  };
 </script>
 </body>
 </html>
