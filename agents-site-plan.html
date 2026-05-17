@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imari · Site Plan</title>
+  <link rel="icon" type="image/svg+xml" href="https://imari-website-beta.vercel.app/logos/imari-gingko.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --parchment: #f5f0e8;
+      --parchment-dark: #ede6d6;
+      --ink: #1a1712;
+      --ink-mid: #2a2520;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --warm-mid: #8c7b60;
+      --rule: rgba(184,151,90,0.18);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--parchment); color: var(--ink); font-family: 'Jost', sans-serif; font-weight: 300; }
+
+    #gate { position: fixed; inset: 0; background: var(--ink); display: flex; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.9s ease, visibility 0.9s ease; }
+    #gate.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+    .gate-inner { text-align: center; padding: 3rem; max-width: 420px; width: 100%; }
+    .gate-logo { display: block; width: 110px; margin: 0 auto 3rem; }
+    .gate-label { font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .gate-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 1.8rem; color: var(--parchment); line-height: 1.3; margin-bottom: 2.5rem; }
+    .gate-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(184,151,90,0.35); padding: 0.8rem 0; color: var(--parchment); font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 300; letter-spacing: 0.18em; text-align: center; outline: none; transition: border-color 0.3s; }
+    .gate-input::placeholder { color: rgba(245,240,232,0.25); }
+    .gate-input:focus { border-color: var(--gold); }
+    .gate-btn { width: 100%; margin-top: 2rem; padding: 1rem; background: transparent; border: 1px solid var(--gold); color: var(--gold); font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: background 0.3s, color 0.3s; }
+    .gate-btn:hover { background: var(--gold); color: var(--ink); }
+    .gate-error { margin-top: 1.25rem; font-size: 0.68rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.6); min-height: 1em; text-transform: uppercase; }
+
+    main { opacity: 0; transition: opacity 1s ease 0.2s; }
+    main.visible { opacity: 1; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; background: rgba(245,240,232,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(184,151,90,0.2); }
+    .nav-logo { width: 72px; }
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
+    .nav-link { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm-mid); text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: var(--ink); }
+    .nav-link.active { color: var(--gold); }
+    .back-link { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--warm-mid); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
+
+    .page-header { padding: 9rem 3rem 4rem; border-bottom: 1px solid rgba(184,151,90,0.15); }
+    .page-eyebrow { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2.2rem, 5vw, 3.8rem); color: var(--ink); line-height: 1.1; margin-bottom: 1rem; }
+    .page-sub { font-size: 0.82rem; line-height: 1.8; color: var(--warm-mid); max-width: 480px; }
+
+    /* FLOOR PLANS */
+    .plan-section { padding: 5rem 3rem; border-bottom: 1px solid rgba(184,151,90,0.15); }
+    .section-label { font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(184,151,90,0.15); display: block; }
+    .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .plan-item { }
+    .plan-item img { width: 100%; display: block; border: 1px solid rgba(184,151,90,0.15); background: white; }
+    .plan-label { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm-mid); margin-top: 0.75rem; }
+
+    /* BALLROOM CONFIGS */
+    .config-section { padding: 5rem 3rem; background: var(--ink); }
+    .config-section .section-label { color: var(--gold); border-bottom-color: rgba(184,151,90,0.18); }
+    .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .config-item img { width: 100%; display: block; }
+    .config-label { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.45); margin-top: 0.75rem; }
+    .config-cap { font-size: 0.75rem; color: var(--gold); margin-top: 0.25rem; }
+
+    /* SPEC SUMMARY */
+    .spec-section { padding: 5rem 3rem; background: var(--parchment-dark); }
+    .spec-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: rgba(184,151,90,0.15); border: 1px solid rgba(184,151,90,0.15); margin-top: 2rem; }
+    .spec-item { background: var(--parchment-dark); padding: 2rem 1.5rem; }
+    .spec-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--ink); display: block; line-height: 1; margin-bottom: 0.4rem; }
+    .spec-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm-mid); }
+
+    footer { background: var(--ink); border-top: 1px solid rgba(184,151,90,0.1); padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { width: 60px; opacity: 0.35; }
+    .footer-copy { font-size: 0.58rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.15); text-transform: uppercase; }
+    .footer-conf { font-size: 0.58rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.28); text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .page-header { padding: 7rem 1.5rem 3rem; }
+      .plan-section, .config-section, .spec-section { padding: 3rem 1.5rem; }
+      .plan-grid, .config-grid { grid-template-columns: 1fr; }
+      .spec-grid { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-inner">
+    <img class="gate-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari"
+      onerror="this.style.display='none';document.getElementById('gw').style.display='block'" />
+    <p id="gw" style="display:none;font-family:'Cormorant Garamond',serif;font-size:2rem;color:#f5f0e8;letter-spacing:0.25em;margin-bottom:3rem;">IMARI</p>
+    <p class="gate-label">Trade &amp; Planning Partners</p>
+    <p class="gate-title">Shared with <em style="font-style:italic;color:#d4b07a">trusted advisors</em> and booking partners.</p>
+    <input id="pw-input" class="gate-input" type="password" placeholder="Access code" autocomplete="off" />
+    <button class="gate-btn" onclick="checkPassword()">Enter</button>
+    <p class="gate-error" id="gate-error">&nbsp;</p>
+  </div>
+</div>
+
+<main id="main-content">
+
+  <nav>
+    <img class="nav-logo" src="https://imari-website-beta.vercel.app/logos/imari-gingko.svg" alt="Imari" onerror="this.style.display='none'" />
+    <div class="nav-right">
+      <a class="nav-link" href="agents-interior-gallery.html">Interior</a>
+      <a class="nav-link" href="agents-exterior-gallery.html">Exterior</a>
+      <a class="nav-link active" href="agents-site-plan.html">Site Plan</a>
+      <a class="back-link" href="agents.html">← Back to Overview</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <p class="page-eyebrow">Imari Georgetown · Site Plan</p>
+    <h1 class="page-title">Floor plans &amp;<br>configurations.</h1>
+    <p class="page-sub">Three floors across 12,000 square feet. Floor plans for planning purposes. Ballroom configurations for events up to 60.</p>
+  </div>
+
+  <!-- PROPERTY SPECS -->
+  <section class="spec-section">
+    <p class="section-label">Property at a Glance</p>
+    <div class="spec-grid">
+      <div class="spec-item">
+        <span class="spec-num">12,000</span>
+        <span class="spec-label">Sq Ft · Main House</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">1</span>
+        <span class="spec-label">Acre · Manicured Gardens</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">6</span>
+        <span class="spec-label">Bedroom Suites</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">15</span>
+        <span class="spec-label">Bathrooms</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">3</span>
+        <span class="spec-label">Floors</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">60</span>
+        <span class="spec-label">Event Capacity</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">12</span>
+        <span class="spec-label">Private Parking Spaces</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">1930</span>
+        <span class="spec-label">Garden Design · Rose Greely</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOOR PLANS -->
+  <section class="plan-section">
+    <p class="section-label">Floor Plans</p>
+    <div class="plan-grid">
+      <div class="plan-item">
+        <img src="https://images-pw.pixieset.com/elementfield/GJX0w06/FirstFloorPlan-a1df2bf8-2500.png" alt="First Floor Plan" loading="lazy" />
+        <p class="plan-label">First Floor</p>
+      </div>
+      <div class="plan-item">
+        <img src="https://images-pw.pixieset.com/elementfield/GJX0w06/SecondFloorPlan-2b3cb1d7-2500.png" alt="Second Floor Plan" loading="lazy" />
+        <p class="plan-label">Second Floor</p>
+      </div>
+      <div class="plan-item">
+        <img src="https://images-pw.pixieset.com/elementfield/GJX0w06/ThirdFloorPlan-078cbefe-2500.png" alt="Third Floor Plan" loading="lazy" />
+        <p class="plan-label">Third Floor</p>
+      </div>
+      <div class="plan-item">
+        <img src="https://images-pw.pixieset.com/elementfield/GJX0w06/GardenPlan-cad8b39c-2500.png" alt="Garden Plan" loading="lazy" />
+        <p class="plan-label">Garden Plan</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BALLROOM CONFIGURATIONS -->
+  <section class="config-section">
+    <p class="section-label">Ballroom Configurations</p>
+    <div class="config-grid">
+      <div class="config-item">
+        <img src="https://images-pw.pixieset.com/elementfield/K5Xo4Ly/Ballroom-BANQUETDINING-027c81a4-2500.jpg" alt="Banquet Dining" loading="lazy" />
+        <p class="config-label">Banquet Dining</p>
+        <p class="config-cap">Up to 60 guests</p>
+      </div>
+      <div class="config-item">
+        <img src="https://images-pw.pixieset.com/elementfield/K5Xo4Ly/Ballroom-SEATEDDINING-b2408e77-2500.jpg" alt="Seated Dining" loading="lazy" />
+        <p class="config-label">Seated Dining</p>
+        <p class="config-cap">Formal dinner service</p>
+      </div>
+      <div class="config-item">
+        <img src="https://images-pw.pixieset.com/elementfield/K5Xo4Ly/Ballroom-BOARDMEETING-510e4547-2500.jpg" alt="Board Meeting" loading="lazy" />
+        <p class="config-label">Board Meeting</p>
+        <p class="config-cap">Conference & presentation</p>
+      </div>
+      <div class="config-item">
+        <img src="https://images-pw.pixieset.com/elementfield/K5Xo4Ly/Ballroom-LECTURE-f0cb0357-2500.jpg" alt="Lecture" loading="lazy" />
+        <p class="config-label">Lecture / Panel</p>
+        <p class="config-cap">Speaker & audience setup</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <img class="footer-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <span class="footer-copy">© 2025 LXIV Group. All rights reserved.</span>
+    <span class="footer-conf">Confidential · Not for distribution</span>
+  </footer>
+
+</main>
+
+<script>
+  const SESSION_KEY = 'imari-agents-auth';
+
+  function checkPassword() {
+    const val = document.getElementById('pw-input').value.trim();
+    const err = document.getElementById('gate-error');
+    if (val.toLowerCase() === 'imariagents') {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      document.getElementById('gate').classList.add('unlocked');
+      document.getElementById('main-content').classList.add('visible');
+      window.scrollTo(0, 0);
+    } else {
+      err.textContent = 'Incorrect access code.';
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-input').focus();
+      setTimeout(() => { err.textContent = ' '; }, 3000);
+    }
+  }
+
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('main-content').classList.add('visible');
+  }
+
+  document.getElementById('pw-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPassword();
+  });
+</script>
+</body>
+</html>
