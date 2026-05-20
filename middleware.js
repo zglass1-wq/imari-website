@@ -1,0 +1,69 @@
+// Vercel Edge Middleware — gates protected HTML routes server-side.
+// A request is allowed through only if it carries an `imari_auth` cookie
+// whose value is a valid `{role}.{hmac}` pair signed with IMARI_AUTH_SECRET.
+
+export const config = {
+  matcher: [
+    '/agents.html',
+    '/agents-interior-gallery.html',
+    '/agents-exterior-gallery.html',
+    '/agents-site-plan.html',
+    '/corporate.html',
+  ],
+};
+
+const ROLE_ALLOWS = {
+  agents: (p) => p === '/agents.html' || p.startsWith('/agents-'),
+  corporate: (p) => p === '/corporate.html' || p.startsWith('/corporate-'),
+};
+
+const enc = new TextEncoder();
+
+async function hmacHex(secret, message) {
+  const key = await crypto.subtle.importKey(
+    'raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(message));
+  return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function constantTimeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+function readCookie(request, name) {
+  const header = request.headers.get('cookie') || '';
+  for (const part of header.split(';')) {
+    const [k, ...v] = part.trim().split('=');
+    if (k === name) return v.join('=');
+  }
+  return null;
+}
+
+export default async function middleware(request) {
+  const url = new URL(request.url);
+  const secret = process.env.IMARI_AUTH_SECRET;
+  const cookie = readCookie(request, 'imari_auth');
+
+  let role = null;
+  if (secret && cookie) {
+    const idx = cookie.lastIndexOf('.');
+    if (idx > 0) {
+      const candidate = cookie.slice(0, idx);
+      const signature = cookie.slice(idx + 1);
+      const expected = await hmacHex(secret, candidate);
+      if (constantTimeEqual(signature, expected)) role = candidate;
+    }
+  }
+
+  if (role && ROLE_ALLOWS[role] && ROLE_ALLOWS[role](url.pathname)) {
+    return; // authorized — pass through
+  }
+
+  const gate = new URL('/private-info.html', url);
+  gate.searchParams.set('from', url.pathname);
+  return Response.redirect(gate, 302);
+}

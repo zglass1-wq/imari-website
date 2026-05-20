@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/imari-website.html" }
+    { "source": "/", "destination": "/imari-website.html" },
+    { "source": "/private-info", "destination": "/private-info.html" }
   ]
 }
