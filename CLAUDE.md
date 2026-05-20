@@ -143,6 +143,31 @@ Wait for Vercel deploy. Then in an incognito window: test that the new password 
 
 ---
 
+## Rotating passwords
+
+### Rotating a single role's password
+
+Use this when a code has leaked, or when you want to cycle codes on a schedule. Existing logged-in users with the old code stay logged in until their cookie expires (12h max) — they only need the new code on next login.
+
+1. **Vercel → Project Settings → Environment Variables.** Edit the relevant `IMARI_<ROLE>_PASSWORD` (e.g. `IMARI_AGENTS_PASSWORD`) and save the new value.
+2. **Redeploy.** Vercel doesn't hot-reload env vars into Edge Functions. Either click "Redeploy" on the latest deployment, or push any commit to `main`.
+3. **Share the new code** with the people who need it.
+4. **Verify** in an incognito window: old code → "Incorrect access code"; new code → lands on the role's page.
+
+### Force-logging-out every active session
+
+Use this when a code has been **seriously compromised** (e.g. shared publicly, leaked to the wrong party), or when you want a hard cutoff for everyone with any active session. This invalidates every `imari_auth` cookie everywhere, immediately — users mid-browsing will be bounced to `/private-info` on their next request.
+
+1. **Generate a new secret:** `openssl rand -hex 32`
+2. **Vercel → Project Settings → Environment Variables.** Replace `IMARI_AUTH_SECRET` with the new value.
+3. **Optionally also rotate the leaked role's password** in the same step (most common case).
+4. **Redeploy.**
+5. **Verify** in an incognito window AND in a browser that had an active session — both should be bounced to `/private-info`.
+
+Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The middleware and login API both read it dynamically.
+
+---
+
 ## Gotchas
 
 - **Always redeploy after changing env vars in Vercel.** Vercel doesn't hot-reload env vars into Edge functions. Either trigger a manual redeploy or push any commit.
