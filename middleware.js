@@ -11,6 +11,7 @@ export const config = {
     '/corporate.html',
     '/alarm250.html',
     '/freedom250.html',
+    '/alex0349.html',
   ],
 };
 
@@ -19,6 +20,7 @@ const ROLE_ALLOWS = {
   corporate: (p) => p === '/corporate.html' || p.startsWith('/corporate-'),
   alarm250: (p) => p === '/alarm250.html' || p.startsWith('/alarm250-'),
   freedom250: (p) => p === '/freedom250.html' || p.startsWith('/freedom250-'),
+  alex0349: (p) => p === '/alex0349.html' || p.startsWith('/alex0349-') || p.startsWith('/agents-'),
 };
 
 const enc = new TextEncoder();
