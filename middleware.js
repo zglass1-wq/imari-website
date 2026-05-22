@@ -9,12 +9,14 @@ export const config = {
     '/agents-exterior-gallery.html',
     '/agents-site-plan.html',
     '/corporate.html',
+    '/alarm250.html',
   ],
 };
 
 const ROLE_ALLOWS = {
   agents: (p) => p === '/agents.html' || p.startsWith('/agents-'),
   corporate: (p) => p === '/corporate.html' || p.startsWith('/corporate-'),
+  alarm250: (p) => p === '/alarm250.html' || p.startsWith('/alarm250-'),
 };
 
 const enc = new TextEncoder();

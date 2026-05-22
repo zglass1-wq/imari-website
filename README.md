@@ -25,6 +25,7 @@ Set these in **Vercel → Project Settings → Environment Variables** (Producti
 | `IMARI_AUTH_SECRET` | Random server-side secret used to sign the auth cookie. Generate with `openssl rand -hex 32`. **Never share or commit.** |
 | `IMARI_AGENTS_PASSWORD` | Password that unlocks `agents.html` and its galleries. Share with trade & planning partners. |
 | `IMARI_CORPORATE_PASSWORD` | Password that unlocks `corporate.html`. Share with corporate & institutional partners. |
+| `IMARI_ALARM250_PASSWORD` | Password that unlocks `alarm250.html`. Single-prospect page for Alarm.com × UFC Freedom 250. |
 
 After updating env vars, **redeploy** — Vercel does not hot-reload env vars into Edge functions.
 

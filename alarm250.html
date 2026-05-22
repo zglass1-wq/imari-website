@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imari · Alarm.com × UFC Freedom 250</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --parchment: #f5f0e8;
+      --parchment-dark: #ede6d6;
+      --ink: #1a1712;
+      --ink-light: #3d3830;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --warm-mid: #8c7b60;
+      --rule: rgba(184,151,90,0.22);
+      --rule-dark: rgba(184,151,90,0.45);
+      --ember: #1C1A15;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--parchment);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      min-height: 100vh;
+    }
+
+    main { opacity: 1; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; transition: background 0.3s, padding 0.3s; }
+    .nav-logo { width: 88px; transition: opacity 0.3s, width 0.3s; }
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
+    .nav-link { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment); text-decoration: none; transition: color 0.2s, opacity 0.2s; }
+    .nav-link:hover { opacity: 0.6; }
+    .nav-link.dark { color: var(--warm-mid); }
+    .nav-link.dark:hover { color: var(--gold); }
+
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: flex-end; background: var(--ember); }
+    .hero-content { position: relative; padding: 0 3rem 5rem; max-width: 900px; }
+    .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 1.5rem; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2.6rem, 5.4vw, 4.6rem); line-height: 1.08; color: var(--parchment); margin-bottom: 2rem; }
+    .hero-title em { font-style: italic; color: var(--gold-light); }
+    .hero-sub { font-size: 0.92rem; line-height: 1.85; color: rgba(245,240,232,0.72); max-width: 540px; margin-bottom: 3rem; }
+    .hero-stats { display: flex; gap: 4rem; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--parchment); display: block; line-height: 1; }
+    .stat-label { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-top: 0.3rem; display: block; }
+
+    /* SECTIONS */
+    .section-eyebrow { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
+    .section-body { font-size: 0.9rem; line-height: 1.9; color: var(--ink-light); }
+
+    /* ARGUMENT BLOCK */
+    .argument { padding: 7rem 3rem; background: var(--parchment); }
+    .argument-inner { max-width: 880px; margin: 0 auto; text-align: left; }
+    .argument-body { font-size: 1.02rem; line-height: 1.95; color: var(--ink-light); }
+    .argument-body + .argument-body { margin-top: 1.3rem; }
+
+    /* POSITIONING */
+    .position-wrap { background: var(--ember); padding: 7rem 3rem; }
+    .position-inner { max-width: 1360px; margin: 0 auto; }
+    .position-statement { max-width: 760px; margin: 0 auto 5rem; text-align: center; }
+    .position-statement p:not(.section-eyebrow) { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 2.8vw, 2.4rem); font-weight: 300; line-height: 1.45; color: var(--parchment); }
+    .position-statement p:not(.section-eyebrow) em { color: var(--gold-light); font-style: italic; }
+    .value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(200,191,176,0.1); border: 1px solid rgba(200,191,176,0.1); }
+    .value-cell { background: var(--ember); padding: 2.75rem 2.25rem; }
+    .value-title { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-style: italic; font-weight: 300; color: var(--parchment); margin-bottom: 0.875rem; line-height: 1.2; }
+    .value-desc { font-size: 0.75rem; color: rgba(245,240,232,0.6); line-height: 1.7; }
+
+    /* WEEKEND CALENDAR */
+    .weekend-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+    .weekend-inner { max-width: 1200px; margin: 0 auto; }
+    .weekend-head { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+    .weekend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .day-card { background: var(--parchment); border: 1px solid var(--rule); padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .day-img { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.9); }
+    .day-body { padding: 2rem 1.8rem 2.4rem; flex: 1; display: flex; flex-direction: column; }
+    .day-date { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .day-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; color: var(--ink); line-height: 1.2; margin-bottom: 0.8rem; }
+    .day-desc { font-size: 0.82rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.2rem; }
+    .day-meta { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-mid); margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--rule); }
+
+    /* PHOTO BAND */
+    .photo-band { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 0.9fr; height: 340px; overflow: hidden; }
+    .photo-band > div { width: 100%; height: 100%; filter: brightness(0.9); transition: filter 0.5s; }
+    .photo-band > div:hover { filter: brightness(1.02); }
+
+    /* PROPERTY */
+    .property-section { background: var(--ink); padding: 7rem 3rem; overflow: hidden; }
+    .property-inner { max-width: 1200px; margin: 0 auto; }
+    .property-header { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-bottom: 5rem; align-items: end; }
+    .property-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(184,151,90,0.12); border: 1px solid rgba(184,151,90,0.12); margin-bottom: 4px; }
+    .prop-col { background: rgba(26,23,18,0.5); padding: 2.5rem; }
+    .prop-col-title { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(184,151,90,0.15); }
+    .prop-list { list-style: none; }
+    .prop-list li { font-size: 0.82rem; line-height: 1.7; color: rgba(245,240,232,0.7); padding: 0.55rem 0; border-bottom: 1px solid rgba(184,151,90,0.08); display: flex; gap: 0.75rem; }
+    .prop-list li::before { content: '·'; color: var(--gold); font-size: 1.2rem; line-height: 1.3; flex-shrink: 0; }
+    .prop-photos { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 300px; gap: 4px; margin-top: 4px; }
+    .prop-photos > div { width: 100%; height: 100%; filter: brightness(0.82) saturate(0.85); transition: filter 0.4s; }
+    .prop-photos > div:hover { filter: brightness(0.95) saturate(1); }
+
+    /* POSSIBILITIES */
+    .possibilities-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+    .possibilities-inner { max-width: 1100px; margin: 0 auto; }
+    .possibilities-head { text-align: center; margin-bottom: 3.5rem; }
+    .possibilities-cue { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.35rem; color: var(--ink); margin-top: 1rem; }
+    .possibilities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; background: var(--rule); border: 1px solid var(--rule); }
+    .pos-item { background: var(--parchment); padding: 1.4rem 1.8rem; border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); display: flex; gap: 1rem; align-items: baseline; font-size: 0.86rem; line-height: 1.7; color: var(--ink-light); }
+    .pos-item::before { content: '·'; color: var(--gold); font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
+
+    /* OFFERING */
+    .offering-section { padding: 7rem 3rem; background: var(--parchment); }
+    .offering-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; }
+    .offering-head { position: sticky; top: 5rem; }
+    .offering-list { list-style: none; border-top: 1px solid var(--rule); }
+    .offering-list li { display: grid; grid-template-columns: 180px 1fr; gap: 2rem; padding: 1.4rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+    .offering-key { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+    .offering-val { font-size: 0.92rem; line-height: 1.7; color: var(--ink-light); }
+
+    /* CLOSING */
+    .closing-section { position: relative; overflow: hidden; min-height: 480px; display: flex; align-items: center; }
+    .closing-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; filter: brightness(0.3) saturate(0.65); }
+    .closing-content { position: relative; text-align: center; padding: 7rem 2rem; width: 100%; }
+    .closing-line { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.5rem, 3vw, 2.4rem); color: var(--parchment); line-height: 1.4; max-width: 820px; margin: 0 auto 2.5rem; }
+    .closing-note { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.32); }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid rgba(184,151,90,0.08); padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { width: 68px; opacity: 0.45; }
+    .footer-copy { font-size: 0.58rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.18); text-transform: uppercase; }
+    .footer-conf { font-size: 0.58rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.32); text-transform: uppercase; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .hero-content { padding: 0 1.5rem 4rem; }
+      .hero-stats { gap: 2rem; flex-wrap: wrap; }
+      .argument { padding: 4.5rem 1.5rem; }
+      .position-wrap { padding: 5rem 1.5rem; }
+      .position-statement { margin: 0 auto 3rem; }
+      .value-grid { grid-template-columns: repeat(2, 1fr); }
+      .value-cell { padding: 2rem 1.5rem; }
+      .weekend-section { padding: 5rem 1.5rem; }
+      .weekend-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .day-img { height: 200px; }
+      .photo-band { grid-template-columns: 1fr 1fr; height: 220px; }
+      .photo-band > div:nth-child(3), .photo-band > div:nth-child(4) { display: none; }
+      .property-section { padding: 5rem 1.5rem; }
+      .property-header { grid-template-columns: 1fr; gap: 2rem; }
+      .property-cols { grid-template-columns: 1fr; }
+      .prop-photos { grid-template-columns: 1fr 1fr; }
+      .prop-photos > div:nth-child(3) { display: none; }
+      .possibilities-section { padding: 5rem 1.5rem; }
+      .possibilities-grid { grid-template-columns: 1fr; }
+      .offering-section { padding: 5rem 1.5rem; }
+      .offering-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .offering-head { position: static; }
+      .offering-list li { grid-template-columns: 1fr; gap: 0.4rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<main id="main-content">
+
+  <nav id="site-nav">
+    <img id="nav-logo" class="nav-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <div class="nav-right">
+      <a class="nav-link" id="nl1" href="tel:+12028686945">+1 (202) 868-6945</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <!-- <p class="hero-eyebrow">June 12 – 15, 2026</p> -->
+      <h1 class="hero-title">Alarm.com ×<br><em>UFC Freedom 250</em></h1>
+      <p class="hero-sub">Brought to you by Imari Georgetown, a private estate with full staff, entirely yours.</p>
+      <div class="hero-stats">
+        <div><span class="stat-num">June 12-15</span><span class="stat-label">3 Nights, sole occupancy</span></div>
+        <div><span class="stat-num">18</span><span class="stat-label">Overnight guests</span></div>
+        <div><span class="stat-num">200</span><span class="stat-label">Event guests</span></div>
+        <div><span class="stat-num">~1 mi</span><span class="stat-label">From every event</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARGUMENT -->
+  <section class="argument">
+    <div class="argument-inner">
+      <p class="section-eyebrow">The Opportunity</p>
+      <h2 class="section-title">A once-in-a-century weekend in Washington.</h2>
+      <p class="argument-body">UFC Freedom 250 is the first live sporting event ever held at the White House, and your guests belong at the center of it. Every event that weekend sits within two miles of one private acre in central Georgetown. That acre is yours for three nights – sole occupancy, with a full staff in residence. Your guests venture out to the action and come back to a property that is still going. Cigars in the garden after the face-off. A pre-game before Zac Brown. A two-hundred-person viewing party for the fight on Saturday with food, drink, and music for as long as the night runs.</p>
+    </div>
+  </section>
+
+  <!-- POSITIONING -->
+  <section class="position-wrap">
+    <div class="position-inner">
+      <div class="position-statement">
+        <p class="section-eyebrow">The Estate</p>
+        <!-- <p>Imari is a private estate available for the <em>exclusive occupancy of a single party.</em> Full staff. Complete security. Seven-star service from arrival to departure.</p> -->
+        <p>Imari is a private estate available for the exclusive occupancy of a single party. <em>Comfortable luxury on one private acre.</em> Full Staff, complete security, seven star service - a residence built to host, to hold court, to headquarter.</p>
+        <!-- <p><em>Comfortable luxury</em>,on one private acre. A residence built to host, to hold court, to headquarter.</p> -->
+      </div>
+      <div class="value-grid">
+        <div class="value-cell">
+          <p class="value-title">The House</p>
+          <p class="value-desc">Twelve thousand square feet of main residence and a separate guest house. Six suites and three additional guest bedrooms. A chef's kitchen for the chefs you bring in, and a ballroom proportioned for celebrations at scale.</p>
+        </div>
+        <div class="value-cell">
+          <p class="value-title">The Grounds</p>
+          <p class="value-desc">A private acre inside the estate walls. Expansive gardens and a working greenhouse. A spa house with cold plunge, sauna, steam room, and hot tub. A full-size pool. Yours to use however you like, whenever you like.</p>
+        </div>
+        <div class="value-cell">
+          <p class="value-title">The Service</p>
+          <p class="value-desc">A 24/7 concierge and lifestyle team manages logistics, last-minute requests, and the experiences you ask us to build. Butler service throughout the day. In-house event planning and production, up to the hour.</p>
+        </div>
+        <div class="value-cell">
+          <p class="value-title">The Privacy</p>
+          <p class="value-desc">The estate is yours for the duration. No shared spaces, no other guests. Designed from the ground up for privacy. Every staff member signs a confidentiality agreement before entering.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+   <!-- PHOTO BAND -->
+  <div class="photo-band">
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS064.jpeg');background-size:cover;background-position:center bottom;"></div>
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Bar_075.jpeg');background-size:cover;background-position:center;"></div>
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Living_Room_421.jpeg');background-size:cover;background-position:center;"></div>
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS147.jpeg');background-size:cover;background-position:center bottom;"></div>
+  </div>
+
+  <!-- WEEKEND CALENDAR -->
+  <section class="weekend-section">
+    <div class="weekend-inner">
+      <div class="weekend-head">
+        <p class="section-eyebrow">The Weekend</p>
+        <h2 class="section-title">Three nights. Three<br>headline events. One residence.</h2>
+        <p class="section-body" style="max-width:560px;margin:1rem auto 0">Check in Thursday. Check out Sunday. Whatever you want in-between.</p>
+      </div>
+      <div class="weekend-grid">
+        <div class="day-card">
+          <img class="day-img" src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS134.jpeg" alt="Thursday" />
+          <div class="day-body">
+            <p class="day-date">Thursday · June 12</p>
+            <p class="day-title">Face-Off at the Lincoln Memorial</p>
+            <p class="day-desc">Come back to the garden lit. Cigars cut and rolled on site, whiskey poured by the fire, a late supper available for anyone who skipped dinner.</p>
+            <p class="day-meta">60 people</p>
+          </div>
+        </div>
+        <div class="day-card">
+          <img class="day-img" src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS064.jpeg" alt="Friday" />
+          <div class="day-body">
+            <p class="day-date">Friday · June 13</p>
+            <p class="day-title">Zac Brown Band Concert at the Ellipse</p>
+            <p class="day-desc">A pre-game at the residence before the gates open. Drinks, hors d'oeuvres, and an unhurried hour on the lawn. A late dinner ready for everyone who comes back.</p>
+            <p class="day-meta">30 people</p>
+          </div>
+        </div>
+        <div class="day-card">
+          <img class="day-img" src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS147.jpeg" alt="Saturday" />
+          <div class="day-body">
+            <p class="day-date">Saturday · June 14</p>
+            <p class="day-title">UFC Freedom 250 · South Lawn</p>
+            <p class="day-desc">A viewing party for up to two hundred guests. Big screens in the yard, the ballroom, and poolside. A Michelin chef on the grill. Drinks passed all night. The last guests walk upstairs and call it.</p>
+            <p class="day-meta">200 people</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFERING -->
+  <section class="offering-section">
+    <div class="offering-inner">
+      <div class="offering-head">
+        <p class="section-eyebrow">The Offering</p>
+        <h2 class="section-title">Particulars.</h2>
+        <p class="section-body">A single party holds the residence for the entire weekend. The specifics below are the foundation. The rest is built around the way the weekend wants to run.</p>
+      </div>
+      <ul class="offering-list">
+        <li><span class="offering-key">Dates</span><span class="offering-val">Check in Thursday, June 12. Check out Sunday, June 15. Three nights.</span></li>
+        <li><span class="offering-key">Occupancy</span><span class="offering-val">Nine to eighteen overnight guests. Up to two hundred at evening events.</span></li>
+        <li><span class="offering-key">Location</span><span class="offering-val">Central Georgetown. Half a block from the Four Seasons. Less than two miles from the White House.</span></li>
+        <li><span class="offering-key">Included</span><span class="offering-val">Sole-occupancy residence for the stay. Full-service car and driver. Dedicated butler staff. Concierge facilitation of every event on and around the property.</span></li>
+        <li><span class="offering-key">Not Included</span><span class="offering-val">Tickets to UFC Freedom 250.</span></li>
+        <li><span class="offering-key">Pricing</span><span class="offering-val">$ 100,000 - $ 250,00 based on planned events and number of guests</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CLOSING — the canonical italic line (2 of 2) -->
+  <section class="closing-section">
+    <img class="closing-bg" src="https://imari-website-beta.vercel.app/photos/Yard_045.jpeg" alt="Imari grounds" />
+    <div class="closing-content">
+      <p class="closing-line">A weekend your dealers will remember and your competitors cannot copy.</p>
+      <p class="closing-note">Prepared for Alarm.com · Confidential · Not for distribution</p>
+    </div>
+  </section>
+
+  <footer>
+    <img class="footer-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <span class="footer-copy">© 2026 LXIV Group. All rights reserved.</span>
+    <span class="footer-conf">Confidential · Not for distribution</span>
+  </footer>
+
+</main>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  const navLogo = document.getElementById('nav-logo');
+  const nl1 = document.getElementById('nl1');
+
+  window.addEventListener('scroll', () => {
+    const heroH = document.querySelector('.hero').offsetHeight;
+    if (window.scrollY > heroH - 80) {
+      nav.style.background = 'rgba(245,240,232,0.97)';
+      nav.style.boxShadow = '0 1px 0 rgba(184,151,90,0.15)';
+      nav.style.padding = '0.6rem 3rem';
+      navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-gingko.svg';
+      navLogo.style.width = '56px';
+      nl1.classList.add('dark');
+    } else {
+      nav.style.background = 'transparent';
+      nav.style.boxShadow = 'none';
+      nav.style.padding = '1.5rem 3rem';
+      navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-parchment.svg';
+      navLogo.style.width = '88px';
+      nl1.classList.remove('dark');
+    }
+  });
+</script>
+</body>
+</html>

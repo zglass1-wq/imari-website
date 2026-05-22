@@ -8,6 +8,7 @@ export const config = { runtime: 'edge' };
 const ROLES = [
   { role: 'agents',    envVar: 'IMARI_AGENTS_PASSWORD',    redirect: '/agents.html' },
   { role: 'corporate', envVar: 'IMARI_CORPORATE_PASSWORD', redirect: '/corporate.html' },
+  { role: 'alarm250',  envVar: 'IMARI_ALARM250_PASSWORD',  redirect: '/alarm250.html' },
 ];
 
 const COOKIE_MAX_AGE = 60 * 60 * 12; // 12 hours
