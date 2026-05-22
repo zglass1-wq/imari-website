@@ -53,7 +53,7 @@
     .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--parchment); display: block; line-height: 1; }
     .stat-label { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-top: 0.3rem; display: block; }
 
-    /* SECTIONS */
+    /* SECTION HELPERS */
     .section-eyebrow { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
     .section-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
     .section-body { font-size: 0.9rem; line-height: 1.9; color: var(--ink-light); }
@@ -72,7 +72,8 @@
     /* WEEKEND CALENDAR */
     .weekend-section { padding: 7rem 3rem; background: var(--parchment-dark); }
     .weekend-inner { max-width: 1200px; margin: 0 auto; }
-    .weekend-head { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+    .weekend-head { text-align: center; max-width: 880px; margin: 0 auto 4rem; }
+    .weekend-head .section-body { max-width: 780px; margin: 1.5rem auto 0; text-align: left; }
     .weekend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .day-card { background: var(--parchment); border: 1px solid var(--rule); padding: 0; overflow: hidden; display: flex; flex-direction: column; }
     .day-img { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.9); }
@@ -193,7 +194,7 @@
       <div class="weekend-head">
         <p class="section-eyebrow">The Weekend</p>
         <h2 class="section-title">A once-in-a-century weekend in Washington.</h2>
-        <p class="section-body" style="max-width:560px;margin:1rem auto 0">UFC Freedom 250 is the first live sporting event ever held at the White House, and your guests belong at the center of it. Every event that weekend sits within two miles of one private acre in central Georgetown. That acre is yours for three nights – sole occupancy, with a full staff in residence. Your guests venture out to the action and come back to a property that is still going. Cigars in the garden after the face-off. A pre-game before Zac Brown. A two-hundred-person viewing party for the fight on Saturday with food, drink, and music for as long as the night runs.</p>
+        <p class="section-body">UFC Freedom 250 is the first live sporting event ever held at the White House, and your guests belong at the center of it. Every event that weekend sits within two miles of one private acre in central Georgetown. That acre is yours for three nights – sole occupancy, with a full staff in residence. Your guests venture out to the action and come back to a property that is still going. Cigars in the garden after the face-off. A pre-game before Zac Brown. A two-hundred-person viewing party for the fight on Saturday with food, drink, and music for as long as the night runs.</p>
       </div>
       <div class="weekend-grid">
         <div class="day-card">
