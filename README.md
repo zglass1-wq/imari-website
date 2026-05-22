@@ -26,6 +26,7 @@ Set these in **Vercel → Project Settings → Environment Variables** (Producti
 | `IMARI_AGENTS_PASSWORD` | Password that unlocks `agents.html` and its galleries. Share with trade & planning partners. |
 | `IMARI_CORPORATE_PASSWORD` | Password that unlocks `corporate.html`. Share with corporate & institutional partners. |
 | `IMARI_ALARM250_PASSWORD` | Password that unlocks `alarm250.html`. Single-prospect page for Alarm.com × UFC Freedom 250. |
+| `IMARI_FREEDOM250_PASSWORD` | Password that unlocks `freedom250.html`. Generalized UFC Freedom 250 weekend page for any corporate prospect. |
 
 After updating env vars, **redeploy** — Vercel does not hot-reload env vars into Edge functions.
 
