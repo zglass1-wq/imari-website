@@ -605,10 +605,17 @@
     .private-access-inner { max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
     .pa-eyebrow { font-size: 9px; letter-spacing: 0.38em; text-transform: uppercase; color: var(--ochre); display: block; margin-bottom: 16px; }
     .pa-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 3vw, 42px); font-weight: 300; color: var(--parchment); line-height: 1.2; margin-bottom: 20px; }
-    .pa-desc { font-size: 13px; color: var(--stone); line-height: 1.85; margin-bottom: 36px; }
-    .pa-links { display: flex; gap: 16px; flex-wrap: wrap; }
-    .pa-link { padding: 13px 32px; border: 1px solid rgba(184,146,46,0.5); color: var(--ochre); text-decoration: none; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; transition: background 0.3s, color 0.3s, border-color 0.3s; }
-    .pa-link:hover { background: var(--ochre); color: var(--ember); border-color: var(--ochre); }
+    .pa-title em { color: var(--ochre); font-style: italic; }
+    .pa-desc { font-size: 13px; color: var(--stone); line-height: 1.85; margin-bottom: 18px; }
+    .pa-desc:last-of-type { margin-bottom: 32px; }
+    .pa-form { max-width: 420px; }
+    .pa-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(184,146,46,0.35); padding: 14px 0; color: var(--parchment); font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 300; letter-spacing: 0.18em; text-align: center; outline: none; transition: border-color 0.3s; }
+    .pa-input::placeholder { color: rgba(240,235,227,0.25); }
+    .pa-input:focus { border-color: var(--ochre); }
+    .pa-btn { width: 100%; margin-top: 24px; padding: 16px; background: transparent; border: 1px solid var(--ochre); color: var(--ochre); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: background 0.3s, color 0.3s, opacity 0.2s; }
+    .pa-btn:hover { background: var(--ochre); color: var(--ember); }
+    .pa-btn:disabled { opacity: 0.5; cursor: wait; }
+    .pa-error { margin-top: 18px; font-size: 10px; letter-spacing: 0.12em; color: rgba(184,146,46,0.7); min-height: 1em; text-transform: uppercase; text-align: center; }
     .pa-right { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2vw, 26px); font-style: italic; font-weight: 300; color: rgba(200,191,176,0.3); line-height: 1.5; }
 
     /* ── RESPONSIVE ── */
@@ -676,7 +683,7 @@
   <section class="position-wrap">
     <div class="position-inner">
       <div class="position-statement reveal">
-        <p>Imari is a private estate available for the exclusive occupancy of a single party. <em>Comfortable luxury on one private acre.</em> Full Staff, complete security, seven star service - a residence built to host, to hold court, to headquarter.</p>
+        <p>Imari is a private estate available for the exclusive occupancy of a single party. <em>Comfortable luxury on one private acre.</em> Full staff, complete security, seven star service - a residence built to host, to hold court, to headquarter.</p>
       </div>
       <div class="value-grid">
         <div class="value-cell reveal">
@@ -950,12 +957,14 @@
     <div class="private-access-inner reveal">
       <div>
         <span class="pa-eyebrow">Private Access</span>
-        <h2 class="pa-title">For partners and<br>institutional guests.</h2>
+        <h2 class="pa-title">The private side<br>of <em>Imari.</em></h2>
         <p class="pa-desc">Detailed property information, pricing, and availability are shared privately. Travel professionals, family offices, event planners, and corporate partners can request access or explore our partner materials directly.</p>
-        <div class="pa-links">
-          <a href="./private-info.html" class="pa-link">Corporate &amp; Institutional</a>
-          <a href="./private-info.html" class="pa-link">Trade &amp; Planning Partners</a>
-        </div>
+        <p class="pa-desc">Enter your access code below.</p>
+        <form id="pa-form" class="pa-form" autocomplete="off">
+          <input id="pa-input" class="pa-input" type="password" placeholder="Access code" autocomplete="off" />
+          <button id="pa-btn" class="pa-btn" type="submit">Enter</button>
+          <p class="pa-error" id="pa-error">&nbsp;</p>
+        </form>
       </div>
     </div>
   </section>
@@ -1046,6 +1055,53 @@
         requestAnimationFrame(() => requestAnimationFrame(() => { confirm.style.opacity = '1'; }));
       }, 460);
     });
+
+    // Private Access gate form — posts to /api/login and redirects on success
+    const paForm = document.getElementById('pa-form');
+    const paInput = document.getElementById('pa-input');
+    const paBtn = document.getElementById('pa-btn');
+    const paError = document.getElementById('pa-error');
+
+    if (paForm) {
+      const paShowError = (message) => {
+        paError.textContent = message;
+        paInput.value = '';
+        paInput.focus();
+      };
+
+      paForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const password = paInput.value.trim();
+        if (!password) return;
+
+        paBtn.disabled = true;
+        paError.textContent = ' ';
+
+        try {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ password }),
+          });
+          const data = await res.json().catch(() => ({}));
+
+          if (res.ok && data.ok && data.redirect) {
+            window.location.replace(data.redirect);
+            return;
+          }
+
+          if (res.status === 401) {
+            paShowError('Incorrect access code.');
+          } else {
+            paShowError('Unable to verify code. Try again.');
+          }
+        } catch {
+          paShowError('Network error. Try again.');
+        } finally {
+          paBtn.disabled = false;
+        }
+      });
+    }
   </script>
 
 </body>
