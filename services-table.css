@@ -149,6 +149,14 @@
 }
 
 @media (max-width: 640px) {
+  /* Reallocate fixed widths: the desktop 8% price column collapses to ~26px
+     on a phone, too narrow for "1,750"/"15,000" — give the number real room
+     and keep a gap before the unit column. */
+  .services-table .col-service { width: 50%; }
+  .services-table .col-symbol  { width: 4%; }
+  .services-table .col-price   { width: 20%; }
+  .services-table .col-unit    { width: 26%; }
+
   .services-table td { padding: 1rem 0; }
   .services-table .cell-service { padding-left: 0.75rem; }
   .services-table .service-name { font-size: 1rem; }
@@ -158,6 +166,6 @@
     font-size: 0.72rem;
   }
   .services-table .service-detail::before { content: ''; }
-  .services-table .cell-price { font-size: 0.88rem; padding-right: 10px; }
-  .services-table .cell-unit  { font-size: 0.7rem; }
+  .services-table .cell-price { font-size: 0.85rem; padding-right: 8px; }
+  .services-table .cell-unit  { font-size: 0.7rem; padding-left: 6px; }
 }
