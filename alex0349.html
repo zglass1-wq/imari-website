@@ -83,23 +83,9 @@
     .uc-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
 
     /* PHOTO BAND */
-    .photo-band { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 480px; overflow: hidden; }
+    .photo-band { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 480px; overflow: hidden; margin-top: 7rem; }
     .photo-band img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.9); transition: filter 0.5s; }
     .photo-band img:hover { filter: brightness(1.02); }
-
-    /* WHAT'S INCLUDED */
-    .included-section { background: var(--ink); padding: 7rem 3rem; overflow: hidden; }
-    .included-inner { max-width: 1200px; margin: 0 auto; }
-    .included-header { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-bottom: 5rem; align-items: end; }
-    .included-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(184,151,90,0.12); border: 1px solid rgba(184,151,90,0.12); margin-bottom: 4px; }
-    .inc-col { background: rgba(26,23,18,0.5); padding: 2.5rem; }
-    .inc-col-title { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(184,151,90,0.15); }
-    .inc-list { list-style: none; }
-    .inc-list li { font-size: 0.8rem; line-height: 1.7; color: rgba(245,240,232,0.65); padding: 0.55rem 0; border-bottom: 1px solid rgba(184,151,90,0.08); display: flex; gap: 0.75rem; }
-    .inc-list li::before { content: '·'; color: var(--gold); font-size: 1.2rem; line-height: 1.3; flex-shrink: 0; }
-    .inc-photos { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 300px; gap: 4px; margin-top: 4px; }
-    .inc-photos img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.82) saturate(0.85); transition: filter 0.4s; }
-    .inc-photos img:hover { filter: brightness(0.95) saturate(1); }
 
     /* SUITES */
     .suites-section { padding: 7rem 3rem; background: var(--parchment-dark); }
@@ -113,6 +99,12 @@
     .suite-features { list-style: none; }
     .suite-features li { font-size: 0.75rem; line-height: 1.7; color: var(--ink-light); padding: 0.2rem 0; display: flex; gap: 0.6rem; }
     .suite-features li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+    /* ADVISOR STRIP */
+    .advisor-strip { background: var(--parchment); padding: 4.5rem 3rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .advisor-inner { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 220px 1fr; gap: 3.5rem; align-items: start; }
+    .advisor-inner .section-eyebrow { margin: 0; padding-top: 0.35rem; }
+    .advisor-body { font-size: 0.9rem; line-height: 1.95; color: var(--ink-light); max-width: 640px; }
 
     /* INQUIRY */
     .inquiry-section { position: relative; overflow: hidden; min-height: 520px; display: flex; align-items: center; }
@@ -140,18 +132,15 @@
       .use-case.reverse { direction: ltr; }
       .uc-image-wrap { height: 300px; }
       .uc-body-wrap { padding: 2.5rem 1.5rem; }
-      .photo-band { grid-template-columns: 1fr 1fr; height: 220px; }
+      .photo-band { grid-template-columns: 1fr 1fr; height: 220px; margin-top: 5rem; }
       .photo-band img:nth-child(3), .photo-band img:nth-child(4) { display: none; }
-      .included-section { padding: 5rem 1.5rem; }
-      .included-header { grid-template-columns: 1fr; gap: 2rem; }
-      .included-cols { grid-template-columns: 1fr; }
-      .inc-photos { grid-template-columns: 1fr 1fr; }
-      .inc-photos img:nth-child(3) { display: none; }
       .suites-section { padding: 5rem 1.5rem; }
       .suites-inner { grid-template-columns: 1fr; gap: 3rem; }
       .suites-sticky { position: static; }
       .suites-sticky img { display: none; }
       .suite-grid { grid-template-columns: 1fr; }
+      .advisor-strip { padding: 3rem 1.5rem; }
+      .advisor-inner { grid-template-columns: 1fr; gap: 1.25rem; }
       .inquiry-contacts { flex-direction: column; gap: 2rem; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
     }
@@ -196,78 +185,111 @@
     <div class="intro-rule"></div>
   </div>
 
-  <!-- USE CASE 01 -->
+  <!-- SECTION 01 — THE PROPERTY -->
   <div class="use-case">
     <div class="uc-image-wrap">
-      <img src="https://imari-website-beta.vercel.app/photos/Premier_Suite_611.jpeg" alt="Premier Suite" />
+      <img src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS134.jpeg" alt="Estate gardens" />
     </div>
     <div class="uc-body-wrap">
       <p class="uc-num">01</p>
-      <h2 class="uc-title">To Stay</h2>
-      <p class="uc-desc">When a client's itinerary includes Washington D.C., Imari is the answer that no hotel can match. Whole-property exclusivity, a team that anticipates every need before it's expressed, and a residential standard your clients won't find in a hotel suite. Your client arrives, everything works, and you get the credit.</p>
+      <h2 class="uc-title">The Property</h2>
+      <p class="uc-desc">A 12,000 sq ft house on a walled, gated acre in Georgetown. Six suites, a 1,000 sq ft ballroom, a spa house, and a separate guest house for client staff.</p>
       <ul class="uc-list">
-        <li>Whole-property booking — no shared spaces, no other guests</li>
-        <li>Three king and three queen suites for overnight guests</li>
-        <li>Butler-led arrival, daily housekeeping, and evening turndown</li>
-        <li>Dedicated concierge managing all logistics from arrival to departure</li>
-        <li>Commission structure available for qualified trade partners</li>
+        <li>12,000 sq ft main house on one private acre in Georgetown D.C.</li>
+        <li>Manicured gardens and greenhouse designed by Rose Greely (1930), updated by Perry Wheeler — designer of the White House Rose Garden</li>
+        <li>Gated on-site parking — 15 vehicles</li>
+        <li>In the main house: 6 bedroom suites across two floors with 15 bathrooms</li>
+        <li>Entertainment & living spaces flow naturally across the first floor — Parlor, Living Room, Orangerie, and formal Dining Room</li>
+        <li>Chef's Kitchen — commercial-grade, built for serious cooking at any scale</li>
+        <li>Elevator throughout main residence</li>
+        <li>Private gym, dedicated yoga/meditation room, full-size swimming pool, and detached Spa House with sauna, steam room, cold plunge, and hot tub</li>
+        <li>Detached 1,000 sq ft ballroom</li>
+        <li>Multiple indoor and outdoor spaces for breakouts, receptions, and gatherings</li>
+        <li>Three-bedroom guest house — separate entrance and self-contained — for client staff (security, EAs, nannies). Available at additional cost.</li>
       </ul>
     </div>
   </div>
 
-  <!-- USE CASE 02 -->
+  <!-- SECTION 02 — THE SERVICE -->
   <div class="use-case reverse alt">
     <div class="uc-image-wrap">
-      <img src="https://imari-website-beta.vercel.app/photos/Parlor_361.jpeg" alt="Parlor" />
+      <img src="https://imari-website-beta.vercel.app/photos/Kitchen_134.jpeg" alt="Chef's kitchen" />
     </div>
     <div class="uc-body-wrap">
       <p class="uc-num">02</p>
-      <h2 class="uc-title">To Host</h2>
-      <p class="uc-desc">A 930 SF ballroom, manicured grounds, a formal dining room for 20, and the flexibility to flow from session to cocktail hour to dinner without changing venues. Imari is a blank canvas for planners who want to produce something extraordinary — with a property team that functions as an extension of your own.</p>
+      <h2 class="uc-title">The Service</h2>
+      <p class="uc-desc">A full team on property from arrival to departure — concierge, butler, housekeeping, Michelin-star chefs — coordinating everything so the client doesn't have to ask twice.</p>
       <ul class="uc-list">
-        <li>Ballroom configurable for up to 60 seated or standing events</li>
-        <li>Multiple indoor and outdoor spaces for breakouts and receptions</li>
-        <li>Full AV suite for presentations, panels, and production</li>
-        <li>Michelin-star culinary team for custom menus and formal dinners</li>
-        <li>Full event production support from ideation through execution</li>
+        <li>24/7 dedicated concierge managing all logistics end-to-end — planning, reservations, transportation, and on-site coordination</li>
+        <li>Butler-led arrival, daily service, and evening turndown</li>
+        <li>Full housekeeping team — daily service and full property reset after events and overnight</li>
+        <li>In-residence garment care — laundry, pressing, steaming</li>
+        <li>Property team functions as an extension of the planner's own team</li>
+        <li>Farm-sourced breakfast daily — fresh fruit, eggs made to order, pastries, organic yogurt, cold-pressed juices, coffee, tea</li>
+        <li>Stocked kitchen customized in advance to guest preferences</li>
+        <li>Michelin-star chefs available for meals and private dinners</li>
+        <li>Welcome champagne, unpacking service, and private guided estate introduction on arrival</li>
+        <li>Custom floral arrangements styled throughout the estate prior to arrival</li>
       </ul>
     </div>
   </div>
 
-  <!-- USE CASE 03 -->
+  <!-- SECTION 03 — THE PLATFORM -->
   <div class="use-case">
     <div class="uc-image-wrap">
-      <img src="https://imari-website-beta.vercel.app/photos/Executive_Suite_014.jpeg" alt="Executive Suite" />
+      <img src="https://imari-website-beta.vercel.app/photos/Dining_Room_451.jpeg" alt="Formal dining room" />
     </div>
     <div class="uc-body-wrap">
       <p class="uc-num">03</p>
-      <h2 class="uc-title">To Work</h2>
-      <p class="uc-desc">For principals who expect privacy, discretion, and a standard of service that anticipates rather than reacts. Imari offers whole-property exclusivity, NDA-bound staff, a private motor court with no street exposure, and the kind of residential experience that UHNW families can't find in a hotel. For a family visiting Washington, or a multi-generational gathering that requires a real home, this is the placement.</p>
+      <h2 class="uc-title">The Platform</h2>
+      <p class="uc-desc">A purpose-built venue for hosting, from 24-person dinners to 300-person receptions. Full AV, full production, full team.</p>
       <ul class="uc-list">
-        <li>Complete property privacy — no lobby, no exposure, no shared spaces</li>
-        <li>All staff bound by confidentiality agreement before entering</li>
-        <li>Private motor court — vehicles arrive and depart within the grounds</li>
-        <li>Private suites across three floors accommodate multi-generational family groups</li>
-        <li>Staffing, security coordination, and logistics handled end-to-end</li>
+        <li>Up to 60 seated at king's tables or 70 at rounds in the ballroom</li>
+        <li>Up to 24 for private dinners in the formal dining room</li>
+        <li>Up to 300 for larger receptions and cocktail events across the property</li>
+        <li>Full event planning and production — ideation through execution</li>
+        <li>Full AV suite for presentations, panels, and production</li>
+        <li>Custom menus designed for the occasion and guests</li>
+        <li>Flow from work session to cocktail hour to dinner without changing venues</li>
       </ul>
     </div>
   </div>
 
-  <!-- USE CASE 04 -->
+  <!-- SECTION 04 — PRIVACY & SECURITY -->
   <div class="use-case reverse alt">
     <div class="uc-image-wrap">
-      <img src="https://imari-website-beta.vercel.app/photos/Living_Room_351.jpeg" alt="Living Room" />
+      <img src="https://imari-website-beta.vercel.app/photos/Foyer_465.jpeg" alt="Entry foyer" />
     </div>
     <div class="uc-body-wrap">
       <p class="uc-num">04</p>
-      <h2 class="uc-title">To Impress</h2>
-      <p class="uc-desc">Client appreciation dinners, intimate advisory gatherings, relationship-building retreats — the quality of the venue signals the quality of the relationship. Imari provides a setting that communicates seriousness without pretension: a private estate, a chef-driven dinner, and an evening that your clients will remember as exceptional. For advisors managing relationships at the highest level, this is the right environment.</p>
+      <h2 class="uc-title">Privacy & Security</h2>
+      <p class="uc-desc">Whole-property exclusivity, private arrival, perimeter cameras, NDA-bound staff. Vetted and used by heads of state.</p>
       <ul class="uc-list">
-        <li>Private dinners for 8 to 20 in the formal dining room</li>
-        <li>Larger receptions and cocktail evenings for up to 300</li>
-        <li>Overnight accommodation in a private estate — not a hotel floor</li>
-        <li>Custom menus designed for the occasion and the guests</li>
-        <li>Complete discretion — no venue branding, no public visibility</li>
+        <li>Complete property exclusivity — no other guests, no lobby, no shared spaces</li>
+        <li>Private arrival court — arrivals and departures unseen, no street exposure</li>
+        <li>Integrated estate-wide security system with perimeter PTZ cameras, designed and vetted for heads of state and senior officials</li>
+        <li>All staff bound by confidentiality agreement before entering the property</li>
+        <li>Armed security personnel available</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 05 — THE EXTRAS -->
+  <div class="use-case">
+    <div class="uc-image-wrap">
+      <img src="https://imari-website-beta.vercel.app/photos/Bar_075.jpeg" alt="Estate bar" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">05</p>
+      <h2 class="uc-title">The Extras</h2>
+      <p class="uc-desc">Your client asks; we sort it. Wellness, styling, transportation — those are the starting points, not the limits.</p>
+      <ul class="uc-list">
+        <li>Central Georgetown — 1 block from the Four Seasons, minutes from the White House and the Capitol</li>
+        <li>Private wellness programming — massage therapy, acupuncture, IV therapy, yoga instruction, personal training, med-spa treatments</li>
+        <li>Custom wardrobe and personal styling</li>
+        <li>Private airport and train transfers included for arrival and departure</li>
+        <li>Private car and driver available for the duration of the stay</li>
+        <li>Supercar access and private aviation coordination available on request</li>
       </ul>
     </div>
   </div>
@@ -278,66 +300,6 @@
     <img src="https://imari-website-beta.vercel.app/photos/Kitchen_154.jpeg" alt="Kitchen" />
     <img src="https://imari-website-beta.vercel.app/photos/Spahouse_1058.jpeg" alt="Spa House" />
   </div>
-
-  <!-- WHAT'S INCLUDED -->
-  <section class="included-section">
-    <div class="included-inner">
-      <div class="included-header">
-        <div>
-          <p class="section-eyebrow">What's Included</p>
-          <h2 class="section-title" style="color:var(--parchment)">Everything. That's<br>the point.</h2>
-        </div>
-        <p class="section-body" style="color:rgba(245,240,232,0.55)">Imari is quoted and booked as a complete experience. There is no à la carte — every booking includes the full property, the full team, and the full standard of service. What changes is the configuration, the guest count, and the purpose of the stay.</p>
-      </div>
-      <div class="included-cols">
-        <div class="inc-col">
-          <p class="inc-col-title">The Property</p>
-          <ul class="inc-list">
-            <li>12,000 sq ft main house on one private acre, Georgetown D.C.</li>
-            <li>3 King Suites · 3 Queen Suites · 15 Bathrooms</li>
-            <li>Parlor, Living Room, Orangerie, Dining Room & Detached Ballroom</li>
-            <li>Manicured gardens designed by Rose Greely (1930) — updated by Perry Wheeler, designer of the White House Rose Garden</li>
-            <li>Detached Spa House — sauna, steam room, cold plunge & hot tub</li>
-            <li>Full-size pool · Yoga & meditation room · Full gym</li>
-            <li>Private parking for 12 vehicles · Greenhouse & herb garden</li>
-            <li>Elevator · Covered fireside seating</li>
-            <li>Three-bedroom guest house (3 bed · 3 bath · kitchen · living room · office) — available at additional cost</li>
-          </ul>
-        </div>
-        <div class="inc-col">
-          <p class="inc-col-title">The Service</p>
-          <ul class="inc-list">
-            <li>Dedicated concierge managing all logistics end-to-end</li>
-            <li>Michelin-star chefs for all meals and private dinners</li>
-            <li>Butler-led arrival, housekeeping, and evening turndown</li>
-            <li>All staff bound by confidentiality agreement</li>
-            <li>Private car and driver for the duration of the stay</li>
-            <li>Full property reset between sessions and overnight</li>
-            <li>Event production from ideation to execution</li>
-            <li>Private aviation coordination available upon request</li>
-          </ul>
-        </div>
-        <div class="inc-col">
-          <p class="inc-col-title">For Your Clients</p>
-          <ul class="inc-list">
-            <li>No other guests — complete property exclusivity</li>
-            <li>No lobby, no exposure, full residential privacy</li>
-            <li>Private motor court — arrivals and departures unseen</li>
-            <li>NDA-bound staff before entering the property</li>
-            <li>Security system designed and vetted for heads of state and senior officials</li>
-            <li>Central Georgetown — minutes from White House and Capitol</li>
-            <li>Custom programming, itineraries, and off-site coordination</li>
-            <li>Dedicated point of contact for trade partners</li>
-          </ul>
-        </div>
-      </div>
-      <div class="inc-photos">
-        <img src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS157.jpeg" alt="Gardens" />
-        <img src="https://imari-website-beta.vercel.app/photos/Georgetown_Bath_555.jpeg" alt="Suite Bath" />
-        <img src="https://imari-website-beta.vercel.app/photos/Premier_Closet_642.jpeg" alt="Premier Closet" />
-      </div>
-    </div>
-  </section>
 
   <!-- SUITES -->
   <section class="suites-section">
@@ -585,6 +547,14 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </section>
+
+  <!-- FOR TRAVEL ADVISORS -->
+  <section class="advisor-strip">
+    <div class="advisor-inner">
+      <p class="section-eyebrow">For Travel Advisors</p>
+      <p class="advisor-body">Commission structure available for qualified trade partners. Dedicated point of contact handles your bookings, your guests, and your client communications end-to-end. Every stay comes with two WhatsApp groups — one with you and your client, one with you and the property team — so your client is always covered and you always know what's happening.</p>
     </div>
   </section>
 
