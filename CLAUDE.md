@@ -1,8 +1,17 @@
 # Imari Website — Working Guide for Claude
 
-This is a static marketing site for Imari (a private estate in Georgetown, D.C.) deployed on Vercel at `imari.cc`. Most of the site is public; a handful of pages sit behind a **server-side password gate** at `/private-info`.
+This is a static marketing site for Imari (a private estate in Georgetown, D.C.) deployed on Vercel at `imari.cc`. Most of the site is public; the protected HTML files live in [private/](private/) and sit behind a **server-side password gate** at `/private-info`.
 
 If you're being asked to add a new password-protected page, the rest of this document is the playbook. If you're being asked to change unrelated public content, skip to "Repo orientation" at the bottom.
+
+---
+
+## Where files live
+
+- **Public files** sit at the repo root: `imari-website.html` (homepage), `private-info.html` (the gate), `private-access.html` (legacy redirect stub).
+- **Protected files** sit in [private/](private/): every `agents-*.html`, `corporate.html`, and every personalized landing page (`alarm250.html`, `freedom250.html`, `alex0349.html`, `july4.html`, etc.).
+
+The public URL is *not* the file path. Each protected file is mapped to a clean top-level URL via a rewrite in [vercel.json](vercel.json) — `/agents.html` serves `/private/agents.html`, and so on. The middleware sees and matches the **public URL** (the original request path before the rewrite), so `matcher` entries and `ROLE_ALLOWS` rules always use the public path (e.g. `/agents.html`), never `/private/agents.html`.
 
 ---
 
@@ -50,16 +59,26 @@ export const config = {
 
 You do **not** need to edit `ROLE_ALLOWS` for this case — the `agents` role's rule already grants access to anything starting with `/agents-`.
 
-### Step 2 — Create the HTML file
+### Step 2 — Create the HTML file inside `private/`
 
-Name it with the correct role prefix: `agents-*.html` for agents content, `corporate-*.html` for corporate content. **The prefix is what grants access** — a file named `pricing-agents.html` would NOT be unlocked by the agents code.
+Place the file at `private/agents-pricing.html`. Name it with the correct role prefix: `agents-*.html` for agents content, `corporate-*.html` for corporate content. **The prefix is what grants access** — a file named `pricing-agents.html` would NOT be unlocked by the agents code.
 
 Use an existing protected page as a template. The body should start with `<main id="main-content">` and contain **no client-side gate code** — no `<div id="gate">`, no `checkPassword()`, no `sessionStorage` flags. The middleware is the only gate.
 
-### Step 3 — Commit, push, deploy
+### Step 3 — Add a rewrite in `vercel.json`
+
+Edit [vercel.json](vercel.json) so the public URL serves the file from `private/`:
+
+```json
+{ "source": "/agents-pricing.html", "destination": "/private/agents-pricing.html" }
+```
+
+Without this rewrite the public URL 404s.
+
+### Step 4 — Commit, push, deploy
 
 ```bash
-git add middleware.js agents-pricing.html
+git add middleware.js vercel.json private/agents-pricing.html
 git commit -m "Add agents pricing page"
 git push
 ```
@@ -123,18 +142,26 @@ matcher: [
 ],
 ```
 
-### Step 4 — Create the HTML page(s)
+### Step 4 — Create the HTML page(s) inside `private/`
 
-Same rules as before: file name must start with the role prefix (`vendors-*.html`), no client-side gate code, body starts at `<main id="main-content">`. Copy an existing protected page as a template.
+Place files at `private/vendors.html` (and any `private/vendors-*.html`). Same rules as before: file name must start with the role prefix (`vendors-*.html`), no client-side gate code, body starts at `<main id="main-content">`. Copy an existing protected page as a template.
 
-### Step 5 — Update the README
+### Step 5 — Add rewrites in `vercel.json`
+
+Map each public URL to the file inside `private/`:
+
+```json
+{ "source": "/vendors.html", "destination": "/private/vendors.html" }
+```
+
+### Step 6 — Update the README
 
 Add the new env var to the table in [README.md](README.md) so the list of required env vars stays accurate.
 
-### Step 6 — Commit, push, deploy
+### Step 7 — Commit, push, deploy
 
 ```bash
-git add middleware.js api/login.js vendors.html README.md
+git add middleware.js api/login.js vercel.json private/vendors.html README.md
 git commit -m "Add vendors private section"
 git push
 ```
@@ -177,6 +204,8 @@ Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The mid
 - **Don't put `<div id="gate">` or password JS back into the HTML.** That was the old client-side gate which exposed both passwords and content. The middleware is the only gate now.
 - **Test in incognito.** Existing cookies in your normal browser can mask bugs. After changes, always do at least one test from a fresh incognito session.
 - **Don't commit `.env` files.** Passwords live in Vercel env vars only. There is no local `.env` file in this repo.
+- **Protected files live in `private/`, but middleware/matcher paths do not.** Every entry in `matcher` and every key/prefix in `ROLE_ALLOWS` references the public URL (`/agents.html`), not the file path on disk (`/private/agents.html`). The `vercel.json` rewrite is what bridges the two.
+- **Every new protected page needs a rewrite.** Without an entry in `vercel.json`, the public URL 404s even though the file exists under `private/`.
 
 ---
 
@@ -191,18 +220,25 @@ Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The mid
 | [api/logout.js](api/logout.js) | Edge Function. Clears the auth cookie. |
 | [private-info.html](private-info.html) | The unified public gate. One password field. |
 | [private-access.html](private-access.html) | Redirect stub pointing at `private-info.html` (kept for backward compatibility with shared links). |
-| [vercel.json](vercel.json) | Vercel config: root rewrite to `imari-website.html`, clean URL for `/private-info`. |
+| [private/](private/) | Folder holding every protected HTML file. Served at clean top-level URLs via rewrites. |
+| [vercel.json](vercel.json) | Vercel config: root rewrite to `imari-website.html`, clean URL for `/private-info`, and one rewrite per file in `private/`. |
 | [README.md](README.md) | Repo orientation + env var reference. |
 
 ### Currently protected paths
 
-| Path | Unlocked by role |
-|---|---|
-| `/agents.html` | `agents` |
-| `/agents-interior-gallery.html` | `agents` |
-| `/agents-exterior-gallery.html` | `agents` |
-| `/agents-site-plan.html` | `agents` |
-| `/corporate.html` | `corporate` |
+Public URL → file (every protected file lives in [private/](private/) and is exposed via a rewrite in `vercel.json`):
+
+| Public URL | File | Unlocked by role |
+|---|---|---|
+| `/agents.html` | `private/agents.html` | `agents` |
+| `/agents-interior-gallery.html` | `private/agents-interior-gallery.html` | `agents` |
+| `/agents-exterior-gallery.html` | `private/agents-exterior-gallery.html` | `agents` |
+| `/agents-site-plan.html` | `private/agents-site-plan.html` | `agents` |
+| `/corporate.html` | `private/corporate.html` | `corporate` |
+| `/alarm250.html` | `private/alarm250.html` | `alarm250` |
+| `/freedom250.html` | `private/freedom250.html` | `freedom250` |
+| `/alex0349.html` | `private/alex0349.html` | `alex0349` (also `agents-*`) |
+| `/july4.html` | `private/july4.html` | `july4` |
 
 ### Required Vercel env vars
 
@@ -211,6 +247,10 @@ Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The mid
 | `IMARI_AUTH_SECRET` | Random secret used to sign auth cookies. Generate with `openssl rand -hex 32`. **Never share or commit.** |
 | `IMARI_AGENTS_PASSWORD` | Agents code. Shared with trade & planning partners. |
 | `IMARI_CORPORATE_PASSWORD` | Corporate code. Shared with corporate & institutional partners. |
+| `IMARI_ALARM250_PASSWORD` | Alarm.com × UFC Freedom 250 single-prospect page. |
+| `IMARI_FREEDOM250_PASSWORD` | Generalized UFC Freedom 250 weekend page for any corporate prospect. |
+| `IMARI_ALEX0349_PASSWORD` | Personalized agent page (Alex Endo); also grants access to shared `agents-*` galleries. |
+| `IMARI_JULY4_PASSWORD` | Personalized 4th of July weekend landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |
 
 ---
@@ -222,5 +262,5 @@ This is a plain static HTML site — no build step, no framework. Open `imari-we
 Deployment is automatic from the `main` branch of `github.com/zglass1-wq/imari-website`. Pushes trigger a Vercel build.
 
 Public pages: `imari-website.html` (the homepage at `/`), `private-info.html`, `private-access.html` (redirect).
-Protected pages: see the table above.
+Protected pages: everything inside [private/](private/) — see the table above for the URL ⇄ file mapping.
 Assets: `photos/`, `logos/`.

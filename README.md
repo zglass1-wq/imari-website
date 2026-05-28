@@ -13,8 +13,11 @@ Protected paths (declared in [middleware.js](middleware.js)):
 
 - `/agents.html`, `/agents-*.html`
 - `/corporate.html`
+- `/alarm250.html`, `/freedom250.html`, `/alex0349.html`, `/july4.html` (personalized one-off landing pages)
 
-To add a new private section, add (1) a new entry in `ROLES` in [api/login.js](api/login.js), (2) a matching `ROLE_ALLOWS` rule + matcher in [middleware.js](middleware.js), and (3) a new password env var.
+The protected HTML files live in [private/](private/) and are served at clean, top-level URLs via rewrites in [vercel.json](vercel.json). Middleware runs on the public URL (e.g. `/agents.html`) before the rewrite to `/private/agents.html` is applied.
+
+To add a new private section, add (1) a new entry in `ROLES` in [api/login.js](api/login.js), (2) a matching `ROLE_ALLOWS` rule + matcher in [middleware.js](middleware.js), (3) a new password env var, (4) the HTML file under [private/](private/), and (5) a rewrite in [vercel.json](vercel.json) mapping the public URL to the file in `private/`.
 
 ## Required Vercel environment variables
 
@@ -28,6 +31,7 @@ Set these in **Vercel → Project Settings → Environment Variables** (Producti
 | `IMARI_ALARM250_PASSWORD` | Password that unlocks `alarm250.html`. Single-prospect page for Alarm.com × UFC Freedom 250. |
 | `IMARI_FREEDOM250_PASSWORD` | Password that unlocks `freedom250.html`. Generalized UFC Freedom 250 weekend page for any corporate prospect. |
 | `IMARI_ALEX0349_PASSWORD` | Password that unlocks `alex0349.html`. Personalized agent page that mirrors the main agents landing; also grants access to the shared `agents-*` galleries. |
+| `IMARI_JULY4_PASSWORD` | Password that unlocks `july4.html`. Personalized 4th of July weekend landing page. |
 
 After updating env vars, **redeploy** — Vercel does not hot-reload env vars into Edge functions.
 
