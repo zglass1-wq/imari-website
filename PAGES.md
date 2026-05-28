@@ -12,7 +12,7 @@ There are three types of private page in this repo. Each is purpose-built for a 
 |---|---|---|---|---|---|
 | **Specific Offer** | alarm250 · freedom250 · july4 | A specific event/weekend | Single prospect or short list | Salesy, glance-and-decide; replaces a 1-pager | Interior + Exterior (no Site Plan) |
 | **Landing** | alex0349 | The property generally | Personalized — one named recipient | Factual; sophisticated reader making a decision | Full set (Interior + Exterior + Site Plan) |
-| **Collateral** | corporate | A specific use case for a defined audience | Audience-wide, not personalized | Sales-leaning; varies by purpose; short and punchy | Optional — depends on the piece |
+| **Collateral** | corporate | A specific use case for a defined audience | Audience-wide, not personalized | Sales-leaning; varies by purpose; short and punchy | Interior + Exterior (shared block) — omit if a piece argues against it |
 
 ---
 
@@ -26,24 +26,29 @@ A page built to pitch a specific event or weekend to a small list. The recipient
 
 1. **Hero** — Textured dark background (e.g. `photos/wall-texture.jpg`), italic event name in the title. Four-cell stat row: dates · overnight guests · event guests · proximity.
 2. **The Weekend** — Headline + body paragraph framing why this weekend matters, then 3 day-cards (image + date + title + description + headcount meta).
-3. **The Estate** — Dark-background positioning section with a 4-cell value grid: The House / The Grounds / The Service / The Privacy. Brand-stable copy; rarely changes per page.
-4. **Galleries** — Interior + Exterior thumbnail rows with full-screen lightbox. **No Site Plan.**
-5. **The Offering** — Particulars list: Dates · Occupancy · Location · Included · Not Included · Pricing.
-6. **Closing** — Italic Cormorant tagline over dark image overlay, with contact line.
-7. **Footer**
+3. **Position Statement** (`id="section-estate"`) — Dark `--ember` section containing only the centered text intro: "The Estate" eyebrow + italic body paragraph ("Imari is a private estate available for the exclusive occupancy of a single party. *Comfortable luxury on one private acre.* Full staff, complete security, seven star service — a residence built to host, to hold court, to headquarter."). Brand-stable copy; rarely changes per page. Uses `<div class="position-statement" style="margin-bottom: 0;">` so the section is vertically balanced when standalone.
+4. **Galleries** (`id="section-gallery"`) — "Galleries" eyebrow + "A look inside." headline. Interior + Exterior thumbnail rows with full-screen lightbox. **No Site Plan.**
+5. **Estate Details** (`id="section-details"`) — Dark `--ember` section. Centered "Estate Details" eyebrow + "On the grounds, and at your service." section title, then a two-column `.estate-grid`:
+   - **The Property.** — italic Cormorant column title, em-dash bullets covering house, suites, ballroom, spa, pool, guest house, parking, security.
+   - **The Services.** — italic Cormorant column title, em-dash bullets covering concierge, butler, housekeeping, food, wellness, transportation, security.
+   No uppercase eyebrows above the column titles. Bullet content is the codified default — only diverge when a specific page genuinely needs different content.
+6. **The Offering** — Particulars list: Dates · Occupancy · Location · Included · Not Included · Pricing.
+7. **Closing** — Italic Cormorant tagline over dark image overlay, with contact line.
+8. **Footer**
 
 ### Drawer anchors
-Galleries · The Weekend · The Estate · The Offering · Inquire
+Galleries · The Weekend · The Estate · Estate Details · The Offering · Inquire
 
 ### Section backgrounds (alternation)
 
 Adjacent sections never share a background. Canonical sequence:
-- Hero (ember/dark) → Weekend (parchment-dark) → Estate (ember) → Gallery (parchment-dark) → Offering (parchment) → Closing (dark image) → Footer (ink)
+- Hero (ember/dark) → Weekend (parchment-dark) → Position Statement (ember) → Gallery (parchment-dark) → Estate Details (ember) → Offering (parchment) → Closing (dark image) → Footer (ink)
 
 ### Conventions
 - Hero stat row count is always 4. Dates are usually the leftmost stat.
 - Weekend grid is typically 3 days; 2–4 is fine if the program demands it.
 - File names follow the role name (e.g. `july4`, `freedom250`).
+- The **Position Statement → Galleries → Estate Details** block (sections 3–5) is shared with Collateral (Type 3). Copy and structure stay consistent across both types — diverge only when a specific page argues for it.
 - Tone: short, persuasive, no exhaustive detail. If a sentence isn't earning its place, cut it.
 
 ### Template
@@ -97,19 +102,22 @@ A page that replaces an existing handout or pitch document for a defined audienc
 
 1. **Hero** — Photographic background. Audience eyebrow ("Imari Georgetown · {{AUDIENCE_LABEL}}"). Stat row of 4 calibrated to the audience.
 2. **Intro strip** — Dark Ember band, one italic sentence.
-3. **Use Cases** — Audience-specific verticals (e.g. corporate uses Business Roundtable · Investor Day · Strategic Offsite · Pop-Up HQ). **Not** the generic Property/Service/Venue/Security/Extras set from Type 2.
-4. **Photo Band** (optional) — Four-image horizontal strip.
-5. **The Estate** — Two-column dark section: Property bullets on the left, Services bullets on the right, three property photos beneath.
-6. **A day at Imari** (optional) — Sticky-left timeline showing Morning / Afternoon / Evening with bulleted activities.
-7. **Inquiry** — Dark image overlay + contact details.
-8. **Footer**
+3. **Use Cases** — Audience-specific verticals (e.g. corporate uses Business Roundtable · Investor Day · C-Suite Breakout · Pop-Up HQ). **Not** the generic Property/Service/Venue/Security/Extras set from Type 2.
+4. **Photo Band** (legacy) — Four-image horizontal strip. Documented for reference; no current piece uses this. Replaced by the Galleries section below.
+5. **Position Statement** (`id="section-estate"`) — Same shared block as Type 1, section 3. The Estate eyebrow + italic body paragraph on `--ember`. Brand-stable copy.
+6. **Galleries** (`id="section-gallery"`) — Same shared block as Type 1, section 4. "Galleries" / "A look inside." Interior + Exterior thumbnail rows + lightbox.
+7. **Estate Details** (`id="section-details"`) — Same shared block as Type 1, section 5. Estate Details eyebrow + "On the grounds, and at your service." + two-column grid (The Property / The Services) on `--ember`.
+8. **A day at Imari** (optional) — Sticky-left timeline showing Morning / Afternoon / Evening with bulleted activities.
+9. **Inquiry** — Dark image overlay + contact details.
+10. **Footer**
 
 ### Drawer anchors
-Per-page — anchors track the sections actually present on that piece.
+Per-page — anchors track the sections actually present on that piece. When the shared block is used, that means `#section-estate`, `#section-gallery`, and `#section-details`.
 
 ### Conventions
 - Use case titles are audience-specific scenarios, not generic estate features.
-- Optional sections: Galleries (when imagery should be browseable), Photo Band, A day at Imari. Include the ones the piece needs; omit the rest.
+- The **Position Statement → Galleries → Estate Details** block (sections 5–7) is shared with Specific Offer (Type 1) — same markup, same copy. Treat as a single shared unit.
+- Optional sections beyond the shared block: Photo Band, A day at Imari. Include the ones the piece needs; omit the rest.
 - Tone varies by purpose. Generally less detailed than landings, more sales-leaning — short, punchy, convincing.
 
 ### Template
