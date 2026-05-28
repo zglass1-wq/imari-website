@@ -11,11 +11,10 @@ Static marketing site for Imari, deployed on Vercel. Two protected sections (`ag
 
 Protected paths (declared in [middleware.js](middleware.js)):
 
-- `/agents.html`, `/agents-*.html`
 - `/corporate.html`
 - `/alarm250.html`, `/freedom250.html`, `/alex0349.html`, `/july4.html` (personalized one-off landing pages)
 
-The protected HTML files live in [private/](private/) and are served at clean, top-level URLs via rewrites in [vercel.json](vercel.json). Middleware runs on the public URL (e.g. `/agents.html`) before the rewrite to `/private/agents.html` is applied.
+The protected HTML files live in [private/](private/) and are served at clean, top-level URLs via rewrites in [vercel.json](vercel.json). Middleware runs on the public URL (e.g. `/corporate.html`) before the rewrite to `/private/corporate.html` is applied.
 
 To add a new private section, add (1) a new entry in `ROLES` in [api/login.js](api/login.js), (2) a matching `ROLE_ALLOWS` rule + matcher in [middleware.js](middleware.js), (3) a new password env var, (4) the HTML file under [private/](private/), and (5) a rewrite in [vercel.json](vercel.json) mapping the public URL to the file in `private/`.
 
@@ -26,7 +25,6 @@ Set these in **Vercel → Project Settings → Environment Variables** (Producti
 | Variable | Purpose |
 |---|---|
 | `IMARI_AUTH_SECRET` | Random server-side secret used to sign the auth cookie. Generate with `openssl rand -hex 32`. **Never share or commit.** |
-| `IMARI_AGENTS_PASSWORD` | Password that unlocks `agents.html` and its galleries. Share with trade & planning partners. |
 | `IMARI_CORPORATE_PASSWORD` | Password that unlocks `corporate.html`. Share with corporate & institutional partners. |
 | `IMARI_ALARM250_PASSWORD` | Password that unlocks `alarm250.html`. Single-prospect page for Alarm.com × UFC Freedom 250. |
 | `IMARI_FREEDOM250_PASSWORD` | Password that unlocks `freedom250.html`. Generalized UFC Freedom 250 weekend page for any corporate prospect. |

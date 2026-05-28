@@ -2,10 +2,6 @@
   "rewrites": [
     { "source": "/", "destination": "/imari-website.html" },
     { "source": "/private-info", "destination": "/private-info.html" },
-    { "source": "/agents.html", "destination": "/private/agents.html" },
-    { "source": "/agents-interior-gallery.html", "destination": "/private/agents-interior-gallery.html" },
-    { "source": "/agents-exterior-gallery.html", "destination": "/private/agents-exterior-gallery.html" },
-    { "source": "/agents-site-plan.html", "destination": "/private/agents-site-plan.html" },
     { "source": "/corporate.html", "destination": "/private/corporate.html" },
     { "source": "/alarm250.html", "destination": "/private/alarm250.html" },
     { "source": "/freedom250.html", "destination": "/private/freedom250.html" },

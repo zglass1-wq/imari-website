@@ -85,7 +85,7 @@ The body of every page is written in **Host Voice** (defined in `IMARI_VOICES.md
 
 This is persuasive content, not reference content. The voice rules above still apply, but pages have their own pattern:
 
-- **Lead with the proposition, not the setup.** An advisor lands on `/agents.html` to see whether Imari fits their client. The first screen tells them what the property is and what it offers — not "Welcome to Imari" boilerplate.
+- **Lead with the proposition, not the setup.** A planner lands on `/corporate.html` to see whether Imari fits their use case. The first screen tells them what the property is and what it offers — not "Welcome to Imari" boilerplate.
 - **Section headings are nouns or short phrases.** "The Property," "The Service," "The Venue." Not commands, not questions.
 - **Body paragraphs are short and declarative.** Three-sentence paragraphs at most for prose. One-line bullets in the offering particulars.
 - **Numbers and specifics over adjectives.** "12,000 sq ft on one private acre" beats "expansive." "Six suites and three additional guest bedrooms" beats "ample accommodations."

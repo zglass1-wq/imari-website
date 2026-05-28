@@ -11,19 +11,19 @@ If you're being asked to add a new password-protected page, the rest of this doc
 - **Public files** sit at the repo root: `imari-website.html` (homepage), `private-info.html` (the gate), `private-access.html` (legacy redirect stub).
 - **Protected files** sit in [private/](private/): every `agents-*.html`, `corporate.html`, and every personalized landing page (`alarm250.html`, `freedom250.html`, `alex0349.html`, `july4.html`, etc.).
 
-The public URL is *not* the file path. Each protected file is mapped to a clean top-level URL via a rewrite in [vercel.json](vercel.json) — `/agents.html` serves `/private/agents.html`, and so on. The middleware sees and matches the **public URL** (the original request path before the rewrite), so `matcher` entries and `ROLE_ALLOWS` rules always use the public path (e.g. `/agents.html`), never `/private/agents.html`.
+The public URL is *not* the file path. Each protected file is mapped to a clean top-level URL via a rewrite in [vercel.json](vercel.json) — `/corporate.html` serves `/private/corporate.html`, and so on. The middleware sees and matches the **public URL** (the original request path before the rewrite), so `matcher` entries and `ROLE_ALLOWS` rules always use the public path (e.g. `/corporate.html`), never `/private/corporate.html`.
 
 ---
 
 ## How the auth actually works
 
-This is **real protection**, not the client-side gate the site used to have. The protected HTML is never sent to unauthenticated browsers — View Source on `/agents.html` from a logged-out browser shows only a redirect.
+This is **real protection**, not the client-side gate the site used to have. The protected HTML is never sent to unauthenticated browsers — View Source on `/corporate.html` from a logged-out browser shows only a redirect.
 
 The mechanism:
 
 1. **User visits `/private-info`** ([private-info.html](private-info.html)) — a public page with a single password field.
-2. **User enters a code, JS POSTs it to `/api/login`** ([api/login.js](api/login.js)) — an Edge Function. It compares the submitted password against role-specific env vars (`IMARI_AGENTS_PASSWORD`, `IMARI_CORPORATE_PASSWORD`, etc.). On match, it issues an `HttpOnly` cookie named `imari_auth` whose value is `{role}.{hmac-of-role}`, signed with `IMARI_AUTH_SECRET`.
-3. **User is redirected to the destination page** (e.g. `/agents.html`).
+2. **User enters a code, JS POSTs it to `/api/login`** ([api/login.js](api/login.js)) — an Edge Function. It compares the submitted password against role-specific env vars (`IMARI_CORPORATE_PASSWORD`, `IMARI_FREEDOM250_PASSWORD`, etc.). On match, it issues an `HttpOnly` cookie named `imari_auth` whose value is `{role}.{hmac-of-role}`, signed with `IMARI_AUTH_SECRET`.
+3. **User is redirected to the destination page** (e.g. `/corporate.html`).
 4. **Every request to a protected path** triggers [middleware.js](middleware.js), which:
    - Reads the `imari_auth` cookie.
    - Recomputes the HMAC for the embedded role using the secret.
@@ -38,7 +38,7 @@ Cookies expire after 12 hours. To force-invalidate all sessions, rotate `IMARI_A
 
 ## Adding a new page that uses an EXISTING password
 
-Use this when you want a new page (e.g. `agents-pricing.html`) accessible to people who already have the agents code.
+Use this when you want a new page (e.g. `corporate-pricing.html`) accessible to people who already have the corporate code.
 
 ### Step 1 — Add the path to the middleware matcher
 
@@ -47,21 +47,21 @@ Edit [middleware.js](middleware.js). The `matcher` array is an explicit list of 
 ```js
 export const config = {
   matcher: [
-    '/agents.html',
-    '/agents-interior-gallery.html',
-    '/agents-exterior-gallery.html',
-    '/agents-site-plan.html',
-    '/agents-pricing.html',   // ← new line
     '/corporate.html',
+    '/corporate-pricing.html',   // ← new line
+    '/alarm250.html',
+    '/freedom250.html',
+    '/alex0349.html',
+    '/july4.html',
   ],
 };
 ```
 
-You do **not** need to edit `ROLE_ALLOWS` for this case — the `agents` role's rule already grants access to anything starting with `/agents-`.
+You do **not** need to edit `ROLE_ALLOWS` for this case — the `corporate` role's rule already grants access to anything starting with `/corporate-`.
 
 ### Step 2 — Create the HTML file inside `private/`
 
-Place the file at `private/agents-pricing.html`. Name it with the correct role prefix: `agents-*.html` for agents content, `corporate-*.html` for corporate content. **The prefix is what grants access** — a file named `pricing-agents.html` would NOT be unlocked by the agents code.
+Place the file at `private/corporate-pricing.html`. Name it with the correct role prefix: `corporate-*.html` for corporate content. **The prefix is what grants access** — a file named `pricing-corporate.html` would NOT be unlocked by the corporate code.
 
 Use an existing protected page as a template. The body should start with `<main id="main-content">` and contain **no client-side gate code** — no `<div id="gate">`, no `checkPassword()`, no `sessionStorage` flags. The middleware is the only gate.
 
@@ -70,7 +70,7 @@ Use an existing protected page as a template. The body should start with `<main 
 Edit [vercel.json](vercel.json) so the public URL serves the file from `private/`:
 
 ```json
-{ "source": "/agents-pricing.html", "destination": "/private/agents-pricing.html" }
+{ "source": "/corporate-pricing.html", "destination": "/private/corporate-pricing.html" }
 ```
 
 Without this rewrite the public URL 404s.
@@ -78,15 +78,15 @@ Without this rewrite the public URL 404s.
 ### Step 4 — Commit, push, deploy
 
 ```bash
-git add middleware.js vercel.json private/agents-pricing.html
-git commit -m "Add agents pricing page"
+git add middleware.js vercel.json private/corporate-pricing.html
+git commit -m "Add corporate pricing page"
 git push
 ```
 
 Vercel auto-deploys from `main`. Wait ~30–60s, then test in an incognito window:
 
 1. Visit the new page directly without logging in → should redirect to `/private-info`.
-2. Enter the agents code → should land on the agents page.
+2. Enter the corporate code → should land on the corporate page.
 3. Navigate to the new page from there → should load.
 
 ---
@@ -111,7 +111,6 @@ Edit [api/login.js](api/login.js) and add an entry to the `ROLES` array:
 
 ```js
 const ROLES = [
-  { role: 'agents',    envVar: 'IMARI_AGENTS_PASSWORD',    redirect: '/agents.html' },
   { role: 'corporate', envVar: 'IMARI_CORPORATE_PASSWORD', redirect: '/corporate.html' },
   { role: 'vendors',   envVar: 'IMARI_VENDORS_PASSWORD',   redirect: '/vendors.html' },  // ← new
 ];
@@ -127,7 +126,6 @@ Edit [middleware.js](middleware.js). Two edits:
 
 ```js
 const ROLE_ALLOWS = {
-  agents:    (p) => p === '/agents.html'    || p.startsWith('/agents-'),
   corporate: (p) => p === '/corporate.html' || p.startsWith('/corporate-'),
   vendors:   (p) => p === '/vendors.html'   || p.startsWith('/vendors-'),   // ← new
 };
@@ -176,7 +174,7 @@ Wait for Vercel deploy. Then in an incognito window: test that the new password 
 
 Use this when a code has leaked, or when you want to cycle codes on a schedule. Existing logged-in users with the old code stay logged in until their cookie expires (12h max) — they only need the new code on next login.
 
-1. **Vercel → Project Settings → Environment Variables.** Edit the relevant `IMARI_<ROLE>_PASSWORD` (e.g. `IMARI_AGENTS_PASSWORD`) and save the new value.
+1. **Vercel → Project Settings → Environment Variables.** Edit the relevant `IMARI_<ROLE>_PASSWORD` (e.g. `IMARI_CORPORATE_PASSWORD`) and save the new value.
 2. **Redeploy.** Vercel doesn't hot-reload env vars into Edge Functions. Either click "Redeploy" on the latest deployment, or push any commit to `main`.
 3. **Share the new code** with the people who need it.
 4. **Verify** in an incognito window: old code → "Incorrect access code"; new code → lands on the role's page.
@@ -198,13 +196,13 @@ Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The mid
 ## Gotchas
 
 - **Always redeploy after changing env vars in Vercel.** Vercel doesn't hot-reload env vars into Edge functions. Either trigger a manual redeploy or push any commit.
-- **File naming dictates access.** A page named `agents-something.html` is unlocked by the agents code via the prefix rule in `ROLE_ALLOWS`. A page named `something-agents.html` is NOT — the prefix check fails.
+- **File naming dictates access.** A page named `corporate-something.html` is unlocked by the corporate code via the prefix rule in `ROLE_ALLOWS`. A page named `something-corporate.html` is NOT — the prefix check fails.
 - **Don't reuse role names across the system.** Each `role` string in the `ROLES` array must be unique.
 - **The `matcher` is an explicit list, not a wildcard.** Even though `ROLE_ALLOWS` uses prefixes, the middleware only runs on paths in the `matcher`. New pages must be added there.
 - **Don't put `<div id="gate">` or password JS back into the HTML.** That was the old client-side gate which exposed both passwords and content. The middleware is the only gate now.
 - **Test in incognito.** Existing cookies in your normal browser can mask bugs. After changes, always do at least one test from a fresh incognito session.
 - **Don't commit `.env` files.** Passwords live in Vercel env vars only. There is no local `.env` file in this repo.
-- **Protected files live in `private/`, but middleware/matcher paths do not.** Every entry in `matcher` and every key/prefix in `ROLE_ALLOWS` references the public URL (`/agents.html`), not the file path on disk (`/private/agents.html`). The `vercel.json` rewrite is what bridges the two.
+- **Protected files live in `private/`, but middleware/matcher paths do not.** Every entry in `matcher` and every key/prefix in `ROLE_ALLOWS` references the public URL (`/corporate.html`), not the file path on disk (`/private/corporate.html`). The `vercel.json` rewrite is what bridges the two.
 - **Every new protected page needs a rewrite.** Without an entry in `vercel.json`, the public URL 404s even though the file exists under `private/`.
 
 ---
@@ -230,14 +228,10 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 
 | Public URL | File | Unlocked by role |
 |---|---|---|
-| `/agents.html` | `private/agents.html` | `agents` |
-| `/agents-interior-gallery.html` | `private/agents-interior-gallery.html` | `agents` |
-| `/agents-exterior-gallery.html` | `private/agents-exterior-gallery.html` | `agents` |
-| `/agents-site-plan.html` | `private/agents-site-plan.html` | `agents` |
 | `/corporate.html` | `private/corporate.html` | `corporate` |
 | `/alarm250.html` | `private/alarm250.html` | `alarm250` |
 | `/freedom250.html` | `private/freedom250.html` | `freedom250` |
-| `/alex0349.html` | `private/alex0349.html` | `alex0349` (also `agents-*`) |
+| `/alex0349.html` | `private/alex0349.html` | `alex0349` |
 | `/july4.html` | `private/july4.html` | `july4` |
 
 ### Required Vercel env vars
@@ -245,11 +239,10 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | Variable | Purpose |
 |---|---|
 | `IMARI_AUTH_SECRET` | Random secret used to sign auth cookies. Generate with `openssl rand -hex 32`. **Never share or commit.** |
-| `IMARI_AGENTS_PASSWORD` | Agents code. Shared with trade & planning partners. |
 | `IMARI_CORPORATE_PASSWORD` | Corporate code. Shared with corporate & institutional partners. |
 | `IMARI_ALARM250_PASSWORD` | Alarm.com × UFC Freedom 250 single-prospect page. |
 | `IMARI_FREEDOM250_PASSWORD` | Generalized UFC Freedom 250 weekend page for any corporate prospect. |
-| `IMARI_ALEX0349_PASSWORD` | Personalized agent page (Alex Endo); also grants access to shared `agents-*` galleries. |
+| `IMARI_ALEX0349_PASSWORD` | Personalized landing page for Alex Endo. |
 | `IMARI_JULY4_PASSWORD` | Personalized 4th of July weekend landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |
 
