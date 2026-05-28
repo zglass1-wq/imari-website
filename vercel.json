@@ -6,6 +6,7 @@
     { "source": "/alarm250.html", "destination": "/private/alarm250.html" },
     { "source": "/freedom250.html", "destination": "/private/freedom250.html" },
     { "source": "/alex0349.html", "destination": "/private/alex0349.html" },
-    { "source": "/july4.html", "destination": "/private/july4.html" }
+    { "source": "/july4.html", "destination": "/private/july4.html" },
+    { "source": "/july4p2.html", "destination": "/private/july4p2.html" }
   ]
 }
