@@ -17,6 +17,7 @@
       --warm-mid: #8c7b60;
       --rule: rgba(184,151,90,0.22);
       --rule-dark: rgba(184,151,90,0.45);
+      --ember: #1C1A15;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -86,19 +87,19 @@
     .photo-band img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.9); transition: filter 0.5s; }
     .photo-band img:hover { filter: brightness(1.02); }
 
-    /* PROPERTY */
-    .property-section { background: var(--ink); padding: 7rem 3rem; overflow: hidden; }
-    .property-inner { max-width: 1200px; margin: 0 auto; }
-    .property-header { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-bottom: 5rem; align-items: end; }
-    .property-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(184,151,90,0.12); border: 1px solid rgba(184,151,90,0.12); margin-bottom: 4px; }
-    .prop-col { background: rgba(26,23,18,0.5); padding: 2.5rem; }
-    .prop-col-title { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(184,151,90,0.15); }
-    .prop-list { list-style: none; }
-    .prop-list li { font-size: 0.8rem; line-height: 1.7; color: rgba(245,240,232,0.65); padding: 0.55rem 0; border-bottom: 1px solid rgba(184,151,90,0.08); display: flex; gap: 0.75rem; }
-    .prop-list li::before { content: '·'; color: var(--gold); font-size: 1.2rem; line-height: 1.3; flex-shrink: 0; }
-    .prop-photos { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 300px; gap: 4px; margin-top: 4px; }
-    .prop-photos img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.82) saturate(0.85); transition: filter 0.4s; }
-    .prop-photos img:hover { filter: brightness(0.95) saturate(1); }
+    /* POSITIONING */
+    .position-wrap { background: var(--ember); padding: 7rem 3rem; }
+    .position-inner { max-width: 1360px; margin: 0 auto; }
+    .position-statement { max-width: 760px; margin: 0 auto 5rem; text-align: center; }
+    .position-statement p:not(.section-eyebrow) { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 2.8vw, 2.4rem); font-weight: 300; line-height: 1.45; color: var(--parchment); }
+    .position-statement p:not(.section-eyebrow) em { color: var(--gold-light); font-style: italic; }
+    .estate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(200,191,176,0.1); border: 1px solid rgba(200,191,176,0.1); }
+    .estate-col { background: var(--ember); padding: 2.75rem 2.25rem; }
+    .estate-col-eyebrow { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .estate-col-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-style: italic; font-weight: 300; color: var(--parchment); margin-bottom: 1.5rem; line-height: 1.2; }
+    .estate-list { list-style: none; border-top: 1px solid var(--rule); }
+    .estate-list li { font-size: 0.78rem; line-height: 1.7; color: rgba(245,240,232,0.7); padding: 0.7rem 0; border-bottom: 1px solid var(--rule); display: flex; gap: 0.75rem; }
+    .estate-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
 
     /* AGENDA */
     .agenda-section { padding: 7rem 3rem; background: var(--parchment-dark); }
@@ -144,11 +145,10 @@
       .uc-body-wrap { padding: 2.5rem 1.5rem; }
       .photo-band { grid-template-columns: 1fr 1fr; height: 220px; }
       .photo-band img:nth-child(3), .photo-band img:nth-child(4) { display: none; }
-      .property-section { padding: 5rem 1.5rem; }
-      .property-header { grid-template-columns: 1fr; gap: 2rem; }
-      .property-cols { grid-template-columns: 1fr; }
-      .prop-photos { grid-template-columns: 1fr 1fr; }
-      .prop-photos img:nth-child(3) { display: none; }
+      .position-wrap { padding: 5rem 1.5rem; }
+      .position-statement { margin: 0 auto 3rem; }
+      .estate-grid { grid-template-columns: 1fr; }
+      .estate-col { padding: 2rem 1.5rem; }
       .agenda-section { padding: 5rem 1.5rem; }
       .agenda-inner { grid-template-columns: 1fr; gap: 3rem; }
       .agenda-sticky { position: static; }
@@ -274,48 +274,43 @@
     <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS147.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
   </div>
 
-  <!-- PROPERTY -->
-  <section class="property-section">
-    <div class="property-inner">
-      <div class="property-header">
-        <div>
-          <p class="section-eyebrow">The Estate</p>
-          <h2 class="section-title" style="color:var(--parchment)">Built for guests whose<br>presence is consequential.</h2>
-        </div>
-        <p class="section-body" style="color:rgba(245,240,232,0.55)">A private acre estate in the heart of Georgetown. Designed for security, discretion, and the conduct of serious work. Every staff member signs a confidentiality agreement before entering. Vehicles arrive and depart within the grounds, completely out of public view.</p>
+  <!-- POSITIONING -->
+  <section class="position-wrap" id="section-estate">
+    <div class="position-inner">
+      <div class="position-statement">
+        <p class="section-eyebrow">The Estate</p>
+        <p>Imari is a private estate available for the exclusive occupancy of a single party. <em>Comfortable luxury on one private acre.</em> Full staff, complete security, seven star service - a residence built to host, to hold court, to headquarter.</p>
       </div>
-      <div class="property-cols">
-        <div class="prop-col">
-          <p class="prop-col-title">Property</p>
-          <ul class="prop-list">
-            <li>Private acre estate designed for security and discretion</li>
-            <li>930 SF ballroom with customizable configurations</li>
-            <li>Nine bedroom suites for up to 15 overnight guests</li>
-            <li>Multiple sitting rooms, salons, and greenhouse</li>
-            <li>Onsite parking and private motor court</li>
-            <li>Complete AV suite for presentations</li>
-            <li>Manicured grounds, pool, spa, and gym</li>
-            <li>Central Georgetown — White House, Capitol nearby</li>
+      <div class="estate-grid">
+        <div class="estate-col">
+          <p class="estate-col-eyebrow">Property</p>
+          <p class="estate-col-title">What's on the grounds.</p>
+          <ul class="estate-list">
+            <li>12,000 sq ft main house on one private acre of manicured gardens in central Georgetown D.C.</li>
+            <li>Six bedroom suites across two floors with 15 bathrooms</li>
+            <li>1,000 sq ft detached ballroom</li>
+            <li>Detached Spa House — sauna, steam room, cold plunge, hot tub</li>
+            <li>Full-size pool, gym, dedicated yoga and meditation room</li>
+            <li>Three-bedroom guest house for client staff — separate entrance, self-contained</li>
+            <li>Gated arrival court with parking for 10 vehicles</li>
+            <li>Estate-wide security with perimeter PTZ cameras, vetted for heads of state</li>
           </ul>
         </div>
-        <div class="prop-col">
-          <p class="prop-col-title">Services</p>
-          <ul class="prop-list">
-            <li>Dedicated concierge managing all logistics end-to-end</li>
-            <li>Michelin-star chefs for private meals and formal dinners</li>
-            <li>Butler-led arrival, housekeeping, and evening turndown</li>
-            <li>All staff bound by confidentiality agreement</li>
-            <li>Private car and driver for the duration</li>
-            <li>Event production from ideation to execution</li>
-            <li>Private aviation coordination available</li>
-            <li>Full property reset between sessions and overnight</li>
+        <div class="estate-col">
+          <p class="estate-col-eyebrow">Services</p>
+          <p class="estate-col-title">How the days run.</p>
+          <ul class="estate-list">
+            <li>24/7 dedicated concierge managing logistics end-to-end</li>
+            <li>Butler-led arrival, daily service, evening turndown</li>
+            <li>Full housekeeping team — daily service and full property reset</li>
+            <li>Farm-sourced breakfast daily — eggs to order, pastries, cold-pressed juices</li>
+            <li>Stocked kitchen customized in advance to guest preferences</li>
+            <li>Michelin-star chefs available for meals and private dinners</li>
+            <li>Wellness on property — massage, acupuncture, IV therapy, yoga, personal training</li>
+            <li>Supercar access and private aviation coordination on request</li>
+            <li>Armed security personnel available</li>
           </ul>
         </div>
-      </div>
-      <div class="prop-photos">
-        <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Dining_Room_DSCF0271.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.82) saturate(0.85);"></div>
-        <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS157.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.82) saturate(0.85);"></div>
-        <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Living_Room_316.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.82) saturate(0.85);"></div>
       </div>
     </div>
   </section>
