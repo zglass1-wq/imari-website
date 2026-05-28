@@ -4,6 +4,8 @@ This is a static marketing site for Imari (a private estate in Georgetown, D.C.)
 
 If you're being asked to add a new password-protected page, the rest of this document is the playbook. If you're being asked to change unrelated public content, skip to "Repo orientation" at the bottom.
 
+> **For page content/structure** (the three page types — Specific Offer, Landing, Collateral — and which sections each one uses), see [PAGES.md](PAGES.md). Starter templates for each type live in [templates/](templates/) and are excluded from deploys via [.vercelignore](.vercelignore). This file (`CLAUDE.md`) owns the auth/middleware/rewrite playbook; `PAGES.md` owns what goes on the page.
+
 ---
 
 ## Where files live

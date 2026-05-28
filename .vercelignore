@@ -1,0 +1,6 @@
+# Page-type templates. Reused in-repo when building new private pages; never deployed.
+# See PAGES.md for the workflow.
+templates/
+
+# Deprecated local-only page snapshots.
+private/DEPR/

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<!--
+  TEMPLATE — Collateral
+  See PAGES.md ("Type 3") for section conventions and CLAUDE.md for the
+  auth/middleware/rewrite playbook.
+
+  Required token replacements:
+    {{AUDIENCE_TITLE}}   — for the <title> tag, e.g. "Corporate Catalyst"
+    {{AUDIENCE_LABEL}}   — hero eyebrow text, e.g. "Corporate Catalyst"
+    {{HERO_TITLE_HTML}}  — the H1; supports <br> and <em>
+    {{HERO_SUB}}         — sub-paragraph beneath the hero title
+    {{STAT_N_NUM/LABEL}} — hero stat row (4 cells, calibrated to the audience)
+    {{INTRO_TEXT}}       — single italic sentence in the Intro strip
+    {{USE_CASE_N_*}}     — four audience-specific verticals (number / title / desc / bullets / image)
+
+  Optional sections — Collateral varies piece to piece. Delete blocks that
+  don't apply to the piece you're building:
+    - Photo Band      — drop the <div class="photo-band"> block if not needed
+    - A day at Imari  — drop the <section class="agenda-section"> block if not needed
+    - Galleries       — not present in this template by default; if needed,
+      lift the Galleries block from _template-landing.html and drop in
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imari · {{AUDIENCE_TITLE}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --parchment: #f5f0e8;
+      --parchment-dark: #ede6d6;
+      --ink: #1a1712;
+      --ink-light: #3d3830;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --warm-mid: #8c7b60;
+      --rule: rgba(184,151,90,0.22);
+      --rule-dark: rgba(184,151,90,0.45);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--parchment);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      min-height: 100vh;
+    }
+
+    /* MAIN */
+    main { opacity: 1; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; transition: background 0.3s, padding 0.3s; }
+    .nav-logo { width: 88px; transition: opacity 0.3s, width 0.3s; }
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
+    .nav-link { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment); text-decoration: none; transition: color 0.2s, opacity 0.2s; }
+    .nav-link:hover { opacity: 0.6; }
+    .nav-link.dark { color: var(--warm-mid); }
+    .nav-link.dark:hover { color: var(--gold); }
+
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: flex-end; }
+    .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,23,18,0.15) 0%, rgba(26,23,18,0.1) 40%, rgba(26,23,18,0.78) 100%); }
+    .hero-content { position: relative; padding: 0 3rem 5rem; max-width: 820px; }
+    .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 1.5rem; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.05; color: var(--parchment); margin-bottom: 2rem; }
+    .hero-title em { font-style: italic; color: var(--gold-light); }
+    .hero-sub { font-size: 0.88rem; line-height: 1.85; color: rgba(245,240,232,0.7); max-width: 480px; margin-bottom: 3rem; }
+    .hero-stats { display: flex; gap: 4rem; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--parchment); display: block; line-height: 1; }
+    .stat-label { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-top: 0.3rem; display: block; }
+
+    /* INTRO STRIP */
+    .intro-strip { background: var(--ink); padding: 4rem 3rem; display: flex; align-items: center; gap: 4rem; justify-content: center; }
+    .intro-rule { width: 60px; height: 1px; background: var(--gold); flex-shrink: 0; }
+    .intro-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.15rem, 2.2vw, 1.55rem); font-weight: 300; font-style: italic; color: rgba(245,240,232,0.8); line-height: 1.55; max-width: 680px; text-align: center; }
+
+    /* SECTION HELPERS */
+    .section-eyebrow { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
+    .section-body { font-size: 0.88rem; line-height: 1.9; color: var(--ink-light); }
+
+    /* USE CASES — split layout */
+    .use-case { display: grid; grid-template-columns: 1fr 1fr; min-height: 580px; border-bottom: 1px solid var(--rule); }
+    .use-case.reverse { direction: rtl; }
+    .use-case.reverse > * { direction: ltr; }
+    .uc-image-wrap { overflow: hidden; }
+    .uc-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s ease; }
+    .use-case:hover .uc-image-wrap img { transform: scale(1.04); }
+    .uc-body-wrap { padding: 4.5rem 4rem; display: flex; flex-direction: column; justify-content: center; background: var(--parchment); }
+    .use-case.alt .uc-body-wrap { background: var(--parchment-dark); }
+    .uc-num { font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+    .uc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 400; color: var(--ink); margin-bottom: 1rem; line-height: 1.15; }
+    .uc-desc { font-size: 0.82rem; line-height: 1.9; color: var(--ink-light); margin-bottom: 2rem; }
+    .uc-list { list-style: none; border-top: 1px solid var(--rule); padding-top: 1.25rem; }
+    .uc-list li { font-size: 0.75rem; line-height: 1.65; color: var(--warm-mid); padding: 0.3rem 0; border-bottom: 1px solid var(--rule); display: flex; gap: 0.75rem; }
+    .uc-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+    /* PHOTO BAND */
+    .photo-band { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 0.9fr; height: 340px; overflow: hidden; }
+    .photo-band img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.9); transition: filter 0.5s; }
+    .photo-band img:hover { filter: brightness(1.02); }
+
+    /* PROPERTY */
+    .property-section { background: var(--ink); padding: 7rem 3rem; overflow: hidden; }
+    .property-inner { max-width: 1200px; margin: 0 auto; }
+    .property-header { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-bottom: 5rem; align-items: end; }
+    .property-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(184,151,90,0.12); border: 1px solid rgba(184,151,90,0.12); margin-bottom: 4px; }
+    .prop-col { background: rgba(26,23,18,0.5); padding: 2.5rem; }
+    .prop-col-title { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(184,151,90,0.15); }
+    .prop-list { list-style: none; }
+    .prop-list li { font-size: 0.8rem; line-height: 1.7; color: rgba(245,240,232,0.65); padding: 0.55rem 0; border-bottom: 1px solid rgba(184,151,90,0.08); display: flex; gap: 0.75rem; }
+    .prop-list li::before { content: '·'; color: var(--gold); font-size: 1.2rem; line-height: 1.3; flex-shrink: 0; }
+    .prop-photos { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 300px; gap: 4px; margin-top: 4px; }
+    .prop-photos img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.82) saturate(0.85); transition: filter 0.4s; }
+    .prop-photos img:hover { filter: brightness(0.95) saturate(1); }
+
+    /* AGENDA */
+    .agenda-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+    .agenda-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 400px 1fr; gap: 6rem; align-items: start; }
+    .agenda-sticky { position: sticky; top: 5rem; }
+    .agenda-sticky img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; margin-top: 2.5rem; }
+    .timeline { margin-top: 0.5rem; }
+    .tl-item { display: grid; grid-template-columns: 100px 1fr; gap: 2.5rem; padding-bottom: 3rem; position: relative; }
+    .tl-item::before { content: ''; position: absolute; left: 100px; top: 0.5rem; bottom: 0; width: 1px; background: var(--rule-dark); }
+    .tl-item:last-child::before { display: none; }
+    .tl-time { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--gold); text-align: right; padding-right: 2.5rem; padding-top: 0.1rem; position: relative; }
+    .tl-time::after { content: ''; position: absolute; right: -5px; top: 0.45rem; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); border: 2px solid var(--parchment-dark); }
+    .tl-heading { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: var(--ink); margin-bottom: 0.75rem; }
+    .tl-items { list-style: none; }
+    .tl-items li { font-size: 0.78rem; line-height: 1.8; color: var(--ink-light); padding: 0.15rem 0; display: flex; gap: 0.6rem; }
+    .tl-items li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+    /* INQUIRY */
+    .inquiry-section { position: relative; overflow: hidden; min-height: 520px; display: flex; align-items: center; }
+    .inquiry-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; filter: brightness(0.28) saturate(0.65); }
+    .inquiry-content { position: relative; text-align: center; padding: 7rem 2rem; width: 100%; }
+    .inquiry-body { font-size: 0.88rem; line-height: 1.9; color: rgba(245,240,232,0.5); max-width: 480px; margin: 1.5rem auto 3.5rem; }
+    .inquiry-contacts { display: flex; gap: 5rem; justify-content: center; margin-bottom: 3rem; }
+    .contact-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .contact-val { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--parchment); text-decoration: none; display: block; transition: color 0.2s; }
+    .contact-val:hover { color: var(--gold-light); }
+    .inquiry-note { font-size: 0.62rem; letter-spacing: 0.1em; color: rgba(245,240,232,0.18); }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid rgba(184,151,90,0.08); padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { width: 68px; opacity: 0.45; }
+    .footer-copy { font-size: 0.58rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.18); text-transform: uppercase; }
+    .footer-conf { font-size: 0.58rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.32); text-transform: uppercase; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .hero-content { padding: 0 1.5rem 4rem; }
+      .hero-stats { gap: 2.5rem; }
+      .use-case { grid-template-columns: 1fr; min-height: auto; }
+      .use-case.reverse { direction: ltr; }
+      .uc-image-wrap { height: 300px; }
+      .uc-body-wrap { padding: 2.5rem 1.5rem; }
+      .photo-band { grid-template-columns: 1fr 1fr; height: 220px; }
+      .photo-band img:nth-child(3), .photo-band img:nth-child(4) { display: none; }
+      .property-section { padding: 5rem 1.5rem; }
+      .property-header { grid-template-columns: 1fr; gap: 2rem; }
+      .property-cols { grid-template-columns: 1fr; }
+      .prop-photos { grid-template-columns: 1fr 1fr; }
+      .prop-photos img:nth-child(3) { display: none; }
+      .agenda-section { padding: 5rem 1.5rem; }
+      .agenda-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .agenda-sticky { position: static; }
+      .agenda-sticky img { display: none; }
+      .inquiry-contacts { flex-direction: column; gap: 2rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<main id="main-content">
+
+  <nav id="site-nav">
+    <img id="nav-logo" class="nav-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <div class="nav-right">
+      <a class="nav-link" id="nl1" href="tel:+12028686945">+1 (202) 868-6945</a>
+      <a class="nav-link" id="nl2" href="#inquiry">Inquire</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <img class="hero-img" src="https://imari-website-beta.vercel.app/photos/Dining_Room_105-header.jpg" alt="Imari Georgetown" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Imari Georgetown · {{AUDIENCE_LABEL}}</p>
+      <h1 class="hero-title">{{HERO_TITLE_HTML}}</h1>
+      <p class="hero-sub">{{HERO_SUB}}</p>
+      <div class="hero-stats">
+        <div><span class="stat-num">{{STAT_1_NUM}}</span><span class="stat-label">{{STAT_1_LABEL}}</span></div>
+        <div><span class="stat-num">{{STAT_2_NUM}}</span><span class="stat-label">{{STAT_2_LABEL}}</span></div>
+        <div><span class="stat-num">{{STAT_3_NUM}}</span><span class="stat-label">{{STAT_3_LABEL}}</span></div>
+        <div><span class="stat-num">{{STAT_4_NUM}}</span><span class="stat-label">{{STAT_4_LABEL}}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-strip">
+    <div class="intro-rule"></div>
+    <p class="intro-text">{{INTRO_TEXT}}</p>
+    <div class="intro-rule"></div>
+  </div>
+
+  <!-- USE CASE 01 -->
+  <div class="use-case">
+    <div class="uc-image-wrap">
+      <img src="{{USE_CASE_1_IMAGE}}" alt="{{USE_CASE_1_IMAGE_ALT}}" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">01</p>
+      <h2 class="uc-title">{{USE_CASE_1_TITLE}}</h2>
+      <p class="uc-desc">{{USE_CASE_1_DESC}}</p>
+      <ul class="uc-list">
+        <li>{{USE_CASE_1_BULLET_1}}</li>
+        <li>{{USE_CASE_1_BULLET_2}}</li>
+        <li>{{USE_CASE_1_BULLET_3}}</li>
+        <li>{{USE_CASE_1_BULLET_4}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- USE CASE 02 -->
+  <div class="use-case reverse alt">
+    <div class="uc-image-wrap">
+      <img src="{{USE_CASE_2_IMAGE}}" alt="{{USE_CASE_2_IMAGE_ALT}}" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">02</p>
+      <h2 class="uc-title">{{USE_CASE_2_TITLE}}</h2>
+      <p class="uc-desc">{{USE_CASE_2_DESC}}</p>
+      <ul class="uc-list">
+        <li>{{USE_CASE_2_BULLET_1}}</li>
+        <li>{{USE_CASE_2_BULLET_2}}</li>
+        <li>{{USE_CASE_2_BULLET_3}}</li>
+        <li>{{USE_CASE_2_BULLET_4}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- USE CASE 03 -->
+  <div class="use-case">
+    <div class="uc-image-wrap">
+      <img src="{{USE_CASE_3_IMAGE}}" alt="{{USE_CASE_3_IMAGE_ALT}}" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">03</p>
+      <h2 class="uc-title">{{USE_CASE_3_TITLE}}</h2>
+      <p class="uc-desc">{{USE_CASE_3_DESC}}</p>
+      <ul class="uc-list">
+        <li>{{USE_CASE_3_BULLET_1}}</li>
+        <li>{{USE_CASE_3_BULLET_2}}</li>
+        <li>{{USE_CASE_3_BULLET_3}}</li>
+        <li>{{USE_CASE_3_BULLET_4}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- USE CASE 04 -->
+  <div class="use-case reverse alt">
+    <div class="uc-image-wrap">
+      <img src="{{USE_CASE_4_IMAGE}}" alt="{{USE_CASE_4_IMAGE_ALT}}" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">04</p>
+      <h2 class="uc-title">{{USE_CASE_4_TITLE}}</h2>
+      <p class="uc-desc">{{USE_CASE_4_DESC}}</p>
+      <ul class="uc-list">
+        <li>{{USE_CASE_4_BULLET_1}}</li>
+        <li>{{USE_CASE_4_BULLET_2}}</li>
+        <li>{{USE_CASE_4_BULLET_3}}</li>
+        <li>{{USE_CASE_4_BULLET_4}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHOTO BAND -->
+  <div class="photo-band">
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS064.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Dining_Room_126_web.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Parlor_427.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
+    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS147.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
+  </div>
+
+  <!-- PROPERTY -->
+  <section class="property-section">
+    <div class="property-inner">
+      <div class="property-header">
+        <div>
+          <p class="section-eyebrow">The Estate</p>
+          <h2 class="section-title" style="color:var(--parchment)">Built for guests whose<br>presence is consequential.</h2>
+        </div>
+        <p class="section-body" style="color:rgba(245,240,232,0.55)">A private acre estate in the heart of Georgetown. Designed for security, discretion, and the conduct of serious work. Every staff member signs a confidentiality agreement before entering. Vehicles arrive and depart within the grounds, completely out of public view.</p>
+      </div>
+      <div class="property-cols">
+        <div class="prop-col">
+          <p class="prop-col-title">Property</p>
+          <ul class="prop-list">
+            <li>Private acre estate designed for security and discretion</li>
+            <li>930 SF ballroom with customizable configurations</li>
+            <li>Nine bedroom suites for up to 15 overnight guests</li>
+            <li>Multiple sitting rooms, salons, and greenhouse</li>
+            <li>Onsite parking and private motor court</li>
+            <li>Complete AV suite for presentations</li>
+            <li>Manicured grounds, pool, spa, and gym</li>
+            <li>Central Georgetown — White House, Capitol nearby</li>
+          </ul>
+        </div>
+        <div class="prop-col">
+          <p class="prop-col-title">Services</p>
+          <ul class="prop-list">
+            <li>Dedicated concierge managing all logistics end-to-end</li>
+            <li>Michelin-star chefs for private meals and formal dinners</li>
+            <li>Butler-led arrival, housekeeping, and evening turndown</li>
+            <li>All staff bound by confidentiality agreement</li>
+            <li>Private car and driver for the duration</li>
+            <li>Event production from ideation to execution</li>
+            <li>Private aviation coordination available</li>
+            <li>Full property reset between sessions and overnight</li>
+          </ul>
+        </div>
+      </div>
+      <div class="prop-photos">
+        <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Dining_Room_DSCF0271.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.82) saturate(0.85);"></div>
+        <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS157.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.82) saturate(0.85);"></div>
+        <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Living_Room_316.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.82) saturate(0.85);"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section class="agenda-section">
+    <div class="agenda-inner">
+      <div class="agenda-sticky">
+        <p class="section-eyebrow">The Experience</p>
+        <h2 class="section-title">A day at<br>Imari.</h2>
+        <p class="section-body" style="max-width:320px">Every element handled. Every transition seamless. A sample of what a working day on-property looks like.</p>
+        <img src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS134.jpeg" alt="Gardens" />
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-time">Morning</div>
+          <div>
+            <p class="tl-heading">Settle in. Begin.</p>
+            <ul class="tl-items">
+              <li>In-residence farm-to-table breakfast served at your convenience</li>
+              <li>Informal settling in with concierge assistance as needed</li>
+              <li>Leadership session, roundtable, or working meeting hosted on-site</li>
+              <li>Butler service throughout with refreshments and assistance</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">Afternoon</div>
+          <div>
+            <p class="tl-heading">Work. Move. Recover.</p>
+            <ul class="tl-items">
+              <li>Working lunch in the dining room or arranged off-site</li>
+              <li>Breakout sessions across indoor and outdoor spaces</li>
+              <li>On- or off-site meetings with all transportation handled</li>
+              <li>Gym, spa, or pool between sessions — not all deals close at the table</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">Evening</div>
+          <div>
+            <p class="tl-heading">Host. Connect. Rest.</p>
+            <ul class="tl-items">
+              <li>Private chef-driven dinner in the main house or off-site</li>
+              <li>Drinks, reception, or fireside gathering for informal conversation</li>
+              <li>Overnight guests wind down while events continue uninterrupted</li>
+              <li>Evening turndown, next-day prep, and full property reset while you sleep</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INQUIRY -->
+  <section class="inquiry-section" id="inquiry">
+    <img class="inquiry-bg" src="https://imari-website-beta.vercel.app/photos/Yard_045.jpeg" alt="Estate grounds" />
+    <div class="inquiry-content">
+      <p class="section-eyebrow">Begin a conversation</p>
+      <h2 class="section-title" style="color:var(--parchment)">Reserve for Summer<br>and Fall 2026.</h2>
+      <p class="inquiry-body">Our team works directly with corporate travel coordinators, event planners, executive assistants, and C-suite principals. Availability is limited and held for confirmed parties only.</p>
+      <div class="inquiry-contacts">
+        <div><p class="contact-label">Call</p><a class="contact-val" href="tel:+12028686945">+1 (202) 868-6945</a></div>
+        <div><p class="contact-label">Email</p><a class="contact-val" href="mailto:info@imari.cc">info@imari.cc</a></div>
+      </div>
+      <p class="inquiry-note">This page is shared for planning purposes only. Please do not forward or distribute.</p>
+    </div>
+  </section>
+
+  <footer>
+    <img class="footer-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <span class="footer-copy">© 2025 LXIV Group. All rights reserved.</span>
+    <span class="footer-conf">Confidential · Not for distribution</span>
+  </footer>
+
+</main>
+
+<script>
+  // Nav transitions from light-over-hero to solid on scroll
+  const nav = document.getElementById('site-nav');
+  const navLogo = document.getElementById('nav-logo');
+  const nl1 = document.getElementById('nl1');
+  const nl2 = document.getElementById('nl2');
+
+  window.addEventListener('scroll', () => {
+    const heroH = document.querySelector('.hero').offsetHeight;
+    if (window.scrollY > heroH - 80) {
+      nav.style.background = 'rgba(245,240,232,0.97)';
+      nav.style.boxShadow = '0 1px 0 rgba(184,151,90,0.15)';
+      nav.style.padding = '0.6rem 3rem';
+      navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-gingko.svg';
+      navLogo.style.width = '56px';
+      nl1.classList.add('dark'); nl2.classList.add('dark');
+    } else {
+      nav.style.background = 'transparent';
+      nav.style.boxShadow = 'none';
+      nav.style.padding = '1.5rem 3rem';
+      navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-parchment.svg';
+      navLogo.style.width = '88px';
+      nl1.classList.remove('dark'); nl2.classList.remove('dark');
+    }
+  });
+</script>
+</body>
+</html>

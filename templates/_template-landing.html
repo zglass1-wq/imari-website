@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<!--
+  TEMPLATE — Landing
+  See PAGES.md ("Type 2") for section conventions and CLAUDE.md for the
+  auth/middleware/rewrite playbook.
+
+  Required token replacements:
+    {{RECIPIENT_NAME}}   — uppercase name shown in the hero eyebrow (e.g. "ALEX ENDO")
+    {{RECIPIENT_TITLE}}  — short identifier for the <title> tag (e.g. "Alex Endo")
+    {{HERO_TITLE_HTML}}  — the H1; supports <br> and <em> for italic accent
+    {{HERO_SUB}}         — sub-paragraph beneath the hero title
+    {{INTRO_TEXT}}       — single italic-Cormorant sentence in the Intro strip
+    {{STAT_N_NUM/LABEL}} — hero stat row (4 cells: suites · staff bedrooms · event capacity · "1 party always")
+
+  Optional sections:
+    - Advisor Strip — keep only on advisor-facing landings; otherwise delete
+      the <section class="advisor-strip"> block.
+    - Supplemental Services — typical but not required; remove the
+      <section class="services-section"> block if not pricing this stay.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imari · {{RECIPIENT_TITLE}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="services-table.css" />
+  <style>
+    :root {
+      --parchment: #f5f0e8;
+      --parchment-dark: #ede6d6;
+      --ink: #1a1712;
+      --ink-light: #3d3830;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --warm-mid: #8c7b60;
+      --rule: rgba(184,151,90,0.22);
+      --rule-dark: rgba(184,151,90,0.45);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+    /* Keep anchored sections clear of the fixed nav */
+    [id^="section-"], #inquiry { scroll-margin-top: 90px; }
+
+    body {
+      background: var(--parchment);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      min-height: 100vh;
+    }
+
+    /* MAIN */
+    main { opacity: 1; }
+
+    /* NAV — persistent at all widths: logo (left) · phone + hamburger (right) */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; transition: background 0.3s, padding 0.3s; }
+    nav.scrolled { background: rgba(245,240,232,0.97); box-shadow: 0 1px 0 rgba(184,151,90,0.15); padding: 0.6rem 3rem; }
+    .nav-logo { width: 88px; transition: opacity 0.3s, width 0.3s; }
+    nav.scrolled .nav-logo { width: 56px; }
+    .nav-right { display: flex; align-items: center; gap: 1.75rem; }
+    .nav-phone { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment); text-decoration: none; white-space: nowrap; transition: color 0.2s, opacity 0.2s; }
+    .nav-phone:hover { opacity: 0.6; }
+    nav.scrolled .nav-phone { color: var(--warm-mid); }
+    nav.scrolled .nav-phone:hover { color: var(--gold); opacity: 1; }
+    .nav-toggle { display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 30px; padding: 4px; background: none; border: 0; cursor: pointer; }
+    .nav-toggle span { display: block; width: 24px; height: 1.5px; background: var(--parchment); transition: background 0.3s; }
+    nav.scrolled .nav-toggle span { background: var(--warm-mid); }
+
+    /* NAV DRAWER — slides in from the right */
+    .drawer-backdrop { position: fixed; inset: 0; z-index: 150; background: rgba(26,23,18,0.45); opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+    .drawer-backdrop.open { opacity: 1; visibility: visible; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 160; width: 360px; max-width: 100%; background: var(--parchment); box-shadow: -16px 0 48px rgba(26,23,18,0.20); transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; padding: 1.75rem 2.5rem 2.5rem; overflow-y: auto; }
+    .drawer.open { transform: translateX(0); }
+    .drawer-close { align-self: flex-end; background: none; border: 0; cursor: pointer; font-size: 1.7rem; line-height: 1; color: var(--warm-mid); padding: 0.25rem 0.1rem; transition: color 0.2s; }
+    .drawer-close:hover { color: var(--gold); }
+    .drawer-inner { margin-top: 1.25rem; }
+    .drawer-inner .section-eyebrow { margin-bottom: 1rem; }
+    .drawer-links { display: flex; flex-direction: column; }
+    .drawer-links a { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 1.25rem; line-height: 1.3; color: var(--ink); text-decoration: none; padding: 0.5rem 0; transition: color 0.2s; }
+    .drawer-links a:hover { color: var(--gold); }
+    .drawer-divider { height: 1px; background: var(--rule); margin: 1.75rem 0; }
+
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: flex-end; }
+    .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,23,18,0.15) 0%, rgba(26,23,18,0.1) 40%, rgba(26,23,18,0.82) 100%); }
+    .hero-content { position: relative; padding: 0 3rem 5rem; max-width: 820px; }
+    .hero-eyebrow { font-size: 0.85rem; letter-spacing: 0.08em; color: var(--gold-light); margin-bottom: 1.75rem; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.05; color: var(--parchment); margin-bottom: 2rem; }
+    .hero-title em { font-style: italic; color: var(--gold-light); }
+    .hero-sub { font-size: 0.88rem; line-height: 1.85; color: rgba(245,240,232,0.7); margin-bottom: 3rem; }
+    .hero-stats { display: flex; gap: 4rem; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--parchment); display: block; line-height: 1; }
+    .stat-label { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-top: 0.3rem; display: block; }
+
+    /* INTRO STRIP */
+    .intro-strip { background: var(--ink); padding: 4rem 3rem; display: flex; align-items: center; gap: 4rem; justify-content: center; }
+    .intro-rule { width: 60px; height: 1px; background: var(--gold); flex-shrink: 0; }
+    .intro-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.15rem, 2.2vw, 1.55rem); font-weight: 300; font-style: italic; color: rgba(245,240,232,0.8); line-height: 1.55; max-width: 680px; text-align: center; }
+
+    /* SECTION HELPERS */
+    .section-eyebrow { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
+    .section-body { font-size: 0.88rem; line-height: 1.9; color: var(--ink-light); }
+
+    /* USE CASES */
+    .use-case { display: grid; grid-template-columns: 1fr 1fr; min-height: 560px; border-bottom: 1px solid var(--rule); }
+    .use-case.reverse { direction: rtl; }
+    .use-case.reverse > * { direction: ltr; }
+    .uc-image-wrap { overflow: hidden; }
+    .uc-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s ease; }
+    .use-case:hover .uc-image-wrap img { transform: scale(1.04); }
+    .uc-body-wrap { padding: 4.5rem 4rem; display: flex; flex-direction: column; justify-content: center; background: var(--parchment); }
+    .use-case.alt .uc-body-wrap { background: var(--parchment-dark); }
+    .uc-num { font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+    .uc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 400; color: var(--ink); margin-bottom: 1rem; line-height: 1.15; }
+    .uc-desc { font-size: 0.82rem; line-height: 1.9; color: var(--ink-light); margin-bottom: 2rem; }
+    .uc-list { list-style: none; border-top: 1px solid var(--rule); padding-top: 1.25rem; }
+    .uc-list li { font-size: 0.75rem; line-height: 1.65; color: var(--warm-mid); padding: 0.3rem 0; border-bottom: 1px solid var(--rule); display: flex; gap: 0.75rem; }
+    .uc-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+    /* GALLERY */
+    .gallery-section { background: var(--parchment-dark); padding: 7rem 3rem; }
+    .gallery-inner { max-width: 1200px; margin: 0 auto; }
+    .gallery-header { margin-bottom: 3.5rem; }
+    .subgallery { margin-bottom: 3.5rem; }
+    .subgallery:last-child { margin-bottom: 0; }
+    .subgallery-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: 0.75rem; margin-bottom: 0.85rem; border-bottom: 1px solid var(--rule); }
+    .subgallery-label { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 1.5rem; color: var(--ink); }
+    .subgallery-viewall { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); text-decoration: none; white-space: nowrap; cursor: pointer; transition: opacity 0.2s; }
+    .subgallery-viewall:hover { opacity: 0.6; }
+    .thumb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .thumb { aspect-ratio: 4 / 3; overflow: hidden; cursor: pointer; background: var(--parchment-dark); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease, opacity 0.3s; }
+    .thumb:hover img { transform: scale(1.04); opacity: 0.9; }
+
+    /* LIGHTBOX */
+    .lightbox { position: fixed; inset: 0; z-index: 300; display: none; align-items: center; justify-content: center; background: rgba(26,23,18,0.95); }
+    .lightbox.open { display: flex; }
+    .lb-img { max-width: 90vw; max-height: 80vh; object-fit: contain; display: block; }
+    .lb-label { position: absolute; top: 1.6rem; left: 1.8rem; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+    .lb-counter { position: absolute; top: 1.5rem; right: 4.2rem; font-size: 0.72rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.6); font-variant-numeric: tabular-nums; }
+    .lb-close { position: absolute; top: 1.05rem; right: 1.5rem; background: none; border: 0; cursor: pointer; font-size: 1.9rem; line-height: 1; color: rgba(245,240,232,0.6); transition: color 0.2s; }
+    .lb-close:hover { color: rgba(245,240,232,1); }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 0; cursor: pointer; font-size: 3rem; line-height: 1; color: rgba(245,240,232,0.3); padding: 1rem; transition: color 0.2s; user-select: none; }
+    .lb-nav:hover { color: rgba(245,240,232,0.85); }
+    .lb-prev { left: 0.5rem; }
+    .lb-next { right: 0.5rem; }
+
+    /* SUITES */
+    .suites-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+    .suites-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 400px 1fr; gap: 6rem; align-items: start; }
+    .suites-sticky { position: sticky; top: 5rem; }
+    .suites-sticky img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; margin-top: 2.5rem; }
+    .suite-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 0.5rem; }
+    .suite-card { background: var(--parchment-dark); padding: 2rem; }
+    .suite-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--ink); margin-bottom: 0.4rem; }
+    .suite-detail { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--warm-mid); margin-bottom: 1rem; text-transform: uppercase; }
+    .suite-features { list-style: none; }
+    .suite-features li { font-size: 0.75rem; line-height: 1.7; color: var(--ink-light); padding: 0.2rem 0; display: flex; gap: 0.6rem; }
+    .suite-features li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+    /* SUPPLEMENTAL SERVICES — per-page background override for alternation
+       (component default in services-table.css stays parchment-dark) */
+    #section-supplemental { background: var(--parchment); }
+
+    /* ADVISOR STRIP */
+    .advisor-strip { background: var(--parchment-dark); padding: 4.5rem 3rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .advisor-inner { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 220px 1fr; gap: 3.5rem; align-items: start; }
+    .advisor-inner .section-eyebrow { margin: 0; padding-top: 0.35rem; }
+    .advisor-body { font-size: 0.9rem; line-height: 1.95; color: var(--ink-light); max-width: 640px; }
+
+    /* INQUIRY */
+    .inquiry-section { position: relative; overflow: hidden; min-height: 520px; display: flex; align-items: center; }
+    .inquiry-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; filter: brightness(0.28) saturate(0.65); }
+    .inquiry-content { position: relative; text-align: center; padding: 7rem 2rem; width: 100%; }
+    .inquiry-body { font-size: 0.88rem; line-height: 1.9; color: rgba(245,240,232,0.5); max-width: 480px; margin: 1.5rem auto 3.5rem; }
+    .inquiry-contacts { display: flex; gap: 5rem; justify-content: center; margin-bottom: 3rem; }
+    .contact-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .contact-val { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--parchment); text-decoration: none; display: block; transition: color 0.2s; }
+    .contact-val:hover { color: var(--gold-light); }
+    .inquiry-note { font-size: 0.62rem; letter-spacing: 0.1em; color: rgba(245,240,232,0.18); }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid rgba(184,151,90,0.08); padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { width: 68px; opacity: 0.45; }
+    .footer-copy { font-size: 0.58rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.18); text-transform: uppercase; }
+    .footer-conf { font-size: 0.58rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.32); text-transform: uppercase; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.1rem 1.5rem; }
+      nav.scrolled { padding: 0.85rem 1.5rem; }
+      .nav-logo { width: 72px; }
+      nav.scrolled .nav-logo { width: 52px; }
+      .nav-right { gap: 1.1rem; }
+      .drawer { width: 100%; padding: 1.5rem 1.75rem 2.5rem; }
+      .intro-strip { padding: 3.5rem 1.5rem; gap: 0; }
+      .intro-rule { display: none; }
+      .hero-content { padding: 0 1.5rem 4rem; }
+      .hero-stats { gap: 2.5rem; }
+      .use-case { grid-template-columns: 1fr; min-height: auto; }
+      .use-case.reverse { direction: ltr; }
+      .uc-image-wrap { height: 300px; }
+      .uc-body-wrap { padding: 2.5rem 1.5rem; }
+      .gallery-section { padding: 5rem 1.5rem; }
+      .gallery-header { margin-bottom: 2.5rem; }
+      .subgallery { margin-bottom: 2.5rem; }
+      .suites-section { padding: 5rem 1.5rem; }
+      .suites-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .suites-sticky { position: static; }
+      .suites-sticky img { display: none; }
+      .suite-grid { grid-template-columns: 1fr; }
+      .advisor-strip { padding: 3rem 1.5rem; }
+      .advisor-inner { grid-template-columns: 1fr; gap: 1.25rem; }
+      .inquiry-contacts { flex-direction: column; gap: 2rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .thumb-grid { grid-template-columns: repeat(2, 1fr); }
+      .lb-counter { right: 3.6rem; font-size: 0.66rem; }
+      .lb-nav { font-size: 2.2rem; padding: 0.5rem; }
+      .lb-img { max-width: 94vw; }
+    }
+  </style>
+</head>
+<body>
+
+<main id="main-content">
+
+  <nav id="site-nav">
+    <img id="nav-logo" class="nav-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <div class="nav-right">
+      <a class="nav-phone" id="nav-phone" href="tel:+12028686945">+1 (202) 868-6945</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- NAV DRAWER -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="drawer" id="nav-drawer" aria-hidden="true" aria-label="Site menu">
+    <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+    <div class="drawer-inner">
+      <p class="section-eyebrow">Explore the Estate</p>
+      <div class="drawer-links">
+        <a href="#section-gallery">Galleries</a>
+        <a href="#section-property">The Property</a>
+        <a href="#section-service">The Service</a>
+        <a href="#section-venue">The Venue</a>
+        <a href="#section-security">The Security</a>
+        <a href="#section-extras">The Extras</a>
+        <a href="#section-suites">Accommodations</a>
+        <a href="#section-supplemental">Supplemental Services</a>
+      </div>
+      <div class="drawer-divider"></div>
+      <p class="section-eyebrow">Plan a Stay</p>
+      <div class="drawer-links">
+        <a href="#section-advisors">For Travel Advisors</a>
+        <a href="#inquiry">Inquire</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- HERO -->
+  <div class="hero">
+    <img class="hero-img" src="https://imari-website-beta.vercel.app/photos/Living_Room_421_agents.jpg" alt="Imari Georgetown" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">prepared for {{RECIPIENT_NAME}}</p>
+      <h1 class="hero-title">{{HERO_TITLE_HTML}}</h1>
+      <p class="hero-sub">{{HERO_SUB}}</p>
+      <div class="hero-stats">
+        <div><span class="stat-num">{{STAT_1_NUM}}</span><span class="stat-label">{{STAT_1_LABEL}}</span></div>
+        <div><span class="stat-num">{{STAT_2_NUM}}</span><span class="stat-label">{{STAT_2_LABEL}}</span></div>
+        <div><span class="stat-num">{{STAT_3_NUM}}</span><span class="stat-label">{{STAT_3_LABEL}}</span></div>
+        <div><span class="stat-num">{{STAT_4_NUM}}</span><span class="stat-label">{{STAT_4_LABEL}}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-strip">
+    <div class="intro-rule"></div>
+    <p class="intro-text">{{INTRO_TEXT}}</p>
+    <div class="intro-rule"></div>
+  </div>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="section-gallery">
+    <div class="gallery-inner">
+      <div class="gallery-header">
+        <p class="section-eyebrow">Galleries</p>
+        <h2 class="section-title">See the estate.</h2>
+      </div>
+
+      <div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">Interior</span>
+          <a class="subgallery-viewall" data-gallery="interior" href="#section-gallery">View all 28 →</a>
+        </div>
+        <div class="thumb-grid" data-gallery="interior"></div>
+      </div>
+
+      <div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">Exterior</span>
+          <a class="subgallery-viewall" data-gallery="exterior" href="#section-gallery">View all 23 →</a>
+        </div>
+        <div class="thumb-grid" data-gallery="exterior"></div>
+      </div>
+
+      <div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">Site Plan</span>
+          <a class="subgallery-viewall" data-gallery="site-plan" href="#section-gallery">View all 8 →</a>
+        </div>
+        <div class="thumb-grid" data-gallery="site-plan"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 01 — THE PROPERTY -->
+  <div class="use-case" id="section-property">
+    <div class="uc-image-wrap">
+      <img src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS134.jpeg" alt="Estate gardens" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">01</p>
+      <h2 class="uc-title">The Property</h2>
+      <p class="uc-desc">A 12,000 sq ft house on a walled, gated acre of gardens in Georgetown. Six suites, a 1,000 sq ft ballroom, a spa house, and a separate guest house for client staff.</p>
+      <ul class="uc-list">
+        <li>12,000 sq ft main house on one private acre in Georgetown D.C.</li>
+        <li>Manicured gardens and greenhouse designed by Rose Greely (1930), updated by Perry Wheeler — designer of the White House Rose Garden</li>
+        <li>Gated arrival court with parking for 10 vehicles</li>
+        <li>In the main house: 6 bedroom suites across two floors with 15 bathrooms</li>
+        <li>Entertainment & living spaces flow naturally across the first floor — Parlor, Living Room, Orangerie, and formal Dining Room</li>
+        <li>Chef's Kitchen — commercial-grade, built for serious cooking at any scale</li>
+        <li>Elevator in main residence</li>
+        <li>Private gym, dedicated yoga/meditation room, full-size swimming pool, and detached Spa House with sauna, steam room, cold plunge, and hot tub</li>
+        <li>Detached 1,000 sq ft ballroom</li>
+        <li>Multiple indoor and outdoor spaces for breakouts, receptions, and gatherings</li>
+        <li>Three-bedroom guest house — separate entrance and self-contained — for client staff (security, EAs, nannies). Available at additional cost.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 02 — THE SERVICE -->
+  <div class="use-case reverse alt" id="section-service">
+    <div class="uc-image-wrap">
+      <img src="https://imari-website-beta.vercel.app/photos/Kitchen_134.jpeg" alt="Chef's kitchen" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">02</p>
+      <h2 class="uc-title">The Service</h2>
+      <p class="uc-desc">A full team on property from arrival to departure — concierge, butler, housekeeping, Michelin-star chefs — coordinating everything so the client doesn't have to ask twice.</p>
+      <ul class="uc-list">
+        <li>24/7 dedicated concierge managing all logistics end-to-end — planning, reservations, transportation, and on-site coordination</li>
+        <li>Butler-led arrival, daily service, and evening turndown</li>
+        <li>Full housekeeping team — daily service and full property reset after events and overnight</li>
+        <li>In-residence garment care — laundry, pressing, steaming</li>
+        <li>Property team functions as an extension of the planner's own team</li>
+        <li>Farm-sourced breakfast daily — fresh fruit, eggs made to order, pastries, organic yogurt, cold-pressed juices, coffee, tea</li>
+        <li>Stocked kitchen customized in advance to guest preferences</li>
+        <li>Michelin-star chefs available for meals and private dinners</li>
+        <li>Welcome champagne, unpacking service, and private guided estate introduction on arrival</li>
+        <li>Custom floral arrangements styled throughout the estate prior to arrival</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 03 — THE VENUE -->
+  <div class="use-case" id="section-venue">
+    <div class="uc-image-wrap">
+      <img src="https://imari-website-beta.vercel.app/photos/Dining_Room_451.jpeg" alt="Formal dining room" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">03</p>
+      <h2 class="uc-title">The Venue</h2>
+      <p class="uc-desc">A purpose-built venue for hosting, from 24-person dinners to 300-person receptions. Full AV, full production, full team.</p>
+      <ul class="uc-list">
+        <li>Up to 60 seated at king's tables or 70 at rounds in the ballroom</li>
+        <li>Up to 24 for private dinners in the formal dining room</li>
+        <li>Up to 300 for larger receptions and cocktail events across the property</li>
+        <li>Full event planning and production — ideation through execution</li>
+        <li>Full AV suite for presentations, panels, and production</li>
+        <li>Custom menus designed for the occasion and guests</li>
+        <li>Flow from work session to cocktail hour to dinner without changing venues</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 04 — THE SECURITY -->
+  <div class="use-case reverse alt" id="section-security">
+    <div class="uc-image-wrap">
+      <img src="https://imari-website-beta.vercel.app/photos/Foyer_465.jpeg" alt="Entry foyer" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">04</p>
+      <h2 class="uc-title">The Security</h2>
+      <p class="uc-desc">Whole-property exclusivity, private arrival, perimeter cameras, NDA-bound staff. Vetted and used by heads of state.</p>
+      <ul class="uc-list">
+        <li>Complete property exclusivity — no other guests, no lobby, no shared spaces</li>
+        <li>Private arrival court — arrivals and departures unseen, no street exposure</li>
+        <li>Integrated estate-wide security system with perimeter PTZ cameras, designed and vetted for heads of state and senior officials</li>
+        <li>All staff bound by confidentiality agreement before entering the property</li>
+        <li>Armed security personnel available</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 05 — THE EXTRAS -->
+  <div class="use-case" id="section-extras">
+    <div class="uc-image-wrap">
+      <img src="https://imari-website-beta.vercel.app/photos/Bar_075.jpeg" alt="Estate bar" />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">05</p>
+      <h2 class="uc-title">The Extras</h2>
+      <p class="uc-desc">Your client asks; we sort it. Wellness, styling, transportation — those are the starting points, not the limits.</p>
+      <ul class="uc-list">
+        <li>Central Georgetown — 1 block from the Four Seasons, minutes from the White House and the Capitol</li>
+        <li>Private wellness programming — massage therapy, acupuncture, IV therapy, yoga instruction, personal training, med-spa treatments</li>
+        <li>Custom wardrobe and personal styling</li>
+        <li>Private airport and train transfers included for arrival and departure</li>
+        <li>Private car and driver available for the duration of the stay</li>
+        <li>Supercar access and private aviation coordination available on request</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SUITES -->
+  <section class="suites-section" id="section-suites">
+    <div class="suites-inner">
+      <div class="suites-sticky">
+        <p class="section-eyebrow">Accommodations</p>
+        <h2 class="section-title">The<br>accommodations.</h2>
+        <p class="section-body" style="max-width:320px">Each suite is distinct and finished to the same exceptional standard. Three king, three queen — across three floors of a 12,000 square foot main house.</p>
+        <img src="https://imari-website-beta.vercel.app/photos/Georgetown_Suite_245.jpeg" alt="Georgetown Suite" />
+      </div>
+      <div>
+        <p style="font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">King Suites</p>
+        <div class="suite-grid" style="margin-bottom:1px;">
+          <div class="suite-card">
+            <p class="suite-name">Georgetown Suite</p>
+            <p class="suite-detail">King · En-suite spa bath · En-suite office</p>
+            <ul class="suite-features">
+              <li>Largest suite in the main house</li>
+              <li>Overlooks the manicured Rose Greely gardens</li>
+              <li>En-suite bath with double vanity</li>
+              <li>Walk-in closet</li>
+              <li>Private office with fireplace</li>
+            </ul>
+          </div>
+          <div class="suite-card">
+            <p class="suite-name">Premier Suite</p>
+            <p class="suite-detail">King · En-suite spa bath · Meditation room</p>
+            <ul class="suite-features">
+              <li>Attached to dedicated meditation/yoga room</li>
+              <li>Spa bath with soaking tub and walk-in shower</li>
+              <li>Private dressing room</li>
+              <li>Motorized blackout shades</li>
+            </ul>
+          </div>
+          <div class="suite-card">
+            <p class="suite-name">Executive Suite</p>
+            <p class="suite-detail">King · En-suite bath · Fireplace</p>
+            <ul class="suite-features">
+              <li>Overlooking scenic Olive Street</li>
+              <li>En-suite bath with walk-in shower</li>
+              <li>Fireplace in bedroom</li>
+            </ul>
+          </div>
+        </div>
+        <p style="font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin:2rem 0 1rem;">Queen Suites</p>
+        <div class="suite-grid">
+          <div class="suite-card">
+            <p class="suite-name">Deluxe Suite 1</p>
+            <p class="suite-detail">Queen · En-suite bath · Olive Street views</p>
+            <ul class="suite-features">
+              <li>Above the Executive Suite</li>
+              <li>En-suite bath with walk-in shower</li>
+              <li>Gracious proportions and natural light</li>
+            </ul>
+          </div>
+          <div class="suite-card">
+            <p class="suite-name">Deluxe Suite 2</p>
+            <p class="suite-detail">Queen · En-suite bath · Natural light</p>
+            <ul class="suite-features">
+              <li>Bright and intimate with Olive Street facing windows</li>
+              <li>En-suite bath</li>
+              <li>Ideal for single guests or associates</li>
+            </ul>
+          </div>
+          <div class="suite-card">
+            <p class="suite-name">Garden Suite</p>
+            <p class="suite-detail">Queen · En-suite bath · Garden outlook</p>
+            <ul class="suite-features">
+              <li>Direct views of the manicured grounds</li>
+              <li>En-suite bath with dual vanity and walk-in shower</li>
+              <li>Quiet placement within the residence</li>
+            </ul>
+          </div>
+        </div>
+        <p style="font-size:0.7rem;line-height:1.7;color:var(--warm-mid);margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--rule);">An attached three-bedroom guest house (3 bed · 3 bath · kitchen · living room · office) is available at additional cost.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPLEMENTAL SERVICES -->
+  <section class="services-section" id="section-supplemental">
+    <div class="services-inner">
+      <header class="services-header">
+        <p class="section-eyebrow">Supplemental Services</p>
+        <h2 class="section-title">Supplemental<br>Services.</h2>
+        <p class="section-body">Everything below can be customized to match individual needs. If something isn't listed, just ask — our team can usually make it happen.</p>
+      </header>
+
+      <div class="services-table-block">
+        <h3 class="services-table-title">Butler &amp; Chef Services</h3>
+        <table class="services-table">
+          <colgroup>
+            <col class="col-service" />
+            <col class="col-symbol" />
+            <col class="col-price" />
+            <col class="col-unit" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <td class="cell-service"><span class="service-name">Extended Butler Hours</span><span class="service-detail">8pm to 12am</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">900</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Additional Butler</span><span class="service-detail">regular hours, 7am to 8pm</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">1,300</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">House Chef</span><span class="service-detail">full day, 12 hours</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">2,000</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">House Chef</span><span class="service-detail">lunch service, 4 hours</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">800</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">House Chef</span><span class="service-detail">dinner service, 6 hours</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">1,050</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Omakase with Zach Ramos</span><span class="service-detail">Omakase 29</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">300</td>
+              <td class="cell-unit">per person / $ 3,000 min</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Five-Course with Aaron Silverman</span><span class="service-detail">Pineapple and Pearls, Rose's Luxury, Little Pearl</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">250</td>
+              <td class="cell-unit">per person / $ 5,000 min</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Family Style with Michael Rafidi</span><span class="service-detail">Albi, Yellow, La' Shukran</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">250</td>
+              <td class="cell-unit">per person / $ 5,000 min</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="services-footnote">Ingredients billed separately for house chef services. Additional chef experiences available on request.</p>
+      </div>
+
+      <div class="services-table-block">
+        <h3 class="services-table-title">Events &amp; Gatherings</h3>
+        <table class="services-table">
+          <colgroup>
+            <col class="col-service" />
+            <col class="col-symbol" />
+            <col class="col-price" />
+            <col class="col-unit" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <td class="cell-service"><span class="service-name">Event Coordination</span><span class="service-detail">day-of execution</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">3,000</td>
+              <td class="cell-unit">starting at</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Event Planning &amp; Production</span><span class="service-detail">full-service</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">15,000</td>
+              <td class="cell-unit">starting at</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Additional Floral Arrangements</span><span class="service-detail">entire property</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">3,000</td>
+              <td class="cell-unit">starting at</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Wine &amp; Champagne Service</span><span class="service-detail">main house, living room, greenhouse, or garden</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">75</td>
+              <td class="cell-unit">per person</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Wine &amp; Champagne</span><span class="service-detail">cellar tier reserve selections</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">200</td>
+              <td class="cell-unit">per person</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Cocktail Service</span><span class="service-detail">bartender included</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">120</td>
+              <td class="cell-unit">per person</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Private Security</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">1,900</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="services-table-block">
+        <h3 class="services-table-title">Wellness &amp; Transportation</h3>
+        <table class="services-table">
+          <colgroup>
+            <col class="col-service" />
+            <col class="col-symbol" />
+            <col class="col-price" />
+            <col class="col-unit" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <td class="cell-service"><span class="service-name">Massage</span><span class="service-detail">60 minutes</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">210</td>
+              <td class="cell-unit">per person</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Massage</span><span class="service-detail">90 minutes</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">280</td>
+              <td class="cell-unit">per person</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">IV Infusion</span><span class="service-detail">hydration and immune boost</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">375</td>
+              <td class="cell-unit">per person</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Acupuncture</span><span class="service-detail">60-minute treatment</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">300</td>
+              <td class="cell-unit">per session</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Private Driver</span><span class="service-detail">hourly</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">120</td>
+              <td class="cell-unit">per hour</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Private Driver</span><span class="service-detail">full day</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">1,000</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Supercar Rental</span><span class="service-detail">Ferrari SUV, Aston Martin DB9, or similar</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">1,750</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">E-Bike or Road Bike</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">100</td>
+              <td class="cell-unit">per day</td>
+            </tr>
+            <tr>
+              <td class="cell-service"><span class="service-name">Extended Dining Setup</span><span class="service-detail">12+ guests</span></td>
+              <td class="cell-symbol">$</td><td class="cell-price">600</td>
+              <td class="cell-unit"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR TRAVEL ADVISORS -->
+  <section class="advisor-strip" id="section-advisors">
+    <div class="advisor-inner">
+      <p class="section-eyebrow">For Travel Advisors</p>
+      <p class="advisor-body">Commission structure available for qualified trade partners. Dedicated point of contact handles your bookings, your guests, and your client communications end-to-end. Every stay comes with two WhatsApp groups — one with you and your client, one with you and the property team — so your client is always covered and you always know what's happening.</p>
+    </div>
+  </section>
+
+  <!-- INQUIRY -->
+  <section class="inquiry-section" id="inquiry">
+    <img class="inquiry-bg" src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS157.jpeg" alt="Estate grounds" />
+    <div class="inquiry-content">
+      <p class="section-eyebrow">Begin a conversation</p>
+      <h2 class="section-title" style="color:var(--parchment)">Availability for Summer<br>and Fall 2026.</h2>
+      <p class="inquiry-body">Our team works directly with travel agents, corporate coordinators, event planners, family offices, and wealth management firms. We respond to trade inquiries the same day.</p>
+      <div class="inquiry-contacts">
+        <div><p class="contact-label">Call</p><a class="contact-val" href="tel:+12028686945">+1 (202) 868-6945</a></div>
+        <div><p class="contact-label">Email</p><a class="contact-val" href="mailto:info@imari.cc">info@imari.cc</a></div>
+      </div>
+      <p class="inquiry-note">This page is shared for planning purposes only. Please do not forward or distribute.</p>
+    </div>
+  </section>
+
+  <footer>
+    <img class="footer-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <span class="footer-copy">© 2025 LXIV Group. All rights reserved.</span>
+    <span class="footer-conf">Confidential · Not for distribution</span>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Photo gallery">
+    <span class="lb-label" id="lb-label"></span>
+    <span class="lb-counter" id="lb-counter"></span>
+    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&lsaquo;</button>
+    <img class="lb-img" id="lb-img" src="" alt="" />
+    <button class="lb-nav lb-next" id="lb-next" aria-label="Next photo">&rsaquo;</button>
+  </div>
+
+</main>
+
+<script>
+  /* ============ NAV: scroll state ============ */
+  const nav = document.getElementById('site-nav');
+  const navLogo = document.getElementById('nav-logo');
+  const LOGO_LIGHT = 'https://imari-website-beta.vercel.app/logos/imari-parchment.svg';
+  const LOGO_DARK = 'https://imari-website-beta.vercel.app/logos/imari-gingko.svg';
+
+  window.addEventListener('scroll', () => {
+    const heroH = document.querySelector('.hero').offsetHeight;
+    const scrolled = window.scrollY > heroH - 80;
+    nav.classList.toggle('scrolled', scrolled);
+    navLogo.src = scrolled ? LOGO_DARK : LOGO_LIGHT;
+  });
+
+  /* ============ NAV DRAWER ============ */
+  const navToggle = document.getElementById('nav-toggle');
+  const drawer = document.getElementById('nav-drawer');
+  const drawerBackdrop = document.getElementById('drawer-backdrop');
+  const drawerClose = document.getElementById('drawer-close');
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawerBackdrop.classList.add('open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerBackdrop.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    if (!isLightboxOpen()) document.body.style.overflow = '';
+  }
+  navToggle.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+  // Smooth-scroll handled by CSS scroll-behavior; just close the drawer on pick
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+  /* ============ GALLERY DATA ============ */
+  const IBASE = 'https://images-pw.pixieset.com/elementfield/k4pDank/';
+  const XBASE = 'https://images-pw.pixieset.com/elementfield/mWqDAow/';
+  const SBASE = 'https://imari-website-beta.vercel.app/photos/';
+
+  const GALLERIES = {
+    interior: { label: 'Interior', photos: [
+      { src: IBASE + 'ParlorandLivingRoom_421-679dfedc-1500.jpg', alt: 'Parlor and Living Room' },
+      { src: IBASE + 'LivingRoom_280-8b49bd62-1500.jpg', alt: 'Living Room' },
+      { src: IBASE + 'Parlor_361-952a7c2f-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'LivingRoom_331-d7a1f10f-1500.jpg', alt: 'Living Room' },
+      { src: IBASE + 'Parlor_373-3b75b2b1-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'Parlor_410-34ef3a3f-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'Parlor_390-68077652-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'Sunroom_179-24ecf093-1500.jpg', alt: 'Sunroom / Orangerie' },
+      { src: IBASE + 'Foyer_479-cf57b7c7-1500.jpg', alt: 'Foyer' },
+      { src: IBASE + 'StairswithChair_465-013fadc2-1500.jpg', alt: 'Staircase' },
+      { src: IBASE + 'DC-Bar-2c197cf7-1500.jpg', alt: 'Bar' },
+      { src: IBASE + 'GTOffice_207-84d335ec-1500.jpg', alt: 'Office / Study' },
+      { src: IBASE + 'Dining_105-9c257324-1500.jpg', alt: 'Dining Room' },
+      { src: IBASE + 'DiningANDKitchen_166-9b3c4bc2-1500.jpg', alt: 'Dining and Kitchen' },
+      { src: IBASE + 'DiningRoomDetail_451-6e92f1d7-1500.jpg', alt: 'Dining Room Detail' },
+      { src: IBASE + 'DiningBarCart_126-62965911-1500.jpg', alt: 'Dining Bar Cart' },
+      { src: IBASE + 'Kitchen_134-99b71cc4-1500.jpg', alt: 'Kitchen' },
+      { src: IBASE + 'Kitchen_154-251673fc-1500.jpg', alt: 'Kitchen' },
+      { src: IBASE + 'Premier_611-524d6921-1500.jpg', alt: 'Premier Suite' },
+      { src: IBASE + 'PremierBath_633-a0faebd2-1500.jpg', alt: 'Premier Suite Bath' },
+      { src: IBASE + 'PremierCloset_642-3ac1fbe3-1500.jpg', alt: 'Premier Suite Closet' },
+      { src: IBASE + 'GTBedroom_245-c9c23042-1500.jpg', alt: 'Georgetown Suite' },
+      { src: IBASE + 'GTBath_544-9ab0f4a1-1500.jpg', alt: 'Georgetown Suite Bath' },
+      { src: IBASE + 'GTBath_568-7664b71f-1500.jpg', alt: 'Georgetown Suite Bath' },
+      { src: IBASE + 'GTHerCloset_594-bf63a9f0-1500.jpg', alt: 'Dressing Room' },
+      { src: IBASE + 'Executive_014-4dd42b03-1500.jpg', alt: 'Executive Suite' },
+      { src: IBASE + 'ExecutiveBath_040-3de03534-1500.jpg', alt: 'Executive Suite Bath' },
+      { src: IBASE + 'Deluxe2_061-deaefe04-1500.jpg', alt: 'Suite' }
+    ] },
+    exterior: { label: 'Exterior', photos: [
+      { src: XBASE + 'LXIVDC_GARDENS035-f1a58655-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS026-a2d742b6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS056-b32e0b75-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS007-031204a6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS052-12eb4d65-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS064-e05ccf96-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS073-9d1046b6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS089-7885c03e-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS102-8a3242cd-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS103-ce628255-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS113-6fa7c445-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS125-3cd500a6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS134-3ea4896f-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS147-cc130b9c-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS046-41998986-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS157-6dd64d8c-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS169-bab2922e-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS184-9f61cf7f-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS194-480510dd-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS201-1b1b894d-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS218-ff748caa-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS223-badecf5d-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'SpaHouse_1058-7cd6a107-1500.jpg', alt: 'Spa House' }
+    ] },
+    'site-plan': { label: 'Site Plan', photos: [
+      { src: SBASE + 'FirstFloorPlan.png', alt: 'First Floor Plan' },
+      { src: SBASE + 'SecondFloorPlan.png', alt: 'Second Floor Plan' },
+      { src: SBASE + 'ThirdFloorPlan.png', alt: 'Third Floor Plan' },
+      { src: SBASE + 'GardenPlan.png', alt: 'Garden Plan' },
+      { src: SBASE + 'Ballroom-BANQUETDINING.jpg', alt: 'Ballroom — Banquet Dining' },
+      { src: SBASE + 'Ballroom-SEATEDDINING.jpg', alt: 'Ballroom — Seated Dining' },
+      { src: SBASE + 'Ballroom-BOARDMEETING.jpg', alt: 'Ballroom — Board Meeting' },
+      { src: SBASE + 'Ballroom-LECTURE.jpg', alt: 'Ballroom — Lecture' }
+    ] }
+  };
+
+  /* ============ THUMBNAILS + VIEW ALL ============ */
+  Object.keys(GALLERIES).forEach(key => {
+    const g = GALLERIES[key];
+    const grid = document.querySelector('.thumb-grid[data-gallery="' + key + '"]');
+    if (grid) {
+      g.photos.slice(0, 4).forEach((p, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'thumb';
+        const img = document.createElement('img');
+        img.src = p.src; img.alt = p.alt || ''; img.loading = 'lazy';
+        cell.appendChild(img);
+        cell.addEventListener('click', () => openLightbox(key, i));
+        grid.appendChild(cell);
+      });
+    }
+    const viewall = document.querySelector('.subgallery-viewall[data-gallery="' + key + '"]');
+    if (viewall) {
+      viewall.textContent = 'View all ' + g.photos.length + ' →';
+      viewall.addEventListener('click', e => { e.preventDefault(); openLightbox(key, 0); });
+    }
+  });
+
+  /* ============ LIGHTBOX ============ */
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbLabel = document.getElementById('lb-label');
+  const lbCounter = document.getElementById('lb-counter');
+  let lbPhotos = null, lbIndex = 0, touchX = null;
+
+  function isLightboxOpen() { return lb.classList.contains('open'); }
+
+  function openLightbox(key, idx) {
+    const g = GALLERIES[key];
+    lbPhotos = g.photos; lbIndex = idx;
+    lbLabel.textContent = g.label;
+    renderLightbox();
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function renderLightbox() {
+    const p = lbPhotos[lbIndex];
+    lbImg.src = p.src; lbImg.alt = p.alt || '';
+    lbCounter.textContent = (lbIndex + 1) + ' / ' + lbPhotos.length;
+  }
+  function stepLightbox(d) {
+    if (!lbPhotos) return;
+    lbIndex = (lbIndex + d + lbPhotos.length) % lbPhotos.length;
+    renderLightbox();
+  }
+  function closeLightbox() {
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden', 'true');
+    lbPhotos = null;
+    if (!drawer.classList.contains('open')) document.body.style.overflow = '';
+  }
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', e => { e.stopPropagation(); stepLightbox(-1); });
+  document.getElementById('lb-next').addEventListener('click', e => { e.stopPropagation(); stepLightbox(1); });
+  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); }); // backdrop
+
+  document.addEventListener('keydown', e => {
+    if (isLightboxOpen()) {
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') stepLightbox(-1);
+      else if (e.key === 'ArrowRight') stepLightbox(1);
+    } else if (drawer.classList.contains('open') && e.key === 'Escape') {
+      closeDrawer();
+    }
+  });
+
+  // Touch swipe (mobile)
+  lb.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) stepLightbox(dx < 0 ? 1 : -1);
+    touchX = null;
+  });
+</script>
+</body>
+</html>
