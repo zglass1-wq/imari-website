@@ -22,6 +22,10 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html { scroll-behavior: smooth; }
+    /* Keep anchored sections clear of the fixed nav */
+    [id^="section-"], #inquiry { scroll-margin-top: 90px; }
+
     body {
       background: var(--parchment);
       color: var(--ink);
@@ -34,14 +38,33 @@
     /* MAIN */
     main { opacity: 1; }
 
-    /* NAV */
+    /* NAV — persistent at all widths: logo (left) · phone + hamburger (right) */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; transition: background 0.3s, padding 0.3s; }
+    nav.scrolled { background: rgba(245,240,232,0.97); box-shadow: 0 1px 0 rgba(184,151,90,0.15); padding: 0.6rem 3rem; }
     .nav-logo { width: 88px; transition: opacity 0.3s, width 0.3s; }
-    .nav-right { display: flex; align-items: center; gap: 2rem; }
-    .nav-link { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment); text-decoration: none; transition: color 0.2s, opacity 0.2s; }
-    .nav-link:hover { opacity: 0.6; }
-    .nav-link.dark { color: var(--warm-mid); }
-    .nav-link.dark:hover { color: var(--gold); }
+    nav.scrolled .nav-logo { width: 56px; }
+    .nav-right { display: flex; align-items: center; gap: 1.75rem; }
+    .nav-phone { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment); text-decoration: none; white-space: nowrap; transition: color 0.2s, opacity 0.2s; }
+    .nav-phone:hover { opacity: 0.6; }
+    nav.scrolled .nav-phone { color: var(--warm-mid); }
+    nav.scrolled .nav-phone:hover { color: var(--gold); opacity: 1; }
+    .nav-toggle { display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 30px; padding: 4px; background: none; border: 0; cursor: pointer; }
+    .nav-toggle span { display: block; width: 24px; height: 1.5px; background: var(--parchment); transition: background 0.3s; }
+    nav.scrolled .nav-toggle span { background: var(--warm-mid); }
+
+    /* NAV DRAWER — slides in from the right */
+    .drawer-backdrop { position: fixed; inset: 0; z-index: 150; background: rgba(26,23,18,0.45); opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+    .drawer-backdrop.open { opacity: 1; visibility: visible; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 160; width: 360px; max-width: 100%; background: var(--parchment); box-shadow: -16px 0 48px rgba(26,23,18,0.20); transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; padding: 1.75rem 2.5rem 2.5rem; overflow-y: auto; }
+    .drawer.open { transform: translateX(0); }
+    .drawer-close { align-self: flex-end; background: none; border: 0; cursor: pointer; font-size: 1.7rem; line-height: 1; color: var(--warm-mid); padding: 0.25rem 0.1rem; transition: color 0.2s; }
+    .drawer-close:hover { color: var(--gold); }
+    .drawer-inner { margin-top: 1.25rem; }
+    .drawer-inner .section-eyebrow { margin-bottom: 1rem; }
+    .drawer-links { display: flex; flex-direction: column; }
+    .drawer-links a { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 1.25rem; line-height: 1.3; color: var(--ink); text-decoration: none; padding: 0.5rem 0; transition: color 0.2s; }
+    .drawer-links a:hover { color: var(--gold); }
+    .drawer-divider { height: 1px; background: var(--rule); margin: 1.75rem 0; }
 
     /* HERO */
     .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: flex-end; }
@@ -136,7 +159,12 @@
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
-      nav { padding: 1.25rem 1.5rem; }
+      nav { padding: 1.1rem 1.5rem; }
+      nav.scrolled { padding: 0.85rem 1.5rem; }
+      .nav-logo { width: 72px; }
+      nav.scrolled .nav-logo { width: 52px; }
+      .nav-right { gap: 1.1rem; }
+      .drawer { width: 100%; padding: 1.5rem 1.75rem 2.5rem; }
       .hero-content { padding: 0 1.5rem 4rem; }
       .hero-stats { gap: 2.5rem; }
       .use-case { grid-template-columns: 1fr; min-height: auto; }
@@ -165,10 +193,34 @@
   <nav id="site-nav">
     <img id="nav-logo" class="nav-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
     <div class="nav-right">
-      <a class="nav-link" id="nl1" href="tel:+12028686945">+1 (202) 868-6945</a>
-      <a class="nav-link" id="nl2" href="#inquiry">Inquire</a>
+      <a class="nav-phone" id="nav-phone" href="tel:+12028686945">+1 (202) 868-6945</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
+
+  <!-- NAV DRAWER -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="drawer" id="nav-drawer" aria-hidden="true" aria-label="Site menu">
+    <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+    <div class="drawer-inner">
+      <p class="section-eyebrow">Explore</p>
+      <div class="drawer-links">
+        <a href="#section-roundtable">Business Roundtable</a>
+        <a href="#section-investor-day">Investor Day</a>
+        <a href="#section-breakout">C-Suite Breakout</a>
+        <a href="#section-popup-hq">Pop-Up HQ</a>
+        <a href="#section-estate">The Estate</a>
+        <a href="#section-experience">A Day at Imari</a>
+      </div>
+      <div class="drawer-divider"></div>
+      <p class="section-eyebrow">Plan a Visit</p>
+      <div class="drawer-links">
+        <a href="#inquiry">Inquire</a>
+      </div>
+    </div>
+  </aside>
 
   <!-- HERO -->
   <div class="hero">
@@ -195,7 +247,7 @@
   </div>
 
   <!-- USE CASE 01 -->
-  <div class="use-case">
+  <div class="use-case" id="section-roundtable">
     <div class="uc-image-wrap">
       <img src="https://imari-website-beta.vercel.app/photos/Parlor_390.jpeg" alt="Parlor" />
     </div>
@@ -213,7 +265,7 @@
   </div>
 
   <!-- USE CASE 02 -->
-  <div class="use-case reverse alt">
+  <div class="use-case reverse alt" id="section-investor-day">
     <div class="uc-image-wrap">
       <img src="https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS035.jpeg" alt="Gardens" />
     </div>
@@ -231,7 +283,7 @@
   </div>
 
   <!-- USE CASE 03 -->
-  <div class="use-case">
+  <div class="use-case" id="section-breakout">
     <div class="uc-image-wrap">
       <img src="https://imari-website-beta.vercel.app/photos/Georgetown_Office_207.jpeg" alt="Georgetown Office" />
     </div>
@@ -249,7 +301,7 @@
   </div>
 
   <!-- USE CASE 04 -->
-  <div class="use-case reverse alt">
+  <div class="use-case reverse alt" id="section-popup-hq">
     <div class="uc-image-wrap">
       <img src="https://imari-website-beta.vercel.app/photos/Living_Room_331_web.jpeg" alt="Living Room" />
     </div>
@@ -316,7 +368,7 @@
   </section>
 
   <!-- AGENDA -->
-  <section class="agenda-section">
+  <section class="agenda-section" id="section-experience">
     <div class="agenda-inner">
       <div class="agenda-sticky">
         <p class="section-eyebrow">The Experience</p>
@@ -389,29 +441,47 @@
 </main>
 
 <script>
-  // Nav transitions from light-over-hero to solid on scroll
+  /* ============ NAV: scroll state ============ */
   const nav = document.getElementById('site-nav');
   const navLogo = document.getElementById('nav-logo');
-  const nl1 = document.getElementById('nl1');
-  const nl2 = document.getElementById('nl2');
+  const LOGO_LIGHT = 'https://imari-website-beta.vercel.app/logos/imari-parchment.svg';
+  const LOGO_DARK = 'https://imari-website-beta.vercel.app/logos/imari-gingko.svg';
 
   window.addEventListener('scroll', () => {
     const heroH = document.querySelector('.hero').offsetHeight;
-    if (window.scrollY > heroH - 80) {
-      nav.style.background = 'rgba(245,240,232,0.97)';
-      nav.style.boxShadow = '0 1px 0 rgba(184,151,90,0.15)';
-      nav.style.padding = '0.6rem 3rem';
-      navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-gingko.svg';
-      navLogo.style.width = '56px';
-      nl1.classList.add('dark'); nl2.classList.add('dark');
-    } else {
-      nav.style.background = 'transparent';
-      nav.style.boxShadow = 'none';
-      nav.style.padding = '1.5rem 3rem';
-      navLogo.src = 'https://imari-website-beta.vercel.app/logos/imari-parchment.svg';
-      navLogo.style.width = '88px';
-      nl1.classList.remove('dark'); nl2.classList.remove('dark');
-    }
+    const scrolled = window.scrollY > heroH - 80;
+    nav.classList.toggle('scrolled', scrolled);
+    navLogo.src = scrolled ? LOGO_DARK : LOGO_LIGHT;
+  });
+
+  /* ============ NAV DRAWER ============ */
+  const navToggle = document.getElementById('nav-toggle');
+  const drawer = document.getElementById('nav-drawer');
+  const drawerBackdrop = document.getElementById('drawer-backdrop');
+  const drawerClose = document.getElementById('drawer-close');
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawerBackdrop.classList.add('open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerBackdrop.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  navToggle.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+  // Smooth-scroll handled by CSS scroll-behavior; just close the drawer on pick
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+  document.addEventListener('keydown', e => {
+    if (drawer.classList.contains('open') && e.key === 'Escape') closeDrawer();
   });
 </script>
 </body>
