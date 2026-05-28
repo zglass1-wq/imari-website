@@ -105,10 +105,33 @@
     .uc-list li { font-size: 0.75rem; line-height: 1.65; color: var(--warm-mid); padding: 0.3rem 0; border-bottom: 1px solid var(--rule); display: flex; gap: 0.75rem; }
     .uc-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
 
-    /* PHOTO BAND */
-    .photo-band { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 0.9fr; height: 340px; overflow: hidden; }
-    .photo-band img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; filter: brightness(0.9); transition: filter 0.5s; }
-    .photo-band img:hover { filter: brightness(1.02); }
+    /* GALLERY */
+    .gallery-section { background: var(--parchment); padding: 7rem 3rem; }
+    .gallery-inner { max-width: 1200px; margin: 0 auto; }
+    .gallery-header { margin-bottom: 3.5rem; }
+    .subgallery { margin-bottom: 3.5rem; }
+    .subgallery:last-child { margin-bottom: 0; }
+    .subgallery-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: 0.75rem; margin-bottom: 0.85rem; border-bottom: 1px solid var(--rule); }
+    .subgallery-label { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 1.5rem; color: var(--ink); }
+    .subgallery-viewall { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); text-decoration: none; white-space: nowrap; cursor: pointer; transition: opacity 0.2s; }
+    .subgallery-viewall:hover { opacity: 0.6; }
+    .thumb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .thumb { aspect-ratio: 4 / 3; overflow: hidden; cursor: pointer; background: var(--parchment-dark); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease, opacity 0.3s; }
+    .thumb:hover img { transform: scale(1.04); opacity: 0.9; }
+
+    /* LIGHTBOX */
+    .lightbox { position: fixed; inset: 0; z-index: 300; display: none; align-items: center; justify-content: center; background: rgba(26,23,18,0.95); }
+    .lightbox.open { display: flex; }
+    .lb-img { max-width: 90vw; max-height: 80vh; object-fit: contain; display: block; }
+    .lb-label { position: absolute; top: 1.6rem; left: 1.8rem; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+    .lb-counter { position: absolute; top: 1.5rem; right: 4.2rem; font-size: 0.72rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.6); font-variant-numeric: tabular-nums; }
+    .lb-close { position: absolute; top: 1.05rem; right: 1.5rem; background: none; border: 0; cursor: pointer; font-size: 1.9rem; line-height: 1; color: rgba(245,240,232,0.6); transition: color 0.2s; }
+    .lb-close:hover { color: rgba(245,240,232,1); }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 0; cursor: pointer; font-size: 3rem; line-height: 1; color: rgba(245,240,232,0.3); padding: 1rem; transition: color 0.2s; user-select: none; }
+    .lb-nav:hover { color: rgba(245,240,232,0.85); }
+    .lb-prev { left: 0.5rem; }
+    .lb-next { right: 0.5rem; }
 
     /* POSITIONING */
     .position-wrap { background: var(--ember); padding: 7rem 3rem; }
@@ -171,8 +194,9 @@
       .use-case.reverse { direction: ltr; }
       .uc-image-wrap { height: 300px; }
       .uc-body-wrap { padding: 2.5rem 1.5rem; }
-      .photo-band { grid-template-columns: 1fr 1fr; height: 220px; }
-      .photo-band img:nth-child(3), .photo-band img:nth-child(4) { display: none; }
+      .gallery-section { padding: 5rem 1.5rem; }
+      .gallery-header { margin-bottom: 2.5rem; }
+      .subgallery { margin-bottom: 2.5rem; }
       .position-wrap { padding: 5rem 1.5rem; }
       .position-statement { margin: 0 auto 3rem; }
       .estate-grid { grid-template-columns: 1fr; }
@@ -183,6 +207,13 @@
       .agenda-sticky img { display: none; }
       .inquiry-contacts { flex-direction: column; gap: 2rem; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .thumb-grid { grid-template-columns: repeat(2, 1fr); }
+      .lb-counter { right: 3.6rem; font-size: 0.66rem; }
+      .lb-nav { font-size: 2.2rem; padding: 0.5rem; }
+      .lb-img { max-width: 94vw; }
     }
   </style>
 </head>
@@ -207,6 +238,7 @@
     <div class="drawer-inner">
       <p class="section-eyebrow">Explore</p>
       <div class="drawer-links">
+        <a href="#section-gallery">Galleries</a>
         <a href="#section-roundtable">Business Roundtable</a>
         <a href="#section-investor-day">Investor Day</a>
         <a href="#section-breakout">C-Suite Breakout</a>
@@ -318,13 +350,31 @@
     </div>
   </div>
 
-  <!-- PHOTO BAND -->
-  <div class="photo-band">
-    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS064.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
-    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Dining_Room_126_web.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
-    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Parlor_427.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
-    <div style="background-image:url('https://imari-website-beta.vercel.app/photos/Hellman-Chang_LXIVDC_GARDENS147.jpeg');background-size:cover;background-position:center bottom;width:100%;height:100%;filter:brightness(0.9);"></div>
-  </div>
+  <!-- GALLERY -->
+  <section class="gallery-section" id="section-gallery">
+    <div class="gallery-inner">
+      <div class="gallery-header">
+        <p class="section-eyebrow">Galleries</p>
+        <h2 class="section-title">See the estate.</h2>
+      </div>
+
+      <div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">Interior</span>
+          <a class="subgallery-viewall" data-gallery="interior" href="#section-gallery">View all 28 →</a>
+        </div>
+        <div class="thumb-grid" data-gallery="interior"></div>
+      </div>
+
+      <div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">Exterior</span>
+          <a class="subgallery-viewall" data-gallery="exterior" href="#section-gallery">View all 23 →</a>
+        </div>
+        <div class="thumb-grid" data-gallery="exterior"></div>
+      </div>
+    </div>
+  </section>
 
   <!-- POSITIONING -->
   <section class="position-wrap" id="section-estate">
@@ -438,6 +488,16 @@
     <span class="footer-conf">Confidential · Not for distribution</span>
   </footer>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Photo gallery">
+    <span class="lb-label" id="lb-label"></span>
+    <span class="lb-counter" id="lb-counter"></span>
+    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&lsaquo;</button>
+    <img class="lb-img" id="lb-img" src="" alt="" />
+    <button class="lb-nav lb-next" id="lb-next" aria-label="Next photo">&rsaquo;</button>
+  </div>
+
 </main>
 
 <script>
@@ -472,7 +532,7 @@
     drawerBackdrop.classList.remove('open');
     navToggle.setAttribute('aria-expanded', 'false');
     drawer.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    if (!isLightboxOpen()) document.body.style.overflow = '';
   }
   navToggle.addEventListener('click', openDrawer);
   drawerClose.addEventListener('click', closeDrawer);
@@ -480,8 +540,146 @@
   // Smooth-scroll handled by CSS scroll-behavior; just close the drawer on pick
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
 
+  /* ============ GALLERY DATA ============ */
+  const IBASE = 'https://images-pw.pixieset.com/elementfield/k4pDank/';
+  const XBASE = 'https://images-pw.pixieset.com/elementfield/mWqDAow/';
+
+  const GALLERIES = {
+    interior: { label: 'Interior', photos: [
+      { src: IBASE + 'ParlorandLivingRoom_421-679dfedc-1500.jpg', alt: 'Parlor and Living Room' },
+      { src: IBASE + 'LivingRoom_280-8b49bd62-1500.jpg', alt: 'Living Room' },
+      { src: IBASE + 'Parlor_361-952a7c2f-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'LivingRoom_331-d7a1f10f-1500.jpg', alt: 'Living Room' },
+      { src: IBASE + 'Parlor_373-3b75b2b1-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'Parlor_410-34ef3a3f-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'Parlor_390-68077652-1500.jpg', alt: 'Parlor' },
+      { src: IBASE + 'Sunroom_179-24ecf093-1500.jpg', alt: 'Sunroom / Orangerie' },
+      { src: IBASE + 'Foyer_479-cf57b7c7-1500.jpg', alt: 'Foyer' },
+      { src: IBASE + 'StairswithChair_465-013fadc2-1500.jpg', alt: 'Staircase' },
+      { src: IBASE + 'DC-Bar-2c197cf7-1500.jpg', alt: 'Bar' },
+      { src: IBASE + 'GTOffice_207-84d335ec-1500.jpg', alt: 'Office / Study' },
+      { src: IBASE + 'Dining_105-9c257324-1500.jpg', alt: 'Dining Room' },
+      { src: IBASE + 'DiningANDKitchen_166-9b3c4bc2-1500.jpg', alt: 'Dining and Kitchen' },
+      { src: IBASE + 'DiningRoomDetail_451-6e92f1d7-1500.jpg', alt: 'Dining Room Detail' },
+      { src: IBASE + 'DiningBarCart_126-62965911-1500.jpg', alt: 'Dining Bar Cart' },
+      { src: IBASE + 'Kitchen_134-99b71cc4-1500.jpg', alt: 'Kitchen' },
+      { src: IBASE + 'Kitchen_154-251673fc-1500.jpg', alt: 'Kitchen' },
+      { src: IBASE + 'Premier_611-524d6921-1500.jpg', alt: 'Premier Suite' },
+      { src: IBASE + 'PremierBath_633-a0faebd2-1500.jpg', alt: 'Premier Suite Bath' },
+      { src: IBASE + 'PremierCloset_642-3ac1fbe3-1500.jpg', alt: 'Premier Suite Closet' },
+      { src: IBASE + 'GTBedroom_245-c9c23042-1500.jpg', alt: 'Georgetown Suite' },
+      { src: IBASE + 'GTBath_544-9ab0f4a1-1500.jpg', alt: 'Georgetown Suite Bath' },
+      { src: IBASE + 'GTBath_568-7664b71f-1500.jpg', alt: 'Georgetown Suite Bath' },
+      { src: IBASE + 'GTHerCloset_594-bf63a9f0-1500.jpg', alt: 'Dressing Room' },
+      { src: IBASE + 'Executive_014-4dd42b03-1500.jpg', alt: 'Executive Suite' },
+      { src: IBASE + 'ExecutiveBath_040-3de03534-1500.jpg', alt: 'Executive Suite Bath' },
+      { src: IBASE + 'Deluxe2_061-deaefe04-1500.jpg', alt: 'Suite' }
+    ] },
+    exterior: { label: 'Exterior', photos: [
+      { src: XBASE + 'LXIVDC_GARDENS035-f1a58655-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS026-a2d742b6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS056-b32e0b75-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS007-031204a6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS052-12eb4d65-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS064-e05ccf96-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS073-9d1046b6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS089-7885c03e-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS102-8a3242cd-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS103-ce628255-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS113-6fa7c445-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS125-3cd500a6-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS134-3ea4896f-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS147-cc130b9c-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS046-41998986-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS157-6dd64d8c-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS169-bab2922e-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS184-9f61cf7f-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS194-480510dd-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS201-1b1b894d-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS218-ff748caa-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'LXIVDC_GARDENS223-badecf5d-1500.jpg', alt: 'Gardens' },
+      { src: XBASE + 'SpaHouse_1058-7cd6a107-1500.jpg', alt: 'Spa House' }
+    ] }
+  };
+
+  /* ============ THUMBNAILS + VIEW ALL ============ */
+  Object.keys(GALLERIES).forEach(key => {
+    const g = GALLERIES[key];
+    const grid = document.querySelector('.thumb-grid[data-gallery="' + key + '"]');
+    if (grid) {
+      g.photos.slice(0, 4).forEach((p, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'thumb';
+        const img = document.createElement('img');
+        img.src = p.src; img.alt = p.alt || ''; img.loading = 'lazy';
+        cell.appendChild(img);
+        cell.addEventListener('click', () => openLightbox(key, i));
+        grid.appendChild(cell);
+      });
+    }
+    const viewall = document.querySelector('.subgallery-viewall[data-gallery="' + key + '"]');
+    if (viewall) {
+      viewall.textContent = 'View all ' + g.photos.length + ' →';
+      viewall.addEventListener('click', e => { e.preventDefault(); openLightbox(key, 0); });
+    }
+  });
+
+  /* ============ LIGHTBOX ============ */
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbLabel = document.getElementById('lb-label');
+  const lbCounter = document.getElementById('lb-counter');
+  let lbPhotos = null, lbIndex = 0, touchX = null;
+
+  function isLightboxOpen() { return lb.classList.contains('open'); }
+
+  function openLightbox(key, idx) {
+    const g = GALLERIES[key];
+    lbPhotos = g.photos; lbIndex = idx;
+    lbLabel.textContent = g.label;
+    renderLightbox();
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function renderLightbox() {
+    const p = lbPhotos[lbIndex];
+    lbImg.src = p.src; lbImg.alt = p.alt || '';
+    lbCounter.textContent = (lbIndex + 1) + ' / ' + lbPhotos.length;
+  }
+  function stepLightbox(d) {
+    if (!lbPhotos) return;
+    lbIndex = (lbIndex + d + lbPhotos.length) % lbPhotos.length;
+    renderLightbox();
+  }
+  function closeLightbox() {
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden', 'true');
+    lbPhotos = null;
+    if (!drawer.classList.contains('open')) document.body.style.overflow = '';
+  }
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', e => { e.stopPropagation(); stepLightbox(-1); });
+  document.getElementById('lb-next').addEventListener('click', e => { e.stopPropagation(); stepLightbox(1); });
+  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
   document.addEventListener('keydown', e => {
-    if (drawer.classList.contains('open') && e.key === 'Escape') closeDrawer();
+    if (isLightboxOpen()) {
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') stepLightbox(-1);
+      else if (e.key === 'ArrowRight') stepLightbox(1);
+    } else if (drawer.classList.contains('open') && e.key === 'Escape') {
+      closeDrawer();
+    }
+  });
+
+  lb.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) stepLightbox(dx < 0 ? 1 : -1);
+    touchX = null;
   });
 </script>
 </body>
