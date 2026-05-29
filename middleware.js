@@ -10,6 +10,7 @@ export const config = {
     '/alex0349.html',
     '/july4.html',
     '/july4p2.html',
+    '/newdam1.html',
   ],
 };
 
@@ -20,6 +21,7 @@ const ROLE_ALLOWS = {
   alex0349: (p) => p === '/alex0349.html' || p.startsWith('/alex0349-'),
   july4: (p) => p === '/july4.html' || p.startsWith('/july4-'),
   july4p2: (p) => p === '/july4p2.html' || p.startsWith('/july4p2-'),
+  newdam1: (p) => p === '/newdam1.html' || p.startsWith('/newdam1-'),
 };
 
 const enc = new TextEncoder();

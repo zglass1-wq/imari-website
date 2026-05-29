@@ -12,6 +12,7 @@ const ROLES = [
   { role: 'alex0349',   envVar: 'IMARI_ALEX0349_PASSWORD',   redirect: '/alex0349.html' },
   { role: 'july4',      envVar: 'IMARI_JULY4_PASSWORD',      redirect: '/july4.html' },
   { role: 'july4p2',    envVar: 'IMARI_JULY4P2_PASSWORD',    redirect: '/july4p2.html' },
+  { role: 'newdam1',    envVar: 'IMARI_NEWDAM1_PASSWORD',    redirect: '/newdam1.html' },
 ];
 
 const COOKIE_MAX_AGE = 60 * 60 * 12; // 12 hours
