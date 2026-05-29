@@ -32,6 +32,7 @@ Set these in **Vercel → Project Settings → Environment Variables** (Producti
 | `IMARI_JULY4_PASSWORD` | Password that unlocks `july4.html`. Personalized 4th of July weekend landing page. |
 | `IMARI_JULY4P2_PASSWORD` | Password that unlocks `july4p2.html`. Family-tilt variant of the Salute to America 250 weekend page. |
 | `IMARI_NEWDAM1_PASSWORD` | Password that unlocks `newdam1.html`. Personalized landing page (duplicate of the alex0349 page) prepared for Ruurd. |
+| `IMARI_ABA_PASSWORD` | Password that unlocks `aba.html`. ABA Showcase day page (lunch + dinner, November 2026). |
 
 After updating env vars, **redeploy** — Vercel does not hot-reload env vars into Edge functions.
 
