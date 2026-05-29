@@ -259,3 +259,23 @@ Deployment is automatic from the `main` branch of `github.com/zglass1-wq/imari-w
 Public pages: `imari-website.html` (the homepage at `/`), `private-info.html`, `private-access.html` (redirect).
 Protected pages: everything inside [private/](private/) — see the table above for the URL ⇄ file mapping.
 Assets: `photos/`, `logos/`.
+
+---
+
+## Workflow signaling
+
+When you finish a task and are awaiting my approval, input, or response — before
+stopping your turn — run this command to notify me:
+
+```bash
+osascript -e 'display notification "Awaiting approval" with title "Claude Code" sound name "Glass"'
+```
+
+Do this every time you stop to wait for me, including:
+- After completing a step that requires my review
+- When you've asked a clarifying question and need an answer
+- When you've shown a diff or screenshot and are waiting for approval
+- When you've encountered an error that requires my input to resolve
+
+Do not run this command when you're just thinking, processing, or in the middle
+of a task — only when you've actually stopped and need me to look.
