@@ -193,5 +193,43 @@ The two no-exact-match cases are now decided. The remaining medium-confidence on
 
 ---
 
-## Step 4 placeholder — Final cleanup audit
-*(To be filled in after all files are migrated: unreferenced `/photos/` & `/logos/` local files, orphaned CSS rules, and any now-unlinked standalone gallery pages. Nothing will be deleted — list only.)*
+## Step 4 — Final cleanup audit (list only — nothing deleted)
+
+Migration status: **all 11 files migrated and pushed.** A repo-wide sweep (`*.html`, `*.css`, `*.js`) confirms **zero** remaining non-Cloudinary image references (`pixieset`, `vercel.app/photos|logos`, or relative `./photos|./logos`). The only surviving `vercel.app` strings are `og:url` page-URL tags, which are intentionally out of scope (not images).
+
+### 4a. Unreferenced local image files — deletion candidates
+After migration, **no HTML/CSS/JS references any local `photos/` or `logos/` file.** All are now served from Cloudinary, so the entire local set is dead weight.
+
+- **`photos/` — 78 files, ~182 MB** — all unreferenced. (Includes both the originals now on Cloudinary and extra unused variants like `*.jpg`/`*.jpeg` duplicates, `Living_Room_421.jpeg`, `Lobby_2_651.jpeg`, `Georgetown_Bath_544/555`, `Deluxe_2_Bath_052`, etc.)
+- **`logos/` — 7 files, ~140 KB** — all unreferenced (`imari-ember.svg`, `imari-gingko.svg`, `imari-monogram.svg`, `imari-parchment.svg`, + `@3x.png` variants). Cloudinary `Imari/Brand/Logos` holds the equivalents.
+
+**Note:** `photos/` and `logos/` are **not** in `.vercelignore`, so all 182 MB is currently still uploaded on every Vercel deploy despite being unused. Two cleanup options when you're ready (your call — not done here):
+- **(A) Delete** `photos/` and `logos/` from the repo (removes 182 MB; relies entirely on Cloudinary). Cleanest.
+- **(B) Add `photos/` + `logos/` to `.vercelignore`** (stops deploying them but keeps them in git history as a local backup).
+
+If you delete, also update the **`Assets: photos/, logos/`** line in `CLAUDE.md` (it will be stale).
+
+### 4b. Orphaned CSS rules
+**None introduced.** The migration swapped URLs in place without removing any elements, so all hero/photo-band/gallery CSS rules are still in use. `services-table.css` contains no image `url()` references. No cleanup needed.
+
+### 4c. Standalone / unlinked gallery pages
+**None found.** No `*gallery*.html` or `agents-*.html` files exist in the repo (root, `private/`, or `templates/`). The `agents-*.html` files referenced historically in `CLAUDE.md` are not present. Nothing to flag.
+
+### 4d. Migration summary (for reference)
+| Order | File | Commit |
+|---|---|---|
+| 1 | `private/alex0349.html` (back-fill: transforms) | `68775b3` |
+| 2 | `private-info.html` | `09cd66d` |
+| 3 | `private/alarm250.html` | `7808775` |
+| 4 | `imari-website.html` | `4a19bed` |
+| 5 | `private/freedom250.html` | `ca1d444` |
+| 6 | `private/july4.html` | `7b169b8` |
+| 7 | `private/july4p2.html` | `046b5b3` |
+| 8 | `private/corporate.html` | `2cf261a` |
+| 9 | `templates/_template-specific-offer.html` | `1835875` |
+| 10 | `templates/_template-landing.html` | `30aba50` |
+| 11 | `templates/_template-collateral.html` | `157e35f` |
+
+**Outstanding (non-blocking) decisions raised during migration:**
+- **OG social cards** on `alarm250`, `freedom250`, `july4`, `july4p2` use the **gingko logo SVG** (kept transform-free), not a photo with the 1200×630 crop. Swap to a photo card per page if desired.
+- **Alt-text** on `_template-landing.html`: `Foyer_465`→Stairs swap left `alt="Entry foyer"` on a staircase image (template default, overridden per-page). Fixable on request.
