@@ -30,11 +30,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Imari · {{PAGE_TITLE}} Weekend</title>
-  <link rel="icon" type="image/svg+xml" href="./logos/imari-gingko.svg" />
+  <link rel="icon" type="image/svg+xml" href="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-gingko_bh78d8.svg" />
   <!-- Social / iMessage preview -->
   <meta property="og:title" content="{{PAGE_TITLE}} · Imari Georgetown" />
   <meta property="og:description" content="{{OG_DESCRIPTION}}" />
-  <meta property="og:image" content="https://imari-website-beta.vercel.app/logos/imari-gingko.svg" />
+  <meta property="og:image" content="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-gingko_bh78d8.svg" />
   <meta property="og:url" content="https://imari-website-beta.vercel.app/{{PAGE_SLUG}}.html" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -100,7 +100,7 @@
     .drawer-divider { height: 1px; background: var(--rule); margin: 1.75rem 0; }
 
     /* HERO */
-    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: flex-end; background: var(--ember) url('photos/wall-texture.jpg') center/cover no-repeat; }
+    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: flex-end; background: var(--ember) url('https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/wall-texture_skicra.jpg') center/cover no-repeat; }
     .hero-content { position: relative; padding: 0 3rem 5rem; max-width: 900px; }
     .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 1.5rem; }
     .hero-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2.6rem, 5.4vw, 4.6rem); line-height: 1.08; color: var(--parchment); margin-bottom: 2rem; }
@@ -271,7 +271,7 @@
 <main id="main-content">
 
   <nav id="site-nav">
-    <a href="/" aria-label="Imari home"><img id="nav-logo" class="nav-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" /></a>
+    <a href="/" aria-label="Imari home"><img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" /></a>
     <div class="nav-right">
       <a class="nav-phone" id="nav-phone" href="tel:+12028686945">+1 (202) 868-6945</a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
@@ -453,7 +453,7 @@
 
   <!-- CLOSING — the canonical italic line (2 of 2) -->
   <section class="closing-section" id="section-inquire">
-    <img class="closing-bg" src="https://imari-website-beta.vercel.app/photos/Yard_045.jpeg" alt="Imari grounds" />
+    <img class="closing-bg" src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Yard_045_vgr6lu.jpg" alt="Imari grounds" />
     <div class="closing-content">
       <p class="closing-line">Inquire: Blaine Stephens <a href="tel:2028686945">202.868.6945</a> | <a href="mailto:blaine@imari.cc">blaine@imari.cc</a></p>
       <p class="closing-note">Confidential · Not for distribution</p>
@@ -461,7 +461,7 @@
   </section>
 
   <footer>
-    <img class="footer-logo" src="https://imari-website-beta.vercel.app/logos/imari-parchment.svg" alt="Imari" onerror="this.style.display='none'" />
+    <img class="footer-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" />
     <span class="footer-copy">© 2026 LXIV Group. All rights reserved.</span>
     <span class="footer-conf">Confidential · Not for distribution</span>
   </footer>
@@ -482,8 +482,8 @@
   /* ============ NAV: scroll state ============ */
   const nav = document.getElementById('site-nav');
   const navLogo = document.getElementById('nav-logo');
-  const LOGO_LIGHT = 'https://imari-website-beta.vercel.app/logos/imari-parchment.svg';
-  const LOGO_DARK = 'https://imari-website-beta.vercel.app/logos/imari-gingko.svg';
+  const LOGO_LIGHT = 'https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg';
+  const LOGO_DARK = 'https://res.cloudinary.com/dsp45h9a1/image/upload/imari-gingko_bh78d8.svg';
 
   window.addEventListener('scroll', () => {
     const heroH = document.querySelector('.hero').offsetHeight;
@@ -518,75 +518,73 @@
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
 
   /* ============ GALLERY DATA ============ */
-  const IBASE = 'https://images-pw.pixieset.com/elementfield/k4pDank/';
-  const XBASE = 'https://images-pw.pixieset.com/elementfield/mWqDAow/';
-  const SBASE = 'https://imari-website-beta.vercel.app/photos/';
+  const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
 
   const GALLERIES = {
     interior: { label: 'Interior', photos: [
-      { src: IBASE + 'ParlorandLivingRoom_421-679dfedc-1500.jpg', alt: 'Parlor and Living Room' },
-      { src: IBASE + 'LivingRoom_280-8b49bd62-1500.jpg', alt: 'Living Room' },
-      { src: IBASE + 'Parlor_361-952a7c2f-1500.jpg', alt: 'Parlor' },
-      { src: IBASE + 'LivingRoom_331-d7a1f10f-1500.jpg', alt: 'Living Room' },
-      { src: IBASE + 'Parlor_373-3b75b2b1-1500.jpg', alt: 'Parlor' },
-      { src: IBASE + 'Parlor_410-34ef3a3f-1500.jpg', alt: 'Parlor' },
-      { src: IBASE + 'Parlor_390-68077652-1500.jpg', alt: 'Parlor' },
-      { src: IBASE + 'Sunroom_179-24ecf093-1500.jpg', alt: 'Sunroom / Orangerie' },
-      { src: IBASE + 'Foyer_479-cf57b7c7-1500.jpg', alt: 'Foyer' },
-      { src: IBASE + 'StairswithChair_465-013fadc2-1500.jpg', alt: 'Staircase' },
-      { src: IBASE + 'DC-Bar-2c197cf7-1500.jpg', alt: 'Bar' },
-      { src: IBASE + 'GTOffice_207-84d335ec-1500.jpg', alt: 'Office / Study' },
-      { src: IBASE + 'Dining_105-9c257324-1500.jpg', alt: 'Dining Room' },
-      { src: IBASE + 'DiningANDKitchen_166-9b3c4bc2-1500.jpg', alt: 'Dining and Kitchen' },
-      { src: IBASE + 'DiningRoomDetail_451-6e92f1d7-1500.jpg', alt: 'Dining Room Detail' },
-      { src: IBASE + 'DiningBarCart_126-62965911-1500.jpg', alt: 'Dining Bar Cart' },
-      { src: IBASE + 'Kitchen_134-99b71cc4-1500.jpg', alt: 'Kitchen' },
-      { src: IBASE + 'Kitchen_154-251673fc-1500.jpg', alt: 'Kitchen' },
-      { src: IBASE + 'Premier_611-524d6921-1500.jpg', alt: 'Premier Suite' },
-      { src: IBASE + 'PremierBath_633-a0faebd2-1500.jpg', alt: 'Premier Suite Bath' },
-      { src: IBASE + 'PremierCloset_642-3ac1fbe3-1500.jpg', alt: 'Premier Suite Closet' },
-      { src: IBASE + 'GTBedroom_245-c9c23042-1500.jpg', alt: 'Georgetown Suite' },
-      { src: IBASE + 'GTBath_544-9ab0f4a1-1500.jpg', alt: 'Georgetown Suite Bath' },
-      { src: IBASE + 'GTBath_568-7664b71f-1500.jpg', alt: 'Georgetown Suite Bath' },
-      { src: IBASE + 'GTHerCloset_594-bf63a9f0-1500.jpg', alt: 'Dressing Room' },
-      { src: IBASE + 'Executive_014-4dd42b03-1500.jpg', alt: 'Executive Suite' },
-      { src: IBASE + 'ExecutiveBath_040-3de03534-1500.jpg', alt: 'Executive Suite Bath' },
-      { src: IBASE + 'Deluxe2_061-deaefe04-1500.jpg', alt: 'Suite' }
+      { src: CLD + 'Parlor_and_Living_Room_421_ycl671.jpg', alt: 'Parlor and Living Room' },
+      { src: CLD + 'Living_Room_280_i5lyva.jpg', alt: 'Living Room' },
+      { src: CLD + 'Parlor_361_ark39j.jpg', alt: 'Parlor' },
+      { src: CLD + 'Living_Room_331_spepzh.jpg', alt: 'Living Room' },
+      { src: CLD + 'Parlor_373_vkelnj.jpg', alt: 'Parlor' },
+      { src: CLD + 'Parlor_410_xj8g1z.jpg', alt: 'Parlor' },
+      { src: CLD + 'Parlor_390_lktsk9.jpg', alt: 'Parlor' },
+      { src: CLD + 'Sunroom_179_ggdnkh.jpg', alt: 'Sunroom / Orangerie' },
+      { src: CLD + 'Foyer_479_kfbbnh.jpg', alt: 'Foyer' },
+      { src: CLD + 'Stairs_with_Chair_465_clsrg0.jpg', alt: 'Staircase' },
+      { src: CLD + 'DC_-_Bar_kdizki.jpg', alt: 'Bar' },
+      { src: CLD + 'GT_Office_207_lsjhg8.jpg', alt: 'Office / Study' },
+      { src: CLD + 'Dining_105_xyaxbx.jpg', alt: 'Dining Room' },
+      { src: CLD + 'Dining_AND_Kitchen_166_dleo0l.jpg', alt: 'Dining and Kitchen' },
+      { src: CLD + 'Dining_Room_Detail_451_kv9zwm.jpg', alt: 'Dining Room Detail' },
+      { src: CLD + 'Dining_Bar_Cart_126_rtdr2u.jpg', alt: 'Dining Bar Cart' },
+      { src: CLD + 'Kitchen_134_s5cazd.jpg', alt: 'Kitchen' },
+      { src: CLD + 'Kitchen_154_avquj8.jpg', alt: 'Kitchen' },
+      { src: CLD + 'Premier_611_fksc2s.jpg', alt: 'Premier Suite' },
+      { src: CLD + 'Premier_Bath_633_aa3abf.jpg', alt: 'Premier Suite Bath' },
+      { src: CLD + 'Premier_Closet_642_qzbb9i.jpg', alt: 'Premier Suite Closet' },
+      { src: CLD + 'GT_Bedroom_245_j5ffcp.jpg', alt: 'Georgetown Suite' },
+      { src: CLD + 'GT_Bath_544_zjd6ff.jpg', alt: 'Georgetown Suite Bath' },
+      { src: CLD + 'GT_Bath_568_vgfoie.jpg', alt: 'Georgetown Suite Bath' },
+      { src: CLD + 'GT_Her_Closet_594_zgfrgl.jpg', alt: 'Dressing Room' },
+      { src: CLD + 'Executive_014_w1rp8a.jpg', alt: 'Executive Suite' },
+      { src: CLD + 'Executive_Bath_040_cp3scq.jpg', alt: 'Executive Suite Bath' },
+      { src: CLD + 'Deluxe_2_061_txugmc.jpg', alt: 'Suite' }
     ] },
     exterior: { label: 'Exterior', photos: [
-      { src: XBASE + 'LXIVDC_GARDENS035-f1a58655-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS026-a2d742b6-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS056-b32e0b75-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS007-031204a6-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS052-12eb4d65-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS064-e05ccf96-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS073-9d1046b6-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS089-7885c03e-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS102-8a3242cd-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS103-ce628255-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS113-6fa7c445-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS125-3cd500a6-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS134-3ea4896f-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS147-cc130b9c-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS046-41998986-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS157-6dd64d8c-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS169-bab2922e-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS184-9f61cf7f-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS194-480510dd-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS201-1b1b894d-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS218-ff748caa-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'LXIVDC_GARDENS223-badecf5d-1500.jpg', alt: 'Gardens' },
-      { src: XBASE + 'SpaHouse_1058-7cd6a107-1500.jpg', alt: 'Spa House' }
+      { src: CLD + 'LXIVDC_GARDENS035_ly1k2d.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS026_nx1u73.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS056_oed2fk.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS007_q2e2y0.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS052_ccsvbe.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS064_ybjkpl.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS073_d8t7nt.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS089_zmpr9g.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS102_bv6kmk.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS103_rqir72.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS113_v7dpbk.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS125_zpibxr.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS134_d5aklw.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS147_yvgkkd.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS046_q59bby.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS157_wtqzaq.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS169_kg6m0s.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS184_jgnpcn.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS194_dzlttv.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS201_hodm01.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS218_v7wjnb.jpg', alt: 'Gardens' },
+      { src: CLD + 'LXIVDC_GARDENS223_klaapo.jpg', alt: 'Gardens' },
+      { src: CLD + 'Spa_House_1058_d3cilj.jpg', alt: 'Spa House' }
     ] },
     'site-plan': { label: 'Site Plan', photos: [
-      { src: SBASE + 'FirstFloorPlan.png', alt: 'First Floor Plan' },
-      { src: SBASE + 'SecondFloorPlan.png', alt: 'Second Floor Plan' },
-      { src: SBASE + 'ThirdFloorPlan.png', alt: 'Third Floor Plan' },
-      { src: SBASE + 'GardenPlan.png', alt: 'Garden Plan' },
-      { src: SBASE + 'Ballroom-BANQUETDINING.jpg', alt: 'Ballroom — Banquet Dining' },
-      { src: SBASE + 'Ballroom-SEATEDDINING.jpg', alt: 'Ballroom — Seated Dining' },
-      { src: SBASE + 'Ballroom-BOARDMEETING.jpg', alt: 'Ballroom — Board Meeting' },
-      { src: SBASE + 'Ballroom-LECTURE.jpg', alt: 'Ballroom — Lecture' }
+      { src: CLD + 'FirstFloorPlan_jyuexv.png', alt: 'First Floor Plan' },
+      { src: CLD + 'SecondFloorPlan_a9lyke.png', alt: 'Second Floor Plan' },
+      { src: CLD + 'ThirdFloorPlan_yq3lno.png', alt: 'Third Floor Plan' },
+      { src: CLD + 'GardenPlan_qkwnln.png', alt: 'Garden Plan' },
+      { src: CLD + 'Ballroom-BANQUETDINING_hyqzx6.jpg', alt: 'Ballroom — Banquet Dining' },
+      { src: CLD + 'Ballroom-SEATEDDINING_ykemyx.jpg', alt: 'Ballroom — Seated Dining' },
+      { src: CLD + 'Ballroom-BOARDMEETING_kbtijh.jpg', alt: 'Ballroom — Board Meeting' },
+      { src: CLD + 'Ballroom-LECTURE_nil4at.jpg', alt: 'Ballroom — Lecture' }
     ] }
   };
 
