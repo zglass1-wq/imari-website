@@ -11,7 +11,7 @@ If you're being asked to add a new password-protected page, the rest of this doc
 ## Where files live
 
 - **Public files** sit at the repo root: `imari-website.html` (homepage), `private-info.html` (the gate), `private-access.html` (legacy redirect stub).
-- **Protected files** sit in [private/](private/): every `agents-*.html`, `corporate.html`, and every personalized landing page (`alarm250.html`, `freedom250.html`, `alex0349.html`, `july4.html`, etc.).
+- **Protected files** sit in [private/](private/): `corporate.html` and the personalized/event landing pages (`alarm250.html`, `freedom250.html`, `alex0349.html`, `july4.html`, `july4v2.html`, `july4p2.html`, `newdam1.html`, `aba.html`). New and migrated pages are built from Astro sources in `astro-src/` (currently `july4v2.html`); the rest are legacy hand-authored HTML pending migration. Both serve identically.
 
 The public URL is *not* the file path. Each protected file is mapped to a clean top-level URL via a rewrite in [vercel.json](vercel.json) — `/corporate.html` serves `/private/corporate.html`, and so on. The middleware sees and matches the **public URL** (the original request path before the rewrite), so `matcher` entries and `ROLE_ALLOWS` rules always use the public path (e.g. `/corporate.html`), never `/private/corporate.html`.
 
@@ -38,6 +38,79 @@ Cookies expire after 12 hours. To force-invalidate all sessions, rotate `IMARI_A
 
 ---
 
+## Authoring & launching a private page (Astro) — the canonical workflow
+
+Private pages are **authored in Astro** (`astro-src/`) and compiled to plain static `.html` committed into [private/](private/). **Production never runs Astro** — Vercel serves the committed `.html` exactly as before (no root `package.json`, no build command in `vercel.json`). Editing a page means editing its `.astro` source and running the build; the regenerated `.html` is what you commit and what ships.
+
+> This **supersedes the old "hand-author an HTML file in `private/`" process.** Legacy hand-authored pages still work and still serve; new and migrated pages go through Astro. The gate steps (rewrite, matcher, role, env var) are unchanged. See [imari-private-pages-astro-design.md](imari-private-pages-astro-design.md) for the full design (Approach A1).
+
+Naming: pick a short slug, e.g. `aba`, `july4v2`, `smith-wedding`. The slug is used identically across the page file (`astro-src/src/pages/<slug>.astro`), the build output (`private/<slug>.html`), and all three gate entries.
+
+### Step 1 — Author the page (Astro source)
+
+Create `astro-src/src/pages/<slug>.astro` as a **section list** — import the layout and the sections you want, in order, passing content as props (real prop names below):
+
+```astro
+---
+import PrivatePageLayout from '../layouts/PrivatePageLayout.astro';
+import Hero from '../components/Hero.astro';
+import WeekendSection from '../components/WeekendSection.astro';
+import Gallery from '../components/Gallery.astro';
+import EstateStatement from '../components/EstateStatement.astro';
+import EstateDetails from '../components/EstateDetails.astro';
+import OfferingTable from '../components/OfferingTable.astro';
+import ClosingInquire from '../components/ClosingInquire.astro';
+---
+<PrivatePageLayout
+  title="..."
+  ogTitle="..."
+  ogDescription="..."
+  ogUrl="https://imari.cc/<slug>.html"
+>
+  <Hero title="..." paragraph="..." bgImage="..." stats={[ { num: '...', label: '...' } ]} />
+  <WeekendSection title="..." paragraph="..." days={[ { label: '...', title: '...', description: '...', image: '...', alt: '...', meta: '...' } ]} />
+  <Gallery />          {/* omit for a no-gallery page; pass galleries={...} / keys={[...]} to override */}
+  <EstateStatement />  {/* shared default; override eyebrow/statement only if the page must differ */}
+  <EstateDetails />    {/* shared default; pass property={[...]} / services={[...]} to override (e.g. corporate, newdam1) */}
+  <OfferingTable body="..." rows={[ { key: '...', value: '...' } ]} />
+  <ClosingInquire />   {/* shared contact band; override fields only if needed */}
+</PrivatePageLayout>
+```
+
+Include only the sections the page needs, in any order (§6, slot-based — there is no `sections` array / renderer). Stable sections (`<Gallery />`, `<EstateDetails />`, `<EstateStatement />`, `<ClosingInquire />`) render shared defaults with no props — the defaults live in `astro-src/src/data/galleries.ts` and `astro-src/src/data/estate.ts`. Per-event sections (`Hero`, `WeekendSection`, `OfferingTable`) take content every time (§4). Do **not** add client-side gate code — the middleware is the only gate.
+
+### Step 2 — Build
+
+From `astro-src/`: `npm run build`. This recompiles **every** page and emits each to `private/<name>.html` (§7a — the all-pages build is correct: a shared-component or `galleries.ts` change *should* touch every page that uses it, and the diff proves it). For quiet iteration on one page, `npm run build:one -- <slug>` emits only that page; `npm run dev` gives a live-reload preview.
+
+> **This is the translation step.** Astro → HTML happens here, at build time, on your machine. Vercel never runs Astro. Editing `.astro` changes nothing live until you rebuild and commit the regenerated `.html`.
+
+### Step 3 — Wire the gate (three additive edits — never remove/modify existing entries)
+
+- **[vercel.json](vercel.json)** — add a rewrite: `{ "source": "/<slug>.html", "destination": "/private/<slug>.html" }`
+- **[middleware.js](middleware.js)** — add `/<slug>.html` to the `matcher`, and to `ROLE_ALLOWS`: `<slug>: (p) => p === '/<slug>.html' || p.startsWith('/<slug>-'),`
+- **[api/login.js](api/login.js)** — add to `ROLES`: `{ role: '<slug>', envVar: 'IMARI_<SLUG>_PASSWORD', redirect: '/<slug>.html' },`
+
+Roles don't overlap — a page's code unlocks only that page (and its `/<slug>-*` sub-pages).
+
+### Step 4 — Set the access code in Vercel
+
+Add env var `IMARI_<SLUG>_PASSWORD` = the code to share, in **both Production and Preview**, then **redeploy** (Edge functions read env vars at deploy time). Until set, `/<slug>.html` correctly bounces to `/private-info`.
+
+### Step 5 — Verify behind the gate
+
+Push the branch (triggers a Vercel preview). In an incognito window, enter the code and confirm the page renders and behaves correctly. For a **ported** page, compare against the original until indistinguishable — that's the real acceptance test.
+
+### Step 6 — Commit & PR
+
+Commit on a feature branch (repo convention). The commit includes the new `.astro` source, the rebuilt `private/<slug>.html` (**plus any other `private/*.html` that changed** if you touched a shared component), and the three gate edits. Open the PR only after gated verification passes.
+
+### What you give the client
+
+The URL `https://imari.cc/<slug>.html` plus the access code. A travel agent can forward the code to their client directly — the reason codes are kept over magic links.
+
+---
+
 ## Adding a new page that uses an EXISTING password
 
 Use this when you want a new page (e.g. `corporate-pricing.html`) accessible to people who already have the corporate code.
@@ -61,11 +134,9 @@ export const config = {
 
 You do **not** need to edit `ROLE_ALLOWS` for this case — the `corporate` role's rule already grants access to anything starting with `/corporate-`.
 
-### Step 2 — Create the HTML file inside `private/`
+### Step 2 — Author the page in Astro and build
 
-Place the file at `private/corporate-pricing.html`. Name it with the correct role prefix: `corporate-*.html` for corporate content. **The prefix is what grants access** — a file named `pricing-corporate.html` would NOT be unlocked by the corporate code.
-
-Use an existing protected page as a template. The body should start with `<main id="main-content">` and contain **no client-side gate code** — no `<div id="gate">`, no `checkPassword()`, no `sessionStorage` flags. The middleware is the only gate.
+Create `astro-src/src/pages/corporate-pricing.astro` (see "Authoring & launching a private page" above for the section-list pattern) and run `npm run build` from `astro-src/`, which emits `private/corporate-pricing.html`. Name it with the correct role prefix: `corporate-*` for corporate content. **The prefix is what grants access** — a slug like `pricing-corporate` would NOT be unlocked by the corporate code. The build output contains **no client-side gate code** — the middleware is the only gate.
 
 ### Step 3 — Add a rewrite in `vercel.json`
 
@@ -80,7 +151,7 @@ Without this rewrite the public URL 404s.
 ### Step 4 — Commit, push, deploy
 
 ```bash
-git add middleware.js vercel.json private/corporate-pricing.html
+git add astro-src/src/pages/corporate-pricing.astro private/corporate-pricing.html middleware.js vercel.json
 git commit -m "Add corporate pricing page"
 git push
 ```
@@ -142,9 +213,9 @@ matcher: [
 ],
 ```
 
-### Step 4 — Create the HTML page(s) inside `private/`
+### Step 4 — Author the page(s) in Astro and build
 
-Place files at `private/vendors.html` (and any `private/vendors-*.html`). Same rules as before: file name must start with the role prefix (`vendors-*.html`), no client-side gate code, body starts at `<main id="main-content">`. Copy an existing protected page as a template.
+Create `astro-src/src/pages/vendors.astro` (and any `astro-src/src/pages/vendors-*.astro`), then run `npm run build` from `astro-src/` to emit `private/vendors.html` (and `private/vendors-*.html`). The slug must start with the role prefix (`vendors`, `vendors-*`). No client-side gate code — the middleware is the only gate.
 
 ### Step 5 — Add rewrites in `vercel.json`
 
@@ -161,7 +232,7 @@ Add the new env var to the table in [README.md](README.md) so the list of requir
 ### Step 7 — Commit, push, deploy
 
 ```bash
-git add middleware.js api/login.js vercel.json private/vendors.html README.md
+git add astro-src/src/pages/vendors.astro private/vendors.html middleware.js api/login.js vercel.json README.md
 git commit -m "Add vendors private section"
 git push
 ```
@@ -228,13 +299,19 @@ Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The mid
 
 Public URL → file (every protected file lives in [private/](private/) and is exposed via a rewrite in `vercel.json`):
 
-| Public URL | File | Unlocked by role |
-|---|---|---|
-| `/corporate.html` | `private/corporate.html` | `corporate` |
-| `/alarm250.html` | `private/alarm250.html` | `alarm250` |
-| `/freedom250.html` | `private/freedom250.html` | `freedom250` |
-| `/alex0349.html` | `private/alex0349.html` | `alex0349` |
-| `/july4.html` | `private/july4.html` | `july4` |
+| Public URL | File | Unlocked by role | Authoring |
+|---|---|---|---|
+| `/corporate.html` | `private/corporate.html` | `corporate` | legacy (hand-authored) |
+| `/alarm250.html` | `private/alarm250.html` | `alarm250` | legacy (no gallery) |
+| `/freedom250.html` | `private/freedom250.html` | `freedom250` | legacy (no gallery) |
+| `/alex0349.html` | `private/alex0349.html` | `alex0349` | legacy |
+| `/july4.html` | `private/july4.html` | `july4` | legacy (original; kept while july4v2 is verified) |
+| `/july4v2.html` | `private/july4v2.html` | `july4v2` | **Astro** (`astro-src/src/pages/july4v2.astro`) |
+| `/july4p2.html` | `private/july4p2.html` | `july4p2` | legacy |
+| `/newdam1.html` | `private/newdam1.html` | `newdam1` | legacy |
+| `/aba.html` | `private/aba.html` | `aba` | legacy |
+
+> 9 protected pages today. `july4v2` is the Astro-templated rebuild of `july4`; both run in parallel during migration. The remaining legacy pages are being migrated to Astro one at a time (§7 of the design doc) — until a page's `.astro` source exists, its `private/*.html` is the original hand-authored file and the all-pages build does not touch it.
 
 ### Required Vercel env vars
 
@@ -245,14 +322,18 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `IMARI_ALARM250_PASSWORD` | Alarm.com × UFC Freedom 250 single-prospect page. |
 | `IMARI_FREEDOM250_PASSWORD` | Generalized UFC Freedom 250 weekend page for any corporate prospect. |
 | `IMARI_ALEX0349_PASSWORD` | Personalized landing page for Alex Endo. |
-| `IMARI_JULY4_PASSWORD` | Personalized 4th of July weekend landing page. |
+| `IMARI_JULY4_PASSWORD` | Salute to America 250 weekend landing page (legacy original). |
+| `IMARI_JULY4V2_PASSWORD` | Astro-templated rebuild of the July 4 page (`july4v2.html`). |
+| `IMARI_JULY4P2_PASSWORD` | July 4 weekend landing page (variant p2). |
+| `IMARI_NEWDAM1_PASSWORD` | `newdam1.html` landing page. |
+| `IMARI_ABA_PASSWORD` | `aba.html` landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |
 
 ---
 
 ## Repo orientation
 
-This is a plain static HTML site — no build step, no framework. Open `imari-website.html` in a browser to preview the public pages locally. The auth flow (middleware, API, cookies) only works on the deployed Vercel site; you cannot fully test auth locally without `vercel dev`.
+The **public** pages are plain hand-authored static HTML (`imari-website.html` etc.) — open them in a browser to preview locally. The **private** pages are authored in Astro under `astro-src/` and compiled to static `.html` committed into [private/](private/) (see "Authoring & launching a private page"). **Production still serves committed static HTML with no build step** — there is no root `package.json` and no build command in `vercel.json`, so Vercel never runs Astro. The auth flow (middleware, API, cookies) only works on the deployed Vercel site; you cannot fully test auth locally without `vercel dev`.
 
 Deployment is automatic from the `main` branch of `github.com/zglass1-wq/imari-website`. Pushes trigger a Vercel build.
 
