@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && node ./scripts/emit.mjs",
+    "build:one": "astro build && node ./scripts/emit.mjs --only",
     "preview": "astro preview"
   },
   "devDependencies": {
