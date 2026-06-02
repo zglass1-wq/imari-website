@@ -11,6 +11,7 @@ const ROLES = [
   { role: 'freedom250', envVar: 'IMARI_FREEDOM250_PASSWORD', redirect: '/freedom250.html' },
   { role: 'alex0349',   envVar: 'IMARI_ALEX0349_PASSWORD',   redirect: '/alex0349.html' },
   { role: 'july4',      envVar: 'IMARI_JULY4_PASSWORD',      redirect: '/july4.html' },
+  { role: 'july4v2',    envVar: 'IMARI_JULY4V2_PASSWORD',    redirect: '/july4v2.html' },
   { role: 'july4p2',    envVar: 'IMARI_JULY4P2_PASSWORD',    redirect: '/july4p2.html' },
   { role: 'newdam1',    envVar: 'IMARI_NEWDAM1_PASSWORD',    redirect: '/newdam1.html' },
   { role: 'aba',        envVar: 'IMARI_ABA_PASSWORD',        redirect: '/aba.html' },

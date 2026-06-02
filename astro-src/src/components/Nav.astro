@@ -1,0 +1,41 @@
+---
+// Nav bar + slide-in drawer + backdrop. Scroll-state logic (logo swap,
+// .scrolled) lives in the shared script in PrivatePageLayout. Content shared
+// by default; drawer links can be made a prop later if a page needs to differ.
+const {
+  links = [
+    { href: '#section-gallery', label: 'Galleries' },
+    { href: '#section-weekend', label: 'The Weekend' },
+    { href: '#section-estate', label: 'The Estate' },
+    { href: '#section-details', label: 'Estate Details' },
+    { href: '#section-offering', label: 'The Offering' },
+  ],
+  planLinks = [{ href: '#section-inquire', label: 'Inquire' }],
+} = Astro.props;
+---
+<nav id="site-nav">
+    <a href="/" aria-label="Imari home"><img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" /></a>
+    <div class="nav-right">
+      <a class="nav-phone" id="nav-phone" href="tel:+12028686945">+1 (202) 868-6945</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- NAV DRAWER -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="drawer" id="nav-drawer" aria-hidden="true" aria-label="Site menu">
+    <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+    <div class="drawer-inner">
+      <p class="section-eyebrow">Explore the Weekend</p>
+      <div class="drawer-links">
+        {links.map((l: { href: string; label: string }) => <a href={l.href}>{l.label}</a>)}
+      </div>
+      <div class="drawer-divider"></div>
+      <p class="section-eyebrow">Plan the Stay</p>
+      <div class="drawer-links">
+        {planLinks.map((l: { href: string; label: string }) => <a href={l.href}>{l.label}</a>)}
+      </div>
+    </div>
+  </aside>

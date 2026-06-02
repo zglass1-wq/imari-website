@@ -1,0 +1,17 @@
+---
+// The short centered "The Estate" statement block (#section-estate). Stable
+// content -> defaults to shared. `statement` may contain inline HTML (<em>).
+import { defaultEstateStatement } from '../data/estate';
+const {
+  eyebrow = defaultEstateStatement.eyebrow,
+  statement = defaultEstateStatement.statement,
+} = Astro.props;
+---
+<section class="position-wrap" id="section-estate">
+    <div class="position-inner">
+      <div class="position-statement" style="margin-bottom: 0;">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <p set:html={statement}></p>
+      </div>
+    </div>
+  </section>

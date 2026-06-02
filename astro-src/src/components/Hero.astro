@@ -1,0 +1,26 @@
+---
+// Per-event section — no defaults. All content passed in, including the
+// background image (rendered as an inline style; the .hero CSS rule no longer
+// carries a hardcoded url). `title` may contain inline HTML (<em>, <br>).
+interface Stat { num: string; label: string; }
+interface Props {
+  title: string;
+  paragraph: string;
+  stats?: Stat[];
+  bgImage?: string;
+  eyebrow?: string;
+}
+const { title, paragraph, stats = [], bgImage, eyebrow } = Astro.props as Props;
+---
+<div class="hero" style={bgImage ? `background-image: url('${bgImage}')` : undefined}>
+    <div class="hero-content">
+      {eyebrow && <p class="hero-eyebrow">{eyebrow}</p>}
+      <h1 class="hero-title" set:html={title}></h1>
+      <p class="hero-sub">{paragraph}</p>
+      <div class="hero-stats">
+        {stats.map((s) => (
+          <div><span class="stat-num">{s.num}</span><span class="stat-label">{s.label}</span></div>
+        ))}
+      </div>
+    </div>
+  </div>

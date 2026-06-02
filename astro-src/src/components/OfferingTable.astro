@@ -1,0 +1,27 @@
+---
+// Per-event block (#section-offering) — dates, format, pricing, next step all
+// change per page, and the row set itself varies, so the page supplies the
+// full list. No defaults.
+interface Row { key: string; value: string; }
+interface Props {
+  rows: Row[];
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+}
+const { rows = [], eyebrow = 'The Offering', title = 'Particulars.', body } = Astro.props as Props;
+---
+<section class="offering-section" id="section-offering">
+    <div class="offering-inner">
+      <div class="offering-head">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h2 class="section-title">{title}</h2>
+        {body && <p class="section-body">{body}</p>}
+      </div>
+      <ul class="offering-list">
+        {rows.map((r) => (
+        <li><span class="offering-key">{r.key}</span><span class="offering-val">{r.value}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
