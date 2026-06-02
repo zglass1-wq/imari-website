@@ -11,6 +11,7 @@ export const config = {
     '/july4.html',
     '/july4p2.html',
     '/newdam1.html',
+    '/stfl3.html',
     '/aba.html',
   ],
 };
@@ -23,6 +24,7 @@ const ROLE_ALLOWS = {
   july4: (p) => p === '/july4.html' || p.startsWith('/july4-'),
   july4p2: (p) => p === '/july4p2.html' || p.startsWith('/july4p2-'),
   newdam1: (p) => p === '/newdam1.html' || p.startsWith('/newdam1-'),
+  stfl3: (p) => p === '/stfl3.html' || p.startsWith('/stfl3-'),
   aba: (p) => p === '/aba.html' || p.startsWith('/aba-'),
 };
 
