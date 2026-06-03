@@ -1,0 +1,235 @@
+---
+/* ============================================================================
+   TEMPLATE · LANDING  (general estate landing page: property / service / venue)
+   Source example: newdam.
+
+   HOW TO USE: copy this file to  astro-src/src/pages/<slug>.astro , then edit
+   it down and run `npm run build`. Templates live in src/templates/ and are
+   NOT built or gated — only pages in src/pages/ are.
+
+   ⚠️ LEFTOVER-CONTENT CHECKLIST — change EVERY item before going live:
+     [ ] <PrivatePageLayout>: title, ogTitle, ogDescription, ogImage, ogUrl (→ https://imari.cc/<slug>.html)
+     [ ] Nav drawer: navLinks, navPlanLinks, navExploreLabel, navPlanLabel
+     [ ] <Hero>: eyebrow, title, paragraph, image, stats[]
+     [ ] <IntroStrip>: text
+     [ ] <Gallery>: keys (which subgalleries), or pass galleries={...} to override the shared set
+     [ ] <UseCase> × N: id, num, title, description, items[], image, alt, reverse (alternate true/false)
+     [ ] <Suites>: title, body, image, EVERY floor + suite (name/detail/features[]), footnote
+     [ ] <ServicesTable>: title, body, EVERY block (title + rows: service/detail/price/unit)
+     [ ] <AdvisorStrip>: body
+     [ ] <InquirySection>: title + EVERY contact (label/value/href)
+     [ ] Gate (CLAUDE.md → "Authoring & launching a private page"): add the vercel.json rewrite,
+         middleware.js matcher + ROLE_ALLOWS, api/login.js ROLES, and set IMARI_<SLUG>_PASSWORD in Vercel
+   ============================================================================ */
+import PrivatePageLayout from '../layouts/PrivatePageLayout.astro';
+import CanonicalStyles from '../components/CanonicalStyles.astro';
+import Hero from '../components/Hero.astro';
+import IntroStrip from '../components/IntroStrip.astro';
+import Gallery from '../components/Gallery.astro';
+import UseCase from '../components/UseCase.astro';
+import Suites from '../components/Suites.astro';
+import ServicesTable from '../components/ServicesTable.astro';
+import AdvisorStrip from '../components/AdvisorStrip.astro';
+import InquirySection from '../components/InquirySection.astro';
+
+const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
+
+const navLinks = [
+  { href: '#section-gallery', label: 'Galleries' },
+  { href: '#section-property', label: 'The Property' },
+  { href: '#section-service', label: 'The Service' },
+  { href: '#section-venue', label: 'The Venue' },
+  { href: '#section-security', label: 'The Security' },
+  { href: '#section-extras', label: 'The Extras' },
+  { href: '#section-suites', label: 'Accommodations' },
+  { href: '#section-supplemental', label: 'Supplemental Services' },
+];
+const navPlanLinks = [
+  { href: '#section-advisors', label: 'For Travel Advisors' },
+  { href: '#inquiry', label: 'Inquire' },
+];
+
+const useCases = [
+  {
+    id: 'section-property', num: '01', title: 'The Property', reverse: false,
+    image: CLD + 'LXIVDC_GARDENS134_d5aklw.jpg', alt: 'Estate gardens',
+    description: 'A 12,000 sq ft house on a walled, gated acre of gardens in Georgetown. Six suites, a 1,000 sq ft ballroom, a spa house, and a separate guest house for client staff.',
+    items: [
+      '12,000 sq ft main house on one private acre in Georgetown D.C.',
+      'Manicured gardens and greenhouse designed by Rose Greely (1930), updated by Perry Wheeler — designer of the White House Rose Garden',
+      'Gated arrival court with parking for 10 vehicles',
+      'In the main house: 6 bedroom suites across two floors with 15 bathrooms',
+      'Entertainment & living spaces flow naturally across the first floor — Parlor, Living Room, Orangerie, and formal Dining Room',
+      "Chef's Kitchen — commercial-grade, built for serious cooking at any scale",
+      'Elevator in main residence',
+      'Private gym, dedicated yoga/meditation room, full-size swimming pool, and detached Spa House with sauna, steam room, cold plunge, and hot tub',
+      'Detached 1,000 sq ft ballroom',
+      'Multiple indoor and outdoor spaces for breakouts, receptions, and gatherings',
+      'Three-bedroom guest house — separate entrance and self-contained — for client staff (security, EAs, nannies). Available at additional cost.',
+    ],
+  },
+  {
+    id: 'section-service', num: '02', title: 'The Service', reverse: true,
+    image: CLD + 'Dining_Bar_Cart_126_rtdr2u.jpg', alt: 'Dining room bar cart',
+    description: "A full team on property from arrival to departure — concierge, butler, housekeeping, Michelin-star chefs — coordinating everything so the client doesn't have to ask twice.",
+    items: [
+      '24/7 dedicated concierge managing all logistics end-to-end — planning, reservations, transportation, and on-site coordination',
+      'Butler-led arrival, daily service, and evening turndown',
+      'Full housekeeping team — daily service and full property reset after events and overnight',
+      'In-residence garment care — laundry, pressing, steaming',
+      "Property team functions as an extension of the planner's own team",
+      'Farm-sourced breakfast daily — fresh fruit, eggs made to order, pastries, organic yogurt, cold-pressed juices, coffee, tea',
+      'Stocked kitchen customized in advance to guest preferences',
+      'Michelin-star chefs available for meals and private dinners',
+      'Welcome champagne, unpacking service, and private guided estate introduction on arrival',
+      'Custom floral arrangements styled throughout the estate prior to arrival',
+    ],
+  },
+  {
+    id: 'section-venue', num: '03', title: 'The Venue', reverse: false,
+    image: CLD + 'Living_Room_280_i5lyva.jpg', alt: 'Living room',
+    description: 'A purpose-built venue for hosting, from 24-person dinners to 300-person receptions. Full AV, full production, full team.',
+    items: [
+      "Up to 60 seated at king's tables or 70 at rounds in the ballroom",
+      'Up to 24 for private dinners in the formal dining room',
+      'Up to 300 for larger receptions and cocktail events across the property',
+      'Full event planning and production — ideation through execution',
+      'Full AV suite for presentations, panels, and production',
+      'Custom menus designed for the occasion and guests',
+      'Flow from work session to cocktail hour to dinner without changing venues',
+    ],
+  },
+  {
+    id: 'section-security', num: '04', title: 'The Security', reverse: true,
+    image: CLD + 'LXIVDC_GARDENS102_bv6kmk.jpg', alt: 'Estate gardens',
+    description: 'Whole-property exclusivity, private arrival, perimeter cameras, NDA-bound staff. Vetted and used by heads of state.',
+    items: [
+      'Complete property exclusivity — no other guests, no lobby, no shared spaces',
+      'Private arrival court — arrivals and departures unseen, no street exposure',
+      'Integrated estate-wide security system with perimeter PTZ cameras, designed and vetted for heads of state and senior officials',
+      'All staff bound by confidentiality agreement before entering the property',
+      'Armed security personnel available',
+    ],
+  },
+  {
+    id: 'section-extras', num: '05', title: 'The Extras', reverse: false,
+    image: CLD + 'Spa_House_1058_d3cilj.jpg', alt: 'Estate gardens',
+    description: 'Your client asks; we sort it. Wellness, styling, transportation — those are the starting points, not the limits.',
+    items: [
+      'Central Georgetown — 1 block from the Four Seasons, minutes from the White House and the Capitol',
+      'Private wellness programming — massage therapy, acupuncture, IV therapy, yoga instruction, personal training, med-spa treatments',
+      'Custom wardrobe and personal styling',
+      'Private airport and train transfers included for arrival and departure',
+      'Private car and driver available for the duration of the stay',
+      'Supercar access and private aviation coordination available on request',
+    ],
+  },
+];
+
+const suiteFloors = [
+  { label: 'Second Floor', suites: [
+    { name: 'Georgetown Suite', detail: '1100 Sqft · King', features: ['Largest suite in the main house', 'Overlooks the manicured Rose Greely gardens', 'En-suite bath with double vanity', 'Walk-in closet', 'Private office with fireplace'] },
+    { name: 'Premier Suite', detail: '750 Sqft · King', features: ['Attached to dedicated meditation/yoga room', 'Spa bath with soaking tub and walk-in shower', 'Private dressing room', 'Motorized blackout shades'] },
+    { name: 'Executive Suite', detail: '400 Sqft · King', features: ['Overlooking scenic Olive Street', 'En-suite bath with walk-in shower', 'Fireplace in bedroom'] },
+  ] },
+  { label: 'Third Floor', suites: [
+    { name: 'Garden Suite', detail: '350 Sqft · Queen', features: ['Direct views of the manicured grounds', 'En-suite bath with dual vanity and walk-in shower', 'Quiet placement within the residence'] },
+    { name: 'Deluxe Suite 1', detail: '300 Sqft · Queen', features: ['Above the Executive Suite', 'En-suite bath with walk-in shower', 'Gracious proportions and natural light'] },
+    { name: 'Deluxe Suite 2', detail: '300 Sqft · Queen', features: ['Bright and intimate with Olive Street facing windows', 'En-suite bath', 'Ideal for single guests or associates'] },
+  ] },
+];
+
+const serviceBlocks = [
+  { title: 'Butler & Chef Services', rows: [
+    { service: 'Extended Butler Hours', detail: '8pm to 12am', price: '900', unit: 'per day' },
+    { service: 'Additional Butler', detail: 'regular hours, 7am to 8pm', price: '1,300', unit: 'per day' },
+    { service: 'House Chef', detail: 'full day, 12 hours', price: '2,000', unit: 'per day' },
+    { service: 'House Chef', detail: 'lunch service, 4 hours', price: '800', unit: 'per day' },
+    { service: 'House Chef', detail: 'dinner service, 6 hours', price: '1,050', unit: 'per day' },
+    { service: 'Omakase with Zach Ramos', detail: 'Omakase 29', price: '300', unit: 'per person / $ 3,000 min' },
+    { service: 'Five-Course with Aaron Silverman', detail: 'Pineapple and Pearls, Rose\'s Luxury, Little Pearl', price: '250', unit: 'per person / $ 5,000 min' },
+    { service: 'Family Style with Michael Rafidi', detail: 'Albi, Yellow, La\' Shukran', price: '250', unit: 'per person / $ 5,000 min' },
+  ], footnote: 'Ingredients billed separately for house chef services. Additional chef experiences available on request.' },
+  { title: 'Events & Gatherings', rows: [
+    { service: 'Event Coordination', detail: 'day-of execution', price: '3,000', unit: 'starting at' },
+    { service: 'Event Planning & Production', detail: 'full-service', price: '15,000', unit: 'starting at' },
+    { service: 'Additional Floral Arrangements', detail: 'entire property', price: '3,000', unit: 'starting at' },
+    { service: 'Wine & Champagne Service', detail: 'main house, living room, greenhouse, or garden', price: '75', unit: 'per person' },
+    { service: 'Wine & Champagne', detail: 'cellar tier reserve selections', price: '200', unit: 'per person' },
+    { service: 'Cocktail Service', detail: 'bartender included', price: '120', unit: 'per person' },
+    { service: 'Private Security', price: '1,900', unit: 'per day' },
+  ] },
+  { title: 'Wellness & Transportation', rows: [
+    { service: 'Massage', detail: '60 minutes', price: '210', unit: 'per person' },
+    { service: 'Massage', detail: '90 minutes', price: '280', unit: 'per person' },
+    { service: 'IV Infusion', detail: 'hydration and immune boost', price: '375', unit: 'per person' },
+    { service: 'Acupuncture', detail: '60-minute treatment', price: '300', unit: 'per session' },
+    { service: 'Private Driver', detail: 'hourly', price: '120', unit: 'per hour' },
+    { service: 'Private Driver', detail: 'full day', price: '1,000', unit: 'per day' },
+    { service: 'Supercar Rental', detail: 'Ferrari SUV, Aston Martin DB9, or similar', price: '1,750', unit: 'per day' },
+    { service: 'E-Bike or Road Bike', price: '100', unit: 'per day' },
+    { service: 'Extended Dining Setup', detail: '12+ guests', price: '600', unit: '' },
+  ] },
+];
+---
+<PrivatePageLayout
+  title="Imari · Estate Landing"
+  ogTitle="Imari Georgetown · A Private Estate"
+  ogDescription="Whole-property exclusivity, full staff, and the comfort of a true home in the heart of Georgetown."
+  ogImage={CLD.replace('f_auto,q_auto/', 'f_auto,q_auto,w_1200,h_630,c_fill,g_auto/') + 'Parlor_and_Living_Room_421_ycl671.jpg'}
+  ogUrl="https://imari.cc/SLUG.html"
+  navLinks={navLinks}
+  navPlanLinks={navPlanLinks}
+  navExploreLabel="Explore the Estate"
+  navPlanLabel="Plan a Stay"
+  navLogoLink={false}
+>
+  <CanonicalStyles />
+
+  <Hero
+    image={CLD + 'Parlor_and_Living_Room_421_ycl671.jpg'}
+    imageAlt="Imari Georgetown"
+    eyebrow="Imari Georgetown"
+    title="A private estate in Georgetown —<br>fully staffed, <em>entirely yours.</em>"
+    paragraph="Everything a discerning guest expects and more - Whole-property exclusivity, full staff, and the comfort of a true home — so your clients can host, meet, and decompress on their own terms."
+    stats={[
+      { num: '12,000', label: 'sq.ft.' },
+      { num: '1', label: 'Acre of Gardens' },
+      { num: '6', label: 'Bedroom Suites' },
+      { num: '3', label: 'Staff Bedrooms' },
+      { num: '300', label: 'Event Capacity' },
+    ]}
+  />
+
+  <IntroStrip text="Imari Georgetown is a purpose-built private estate for advisors who need a property that performs. Whole-property exclusivity, dedicated concierge, Michelin-star culinary, and logistics handled end-to-end — so your client's experience exceeds expectations, and so does yours." />
+
+  <Gallery keys={['interior', 'exterior', 'site-plan']} />
+
+  {useCases.map((uc) => <UseCase {...uc} />)}
+
+  <Suites
+    title="The<br>accommodations."
+    body="Each suite is distinct and finished to the same exceptional standard. Three king, three queen — across three floors of a 12,000 square foot main house."
+    image={CLD + 'GT_Bedroom_222_nrkmzw.jpg'}
+    imageAlt="Georgetown Suite"
+    floors={suiteFloors}
+    footnote="An attached three-bedroom guest house (3 bed · 3 bath · kitchen · living room · office) is available at additional cost."
+  />
+
+  <ServicesTable
+    title="Supplemental<br>Services."
+    body="Everything below can be customized to match individual needs. If something isn't listed, just ask — our team can usually make it happen."
+    blocks={serviceBlocks}
+  />
+
+  <AdvisorStrip body="Commission structure available for qualified trade partners. Dedicated point of contact handles your bookings, your guests, and your client communications end-to-end. Every stay comes with two WhatsApp groups — one with you and your client, one with you and the property team — so your client is always covered and you always know what's happening." />
+
+  <InquirySection
+    title="Inquire with our team for availability."
+    bgImage={CLD + 'LXIVDC_GARDENS157_wtqzaq.jpg'}
+    contacts={[
+      { label: 'Call', value: '+1 (202) 868-6945', href: 'tel:+12028686945' },
+      { label: 'Email', value: 'blaine@imari.cc', href: 'mailto:blaine@imari.cc' },
+    ]}
+  />
+</PrivatePageLayout>

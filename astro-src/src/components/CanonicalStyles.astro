@@ -1,0 +1,20 @@
+---
+// Canonical shared values for NEW pages built from the templates (§7b).
+// The faithful ports (corporatev2/newdamv2/july4v2) preserve each original's
+// drifted CSS via per-page .page--* blocks; the TEMPLATES instead converge to
+// one canonical look so every future page is born consistent. The values here
+// are the agreed canonical set; everything else (section-body 0.9, gallery
+// parchment-dark, hero-eyebrow 0.6rem/0.3em, hero-title/sub) already matches
+// the layout's baseline, so only these four need stating.
+//
+// Scoped under #main-content so they win over the layout's baseline by
+// specificity (id > class), regardless of style order. This CSS is bundled
+// only onto pages that render <CanonicalStyles /> — i.e. template-derived
+// pages — so july4v2 and the ports are never affected.
+---
+<style is:global>
+  #main-content .hero-content { max-width: 1000px; }
+  #main-content .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+  #main-content .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,23,18,0.15) 0%, rgba(26,23,18,0.1) 40%, rgba(26,23,18,0.80) 100%); }
+  #main-content .use-case { min-height: 570px; }
+</style>
