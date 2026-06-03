@@ -1,0 +1,91 @@
+---
+// Supplemental services: header + one or more priced tables (newdam). Per-event
+// content, no default. `title`/block titles may contain inline HTML (<br>, &).
+// CSS ported from the repo's existing services-table.css (kept in sync here).
+interface Row { service: string; detail?: string; symbol?: string; price: string; unit?: string; }
+interface Block { title: string; rows: Row[]; footnote?: string; }
+interface Props {
+  eyebrow?: string;
+  title: string;
+  body?: string;
+  blocks?: Block[];
+  id?: string;
+}
+const { eyebrow = 'Supplemental Services', title, body, blocks = [], id = 'section-supplemental' } = Astro.props as Props;
+---
+<section class="services-section" id={id}>
+    <div class="services-inner">
+      <header class="services-header">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h2 class="section-title" set:html={title}></h2>
+        {body && <p class="section-body">{body}</p>}
+      </header>
+
+      {blocks.map((b) => (
+      <div class="services-table-block">
+        <h3 class="services-table-title">{b.title}</h3>
+        <table class="services-table">
+          <colgroup>
+            <col class="col-service" />
+            <col class="col-symbol" />
+            <col class="col-price" />
+            <col class="col-unit" />
+          </colgroup>
+          <tbody>
+            {b.rows.map((r) => (
+            <tr>
+              <td class="cell-service"><span class="service-name">{r.service}</span>{r.detail && <span class="service-detail">{r.detail}</span>}</td>
+              <td class="cell-symbol">{r.symbol ?? '$'}</td><td class="cell-price">{r.price}</td>
+              <td class="cell-unit">{r.unit ?? ''}</td>
+            </tr>
+            ))}
+          </tbody>
+        </table>
+        {b.footnote && <p class="services-footnote">{b.footnote}</p>}
+      </div>
+      ))}
+    </div>
+  </section>
+
+<style is:global>
+  .services-section { background: var(--parchment-dark); padding: 7rem 3rem; }
+  .services-inner { max-width: 880px; margin: 0 auto; }
+  .services-header { margin-bottom: 4rem; }
+  .services-header .section-body { max-width: 560px; }
+  .services-table-block { margin-bottom: 4rem; }
+  .services-table-block:last-child { margin-bottom: 0; }
+  .services-table-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: clamp(1.2rem, 2vw, 1.5rem); line-height: 1.2; color: var(--ink); padding-bottom: 0.65rem; border-bottom: 1px solid var(--rule-dark); margin-bottom: 0.5rem; }
+  .services-table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+  .services-table .col-service { width: 68%; }
+  .services-table .col-symbol  { width: 2%; }
+  .services-table .col-price   { width: 8%; }
+  .services-table .col-unit    { width: 22%; }
+  .services-table tr { border-bottom: 1px solid var(--rule); }
+  .services-table tr:last-child { border-bottom: none; }
+  .services-table td { padding: 1.25rem 0; vertical-align: baseline; }
+  .services-table .cell-service { padding-left: 1.25rem; padding-right: 1rem; }
+  .services-table .service-name { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 1rem; color: var(--ink); }
+  .services-table .service-detail { font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--warm-mid); letter-spacing: 0.01em; }
+  .services-table .service-detail::before { content: ' \2014 '; color: var(--warm-mid); }
+  .services-table .cell-symbol { text-align: left; padding: 0; font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.9rem; color: var(--ink); white-space: nowrap; }
+  .services-table .cell-price { text-align: right; padding-left: 0; padding-right: 12px; font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.9rem; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .services-table .cell-unit { text-align: left; font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--warm-mid); text-transform: lowercase; letter-spacing: 0; }
+  .services-footnote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 0.85rem; line-height: 1.6; color: var(--warm-mid); margin-top: 1.25rem; }
+  @media (max-width: 900px) {
+    .services-section { padding: 5rem 1.5rem; }
+    .services-header { margin-bottom: 3rem; }
+  }
+  @media (max-width: 640px) {
+    .services-table .col-service { width: 50%; }
+    .services-table .col-symbol  { width: 4%; }
+    .services-table .col-price   { width: 20%; }
+    .services-table .col-unit    { width: 26%; }
+    .services-table td { padding: 1rem 0; }
+    .services-table .cell-service { padding-left: 0.75rem; }
+    .services-table .service-name { font-size: 1rem; }
+    .services-table .service-detail { display: block; margin-top: 0.2rem; font-size: 0.72rem; }
+    .services-table .service-detail::before { content: ''; }
+    .services-table .cell-price { font-size: 0.85rem; padding-right: 8px; }
+    .services-table .cell-unit  { font-size: 0.7rem; padding-left: 6px; }
+  }
+</style>

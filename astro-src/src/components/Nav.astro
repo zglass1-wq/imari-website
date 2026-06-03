@@ -11,10 +11,13 @@ const {
     { href: '#section-offering', label: 'The Offering' },
   ],
   planLinks = [{ href: '#section-inquire', label: 'Inquire' }],
+  exploreLabel = 'Explore the Weekend',
+  planLabel = 'Plan the Stay',
+  logoLink = true,
 } = Astro.props;
 ---
 <nav id="site-nav">
-    <a href="/" aria-label="Imari home"><img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" /></a>
+    {logoLink ? <a href="/" aria-label="Imari home"><img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" /></a> : <img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" />}
     <div class="nav-right">
       <a class="nav-phone" id="nav-phone" href="tel:+12028686945">+1 (202) 868-6945</a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
@@ -28,12 +31,12 @@ const {
   <aside class="drawer" id="nav-drawer" aria-hidden="true" aria-label="Site menu">
     <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
     <div class="drawer-inner">
-      <p class="section-eyebrow">Explore the Weekend</p>
+      <p class="section-eyebrow">{exploreLabel}</p>
       <div class="drawer-links">
         {links.map((l: { href: string; label: string }) => <a href={l.href}>{l.label}</a>)}
       </div>
       <div class="drawer-divider"></div>
-      <p class="section-eyebrow">Plan the Stay</p>
+      <p class="section-eyebrow">{planLabel}</p>
       <div class="drawer-links">
         {planLinks.map((l: { href: string; label: string }) => <a href={l.href}>{l.label}</a>)}
       </div>

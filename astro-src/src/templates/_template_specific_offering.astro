@@ -1,0 +1,106 @@
+---
+/* ============================================================================
+   TEMPLATE · SPECIFIC OFFERING  (a dated event with a multi-part program)
+   Source example: july4 / july4v2 (Salute to America 250 weekend).
+
+   HOW TO USE: copy this file to  astro-src/src/pages/<slug>.astro , then edit
+   it down to the new offering and run `npm run build`. Templates live in
+   src/templates/ and are NOT built or gated — only pages in src/pages/ are.
+
+   ⚠️ LEFTOVER-CONTENT CHECKLIST — change EVERY item before going live:
+     [ ] <PrivatePageLayout>: title, ogTitle, ogDescription, ogUrl (→ https://imari.cc/<slug>.html)
+     [ ] Nav drawer: navLinks, navPlanLinks, navExploreLabel, navPlanLabel
+     [ ] <Hero>: title, paragraph, bgImage, stats[]
+     [ ] <WeekendSection>: title, paragraph, and EVERY day card (label/title/description/image/alt/meta)
+     [ ] <OfferingTable>: body + EVERY row (key/value) — dates, pricing, etc.
+     [ ] <ClosingInquire>: contact — defaults to Blaine Stephens; override name/phone/email if different
+     [ ] Shared-default sections (<EstateStatement/>, <Gallery/>, <EstateDetails/>): override only if THIS page differs
+     [ ] Gate (CLAUDE.md → "Authoring & launching a private page"): add the vercel.json rewrite,
+         middleware.js matcher + ROLE_ALLOWS, api/login.js ROLES, and set IMARI_<SLUG>_PASSWORD in Vercel
+   ============================================================================ */
+import PrivatePageLayout from '../layouts/PrivatePageLayout.astro';
+import CanonicalStyles from '../components/CanonicalStyles.astro';
+import Hero from '../components/Hero.astro';
+import WeekendSection from '../components/WeekendSection.astro';
+import EstateStatement from '../components/EstateStatement.astro';
+import Gallery from '../components/Gallery.astro';
+import EstateDetails from '../components/EstateDetails.astro';
+import OfferingTable from '../components/OfferingTable.astro';
+import ClosingInquire from '../components/ClosingInquire.astro';
+
+const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
+
+const days = [
+  {
+    label: 'Thursday · July 2',
+    title: 'Dinner and Jazz at Imari',
+    description: 'The weekend opens at the estate. A private chef moves through the regions of America — small plates, considered pairings, the story of our country told course by course. When the table clears, cocktails are poured and the main salon comes alive with live jazz. The night ends on your own terms, at home.',
+    image: CLD + 'milesdavis2_cstbuf.jpg',
+    alt: 'Jazz trumpeter performing live',
+    meta: '60 people',
+  },
+  {
+    label: 'Friday · July 3',
+    title: 'Pre-Party, then the Ball',
+    description: 'A specialty cocktail hour on the estate — a bespoke patriotic menu, passed bites, and the ease of a private start to a formal night. When the moment is right, cars take you to the Official Countdown 250 Ball at the Washington Hilton. Your table is waiting. Afterward, the car brings you back while the rest of the city finds its way home.',
+    image: CLD + 'IMG_3771_ea5mpm.jpg',
+    alt: 'Candlelit cocktail setting at Imari',
+    meta: '30 people',
+  },
+  {
+    label: 'Saturday · July 4',
+    title: 'Barbeque and Fireworks on the Water',
+    description: 'An elevated barbecue on the estate lawn — long tables, cold drinks, lawn games in the afternoon sun. Unhurried. As evening falls, your group boards a private boat charter on the Potomac steps from the estate. The Salute to America 250 fireworks open above the monuments and reflect in the river below, with nothing between you and the sky.',
+    image: CLD + 'Everett_Chu_qlgope.webp',
+    alt: 'fireworks over the potomac',
+    meta: '200 people',
+  },
+];
+
+const offeringRows = [
+  { key: 'Dates', value: 'Check in Thursday, July 2. Check out Sunday, July 5. Three nights.' },
+  { key: 'Occupancy', value: 'Nine to eighteen overnight guests. Up to two hundred at evening events.' },
+  { key: 'Location', value: 'Central Georgetown. Half a block from the Four Seasons. Less than two miles from the White House.' },
+  { key: 'Included', value: 'Sole-occupancy residence for the stay. Full-service car and driver. Dedicated butler staff. Concierge facilitation of every event on and around the property.' },
+  { key: 'Pricing', value: '$ 100,000 - $ 250,000 based on planned events and number of guests' },
+];
+---
+<PrivatePageLayout
+  title="Imari · Salute to America 250 Weekend"
+  ogTitle="Salute to America 250 · Imari Georgetown"
+  ogDescription="Three nights at a private estate two miles from every event on the program."
+  ogUrl="https://imari.cc/SLUG.html"
+>
+  <CanonicalStyles />
+
+  <Hero
+    title="The <em>Salute to America 250</em><br>weekend"
+    paragraph="A private estate, fully staffed, entirely yours — the place to host the people your business is built around during the biggest weekend the capital has ever staged."
+    bgImage={CLD + 'wall-texture_skicra.jpg'}
+    stats={[
+      { num: 'July 2-5', label: '3 Nights, sole occupancy' },
+      { num: '12,000', label: 'sq.ft.' },
+      { num: '18', label: 'Overnight guests' },
+      { num: '300', label: 'Event guests' },
+    ]}
+  />
+
+  <WeekendSection
+    title="Two hundred and fifty years in the making."
+    paragraph="The Salute to America 250 is the most ambitious Independence Day the country has ever staged — a million people on the National Mall, military flyovers, and a fireworks finale billed as the largest pyrotechnics display in the history of the world. Every moment of it sits within two miles of one private acre in central Georgetown, the perfect setting to host your most valued clients, partners, and leaders, while the public celebrations unfold. Three days that begin with a private chef dinner and live jazz on the grounds, move through a cocktail pre-party and formal ball, and close with fireworks watched from a private charter on the Potomac."
+    days={days}
+  />
+
+  <EstateStatement />
+
+  <Gallery />
+
+  <EstateDetails />
+
+  <OfferingTable
+    body="A single party holds the residence for the entire weekend. The specifics below are the foundation. The rest is built around the way the weekend wants to run."
+    rows={offeringRows}
+  />
+
+  <ClosingInquire />
+</PrivatePageLayout>

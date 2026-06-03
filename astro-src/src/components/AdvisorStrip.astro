@@ -1,0 +1,22 @@
+---
+// Two-column "For Travel Advisors" strip (newdam). Per-event content, no default.
+interface Props { eyebrow?: string; body: string; id?: string; }
+const { eyebrow = 'For Travel Advisors', body, id = 'section-advisors' } = Astro.props as Props;
+---
+<section class="advisor-strip" id={id}>
+    <div class="advisor-inner">
+      <p class="section-eyebrow">{eyebrow}</p>
+      <p class="advisor-body">{body}</p>
+    </div>
+  </section>
+
+<style is:global>
+  .advisor-strip { background: var(--parchment-dark); padding: 4.5rem 3rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .advisor-inner { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 220px 1fr; gap: 3.5rem; align-items: start; }
+  .advisor-inner .section-eyebrow { margin: 0; padding-top: 0.35rem; }
+  .advisor-body { font-size: 0.9rem; line-height: 1.95; color: var(--ink-light); max-width: 640px; }
+  @media (max-width: 900px) {
+    .advisor-strip { padding: 3rem 1.5rem; }
+    .advisor-inner { grid-template-columns: 1fr; gap: 1.25rem; }
+  }
+</style>

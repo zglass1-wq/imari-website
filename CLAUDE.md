@@ -46,9 +46,26 @@ Private pages are **authored in Astro** (`astro-src/`) and compiled to plain sta
 
 Naming: pick a short slug, e.g. `aba`, `july4v2`, `smith-wedding`. The slug is used identically across the page file (`astro-src/src/pages/<slug>.astro`), the build output (`private/<slug>.html`), and all three gate entries.
 
+### Templates — the fastest start (§7b)
+
+Don't author from a blank file — **copy the matching template** from [`astro-src/src/templates/`](astro-src/src/templates/). Each is a complete, verified working example of its page-type with the **canonical (converged) look** baked in (via `<CanonicalStyles />`); you edit it down to the new page. Templates live in `src/templates/` and are **never built or gated** — only `src/pages/` is routed, and they're `_`-prefixed as a second guard — so a template never emits a `private/*.html`.
+
+| Template | Use it for | Sections it demonstrates |
+|---|---|---|
+| `_template_landing` | a general estate landing page | hero (image) · intro · gallery · use-cases · suites · services table · advisor strip · inquiry |
+| `_template_collateral` | a use-case / pitch page ("who it's for, how it's used") | hero (image) · intro · use-cases · estate statement · gallery · estate details · agenda · inquiry |
+| `_template_specific_offering` | a dated event with a multi-part program | hero (bg) · weekend / day-cards · estate statement · gallery · estate details · offering table · closing |
+
+**Trigger-phrase mapping** — when the instruction is *"create a new ___ page for X with these specifics"*:
+- *"landing page"* → copy `_template_landing`
+- *"collateral"* (a use-case / pitch) → copy `_template_collateral`
+- a **dated event / offering** (e.g. "a July 4th weekend page", "an offering for the X conference") → copy `_template_specific_offering`
+
+Then the workflow is: **copy → edit the content down → run the template's leftover-content checklist (the comment block at the top of the file) → build → gate → verify.** Step 1 below is therefore "edit the copied template," not "write from scratch." (Authoring from scratch is still fine — the section list below is the full menu — but a template guarantees the right sections, order, and canonical styling.)
+
 ### Step 1 — Author the page (Astro source)
 
-Create `astro-src/src/pages/<slug>.astro` as a **section list** — import the layout and the sections you want, in order, passing content as props (real prop names below):
+Either copy a template (above) — recommended — or create `astro-src/src/pages/<slug>.astro` from scratch as a **section list**: import the layout and the sections you want, in order, passing content as props (real prop names below):
 
 ```astro
 ---
@@ -77,7 +94,9 @@ import ClosingInquire from '../components/ClosingInquire.astro';
 </PrivatePageLayout>
 ```
 
-Include only the sections the page needs, in any order (§6, slot-based — there is no `sections` array / renderer). Stable sections (`<Gallery />`, `<EstateDetails />`, `<EstateStatement />`, `<ClosingInquire />`) render shared defaults with no props — the defaults live in `astro-src/src/data/galleries.ts` and `astro-src/src/data/estate.ts`. Per-event sections (`Hero`, `WeekendSection`, `OfferingTable`) take content every time (§4). Do **not** add client-side gate code — the middleware is the only gate.
+Include only the sections the page needs, in any order (§6, slot-based — there is no `sections` array / renderer). Stable sections (`<Gallery />`, `<EstateDetails />`, `<EstateStatement />`, `<ClosingInquire />`) render shared defaults with no props — the defaults live in `astro-src/src/data/galleries.ts` and `astro-src/src/data/estate.ts`. Per-event sections (`Hero`, `WeekendSection`/`DayCard`, `OfferingTable`, `IntroStrip`, `UseCase`, `Agenda`, `Suites`, `ServicesTable`, `AdvisorStrip`, `InquirySection`) take content every time (§4). Do **not** add client-side gate code — the middleware is the only gate.
+
+> **Known component gap:** `PhotoBand` — the 4-image horizontal band used on `alarm250.html` and `freedom250.html` — is the one live section type with no component yet (it wasn't present in the july4v2 / corporate / newdam ports the kit was built from). It touches none of the three templates. Build it as a prop-driven component **if/when alarm250 or freedom250 are migrated to Astro**, not before.
 
 ### Step 2 — Build
 

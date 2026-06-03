@@ -3,6 +3,7 @@
     { "source": "/", "destination": "/imari-website.html" },
     { "source": "/private-info", "destination": "/private-info.html" },
     { "source": "/corporate.html", "destination": "/private/corporate.html" },
+    { "source": "/corporatev2.html", "destination": "/private/corporatev2.html" },
     { "source": "/alarm250.html", "destination": "/private/alarm250.html" },
     { "source": "/freedom250.html", "destination": "/private/freedom250.html" },
     { "source": "/alex0349.html", "destination": "/private/alex0349.html" },
@@ -10,6 +11,7 @@
     { "source": "/july4v2.html", "destination": "/private/july4v2.html" },
     { "source": "/july4p2.html", "destination": "/private/july4p2.html" },
     { "source": "/newdam1.html", "destination": "/private/newdam1.html" },
+    { "source": "/newdamv2.html", "destination": "/private/newdamv2.html" },
     { "source": "/stfl3.html", "destination": "/private/stfl3.html" },
     { "source": "/aba.html", "destination": "/private/aba.html" }
   ]

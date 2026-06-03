@@ -1,0 +1,54 @@
+---
+// Split image/text block, alternating left/right via `reverse`. Used as a
+// repeated section (corporate use-cases, newdam property/service/etc.). All
+// content per-page, no default. Listed individually in the page file.
+interface Props {
+  id?: string;
+  num: string;
+  title: string;
+  description: string;
+  items?: string[];
+  image: string;
+  alt?: string;
+  reverse?: boolean;
+}
+const { id, num, title, description, items = [], image, alt = '', reverse = false } = Astro.props as Props;
+---
+<div class={reverse ? 'use-case reverse alt' : 'use-case'} id={id}>
+    <div class="uc-image-wrap">
+      <img src={image} alt={alt} />
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">{num}</p>
+      <h2 class="uc-title">{title}</h2>
+      <p class="uc-desc">{description}</p>
+      {items.length > 0 && (
+      <ul class="uc-list">
+        {items.map((i) => <li>{i}</li>)}
+      </ul>
+      )}
+    </div>
+  </div>
+
+<style is:global>
+  .use-case { display: grid; grid-template-columns: 1fr 1fr; min-height: 580px; border-bottom: 1px solid var(--rule); }
+  .use-case.reverse { direction: rtl; }
+  .use-case.reverse > * { direction: ltr; }
+  .uc-image-wrap { overflow: hidden; }
+  .uc-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s ease; }
+  .use-case:hover .uc-image-wrap img { transform: scale(1.04); }
+  .uc-body-wrap { padding: 4.5rem 4rem; display: flex; flex-direction: column; justify-content: center; background: var(--parchment); }
+  .use-case.alt .uc-body-wrap { background: var(--parchment-dark); }
+  .uc-num { font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+  .uc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 400; color: var(--ink); margin-bottom: 1rem; line-height: 1.15; }
+  .uc-desc { font-size: 0.82rem; line-height: 1.9; color: var(--ink-light); margin-bottom: 2rem; }
+  .uc-list { list-style: none; border-top: 1px solid var(--rule); padding-top: 1.25rem; }
+  .uc-list li { font-size: 0.75rem; line-height: 1.65; color: var(--warm-mid); padding: 0.3rem 0; border-bottom: 1px solid var(--rule); display: flex; gap: 0.75rem; }
+  .uc-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+  @media (max-width: 900px) {
+    .use-case { grid-template-columns: 1fr; min-height: auto; }
+    .use-case.reverse { direction: ltr; }
+    .uc-image-wrap { height: 300px; }
+    .uc-body-wrap { padding: 2.5rem 1.5rem; }
+  }
+</style>
