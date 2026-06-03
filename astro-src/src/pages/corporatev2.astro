@@ -1,0 +1,163 @@
+---
+import PrivatePageLayout from '../layouts/PrivatePageLayout.astro';
+import Hero from '../components/Hero.astro';
+import IntroStrip from '../components/IntroStrip.astro';
+import UseCase from '../components/UseCase.astro';
+import EstateStatement from '../components/EstateStatement.astro';
+import Gallery from '../components/Gallery.astro';
+import EstateDetails from '../components/EstateDetails.astro';
+import Agenda from '../components/Agenda.astro';
+import InquirySection from '../components/InquirySection.astro';
+
+const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
+
+const navLinks = [
+  { href: '#section-gallery', label: 'Galleries' },
+  { href: '#section-roundtable', label: 'Business Roundtable' },
+  { href: '#section-investor-day', label: 'Investor Day' },
+  { href: '#section-breakout', label: 'C-Suite Breakout' },
+  { href: '#section-popup-hq', label: 'Pop-Up HQ' },
+  { href: '#section-estate', label: 'The Estate' },
+  { href: '#section-details', label: 'Estate Details' },
+  { href: '#section-experience', label: 'A Day at Imari' },
+];
+const navPlanLinks = [{ href: '#inquiry', label: 'Inquire' }];
+
+const useCases = [
+  {
+    id: 'section-roundtable', num: '01', title: 'Business Roundtable', reverse: false,
+    image: CLD + 'Parlor_390_lktsk9.jpg', alt: 'Parlor',
+    description: 'A roundtable is only as effective as the environment it takes place in. Our ballroom accommodates up to 60 in a range of configurations — with breakout spaces, grounds, and no competing agenda. No other guests. No schedule imposed from outside. No reason to leave until the work is done.',
+    items: [
+      'Ballroom with customizable layouts for up to 60 seated',
+      'Seamless flow from session to breakout to dinner without changing venues',
+      'Custom menus throughout with Michelin-star chefs',
+      'Gardens and stately rooms signal the weight of the gathering',
+    ],
+  },
+  {
+    id: 'section-investor-day', num: '02', title: 'Investor Day', reverse: true,
+    image: CLD + 'LXIVDC_GARDENS035_ly1k2d.jpg', alt: 'Gardens',
+    description: "An investor day is a performance — and the venue shapes the story. Imari provides intimacy for frank discussions, grandeur to impress sophisticated investors, and the versatility to move from a formal presentation to evening drinks without ever leaving the property. For out-of-town LPs, overnight accommodations mean the day doesn't have to end when the presentation does.",
+    items: [
+      'Private estate makes a statement no hotel ballroom can match',
+      'Full AV suite for presentations, panels, and production',
+      'Formal presentation space flows naturally into dinner and evening drinks on-property',
+      'Overnight accommodations for key LPs extend the relationship beyond the agenda',
+    ],
+  },
+  {
+    id: 'section-breakout', num: '03', title: 'C-Suite Breakout', reverse: false,
+    image: CLD + 'GT_Office_207_lsjhg8.jpg', alt: 'Georgetown Office',
+    description: 'The most valuable work a leadership team does often happens away from the office — but only if the environment is right. Imari separates executives from the noise of daily life and places them inside a private estate designed for creativity, trust, and focused conversation. The real conversations — the ones that only happen when the agenda is done — take place here.',
+    items: [
+      'Exclusively yours — no other guests, no outside interruptions',
+      'Six suites and an attached three-bedroom guest house accommodate up to 18',
+      'Meals, transitions, and services structured entirely around your agenda',
+      'Private car service brings executives in focused and ready to work',
+    ],
+  },
+  {
+    id: 'section-popup-hq', num: '04', title: 'Pop-Up HQ', reverse: true,
+    image: CLD + 'Living_Room_331_spepzh.jpg', alt: 'Living Room',
+    description: 'When Louis XIV moved his court to Versailles, Paris came to him. Rather than dispersing your time across hotel lobbies and borrowed conference rooms, you establish a base. Your team is here. Your guests are received here. Your days are structured on your terms — for a founder on a fundraising run, an executive navigating a critical period, or a diplomat working a multi-day agenda.',
+    items: [
+      'Gated arrival court and no public lobby mean every entry is controlled and private',
+      'Dedicated meeting spaces hold back-to-back sessions without conflict or exposure',
+      'Support staff housed in the connected guest house on-site',
+      'Stay, meet, host, and decompress without ever changing venues',
+    ],
+  },
+];
+
+const agendaPeriods = [
+  { time: 'Morning', heading: 'Settle in. Begin.', items: [
+    'In-residence farm-to-table breakfast served at your convenience',
+    'Informal settling in with concierge assistance as needed',
+    'Leadership session, roundtable, or working meeting hosted on-site',
+    'Butler service throughout with refreshments and assistance',
+  ] },
+  { time: 'Afternoon', heading: 'Work. Move. Recover.', items: [
+    'Working lunch in the dining room or arranged off-site',
+    'Breakout sessions across indoor and outdoor spaces',
+    'On- or off-site meetings with all transportation handled',
+    'Gym, spa, or pool between sessions — not all deals close at the table',
+  ] },
+  { time: 'Evening', heading: 'Host. Connect. Rest.', items: [
+    'Private chef-driven dinner in the main house or off-site',
+    'Drinks, reception, or fireside gathering for informal conversation',
+    'Overnight guests wind down while events continue uninterrupted',
+    'Evening turndown, next-day prep, and full property reset while you sleep',
+  ] },
+];
+---
+<PrivatePageLayout
+  title="Imari · Corporate Catalyst"
+  ogTitle="Imari Georgetown · Corporate Catalyst"
+  ogDescription="Washington, D.C. is where decisions are made. Imari Georgetown is where the most important ones should happen."
+  ogUrl="https://imari.cc/corporatev2.html"
+  pageVariant="collateral"
+  navLinks={navLinks}
+  navPlanLinks={navPlanLinks}
+  navExploreLabel="Explore"
+  navPlanLabel="Plan a Visit"
+  navLogoLink={false}
+>
+  <Hero
+    image={CLD + 'Dining_105_xyaxbx.jpg'}
+    imageAlt="Imari Georgetown"
+    eyebrow="Imari Georgetown · Corporate Catalyst"
+    title="Where the most<br><em>consequential work</em><br>gets done."
+    paragraph="Washington, D.C. is where decisions are made. Imari Georgetown is where the most important ones should happen."
+    stats={[
+      { num: '12,000', label: 'sq.ft.' },
+      { num: '1', label: 'Acre of Gardens' },
+      { num: '6', label: 'Bedroom Suites' },
+      { num: '60', label: 'Seated Meeting Capacity' },
+      { num: '300', label: 'Event Capacity' },
+    ]}
+  />
+
+  <IntroStrip text="A purpose-built estate in the heart of Georgetown designed for senior leaders, investors, and executive teams to convene with intention — whether the objective is relationship building, team alignment, raising capital, or simply connecting with peers." />
+
+  {useCases.map((uc) => <UseCase {...uc} />)}
+
+  <EstateStatement />
+
+  <Gallery />
+
+  <EstateDetails />
+
+  <Agenda
+    title="A day at<br>Imari."
+    body="Every element handled. Every transition seamless. A sample of what a working day on-property looks like."
+    image={CLD + 'LXIVDC_GARDENS134_d5aklw.jpg'}
+    imageAlt="Gardens"
+    periods={agendaPeriods}
+  />
+
+  <InquirySection
+    title="Inquire with Blaine Stephens for availability."
+    bgImage={CLD + 'Yard_045_vgr6lu.jpg'}
+    contacts={[
+      { label: 'Call', value: '+1 (816) 592-9207', href: 'tel:+18165929207' },
+      { label: 'Email', value: 'blaine@imari.cc', href: 'mailto:blaine@imari.cc' },
+    ]}
+  />
+</PrivatePageLayout>
+
+<style is:global>
+  /* Collateral page-type variant: corporate's drifted shared-selector values.
+     Scoped under .page--collateral (on <main>) so they win by specificity and
+     touch only this page. Converged away in the Stage 2 template. */
+  .page--collateral .hero-content { max-width: 820px; }
+  .page--collateral .hero-title { font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.05; }
+  .page--collateral .hero-sub { font-size: 0.88rem; max-width: 480px; }
+  .page--collateral .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+  .page--collateral .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,23,18,0.15) 0%, rgba(26,23,18,0.1) 40%, rgba(26,23,18,0.78) 100%); }
+  .page--collateral .section-body { font-size: 0.88rem; }
+  .page--collateral .gallery-section { background: var(--parchment); }
+  @media (max-width: 900px) {
+    .page--collateral .hero-stats { gap: 2.5rem; }
+  }
+</style>

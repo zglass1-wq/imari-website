@@ -14,6 +14,7 @@ import Lightbox from '../components/Lightbox.astro';
 import { defaultGalleries } from '../data/galleries';
 import type { Galleries } from '../data/galleries';
 
+interface NavLink { href: string; label: string; }
 interface Props {
   title: string;
   ogTitle?: string;
@@ -22,6 +23,16 @@ interface Props {
   ogUrl?: string;
   favicon?: string;
   galleries?: Galleries;
+  // Page-type variant → class on <main> (e.g. 'collateral', 'landing'). Drives
+  // the per-page CSS overrides for drifted shared selectors. Omitted on the
+  // offering baseline (july4v2) so <main id="main-content"> stays unchanged.
+  pageVariant?: string;
+  // Per-page nav drawer overrides (forwarded to Nav; undefined → Nav defaults).
+  navLinks?: NavLink[];
+  navPlanLinks?: NavLink[];
+  navExploreLabel?: string;
+  navPlanLabel?: string;
+  navLogoLink?: boolean;
 }
 const {
   title,
@@ -31,6 +42,12 @@ const {
   ogUrl,
   favicon = 'https://res.cloudinary.com/dsp45h9a1/image/upload/imari-gingko_bh78d8.svg',
   galleries = defaultGalleries,
+  pageVariant,
+  navLinks,
+  navPlanLinks,
+  navExploreLabel,
+  navPlanLabel,
+  navLogoLink,
 } = Astro.props as Props;
 ---
 <!DOCTYPE html>
@@ -277,9 +294,9 @@ const {
 </head>
 <body>
 
-<main id="main-content">
+<main id="main-content" class={pageVariant ? `page--${pageVariant}` : undefined}>
 
-  <Nav />
+  <Nav links={navLinks} planLinks={navPlanLinks} exploreLabel={navExploreLabel} planLabel={navPlanLabel} logoLink={navLogoLink} />
 
   <slot />
 

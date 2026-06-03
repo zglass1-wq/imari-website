@@ -7,6 +7,7 @@ export const config = { runtime: 'edge' };
 
 const ROLES = [
   { role: 'corporate',  envVar: 'IMARI_CORPORATE_PASSWORD',  redirect: '/corporate.html' },
+  { role: 'corporatev2', envVar: 'IMARI_CORPORATEV2_PASSWORD', redirect: '/corporatev2.html' },
   { role: 'alarm250',   envVar: 'IMARI_ALARM250_PASSWORD',   redirect: '/alarm250.html' },
   { role: 'freedom250', envVar: 'IMARI_FREEDOM250_PASSWORD', redirect: '/freedom250.html' },
   { role: 'alex0349',   envVar: 'IMARI_ALEX0349_PASSWORD',   redirect: '/alex0349.html' },
@@ -14,6 +15,7 @@ const ROLES = [
   { role: 'july4v2',    envVar: 'IMARI_JULY4V2_PASSWORD',    redirect: '/july4v2.html' },
   { role: 'july4p2',    envVar: 'IMARI_JULY4P2_PASSWORD',    redirect: '/july4p2.html' },
   { role: 'newdam1',    envVar: 'IMARI_NEWDAM1_PASSWORD',    redirect: '/newdam1.html' },
+  { role: 'newdamv2',   envVar: 'IMARI_NEWDAMV2_PASSWORD',   redirect: '/newdamv2.html' },
   { role: 'stfl3',      envVar: 'IMARI_SMART_PASSWORD',      redirect: '/stfl3.html' },
   { role: 'aba',        envVar: 'IMARI_ABA_PASSWORD',        redirect: '/aba.html' },
 ];

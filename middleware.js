@@ -5,6 +5,7 @@
 export const config = {
   matcher: [
     '/corporate.html',
+    '/corporatev2.html',
     '/alarm250.html',
     '/freedom250.html',
     '/alex0349.html',
@@ -12,6 +13,7 @@ export const config = {
     '/july4v2.html',
     '/july4p2.html',
     '/newdam1.html',
+    '/newdamv2.html',
     '/stfl3.html',
     '/aba.html',
   ],
@@ -19,6 +21,7 @@ export const config = {
 
 const ROLE_ALLOWS = {
   corporate: (p) => p === '/corporate.html' || p.startsWith('/corporate-'),
+  corporatev2: (p) => p === '/corporatev2.html' || p.startsWith('/corporatev2-'),
   alarm250: (p) => p === '/alarm250.html' || p.startsWith('/alarm250-'),
   freedom250: (p) => p === '/freedom250.html' || p.startsWith('/freedom250-'),
   alex0349: (p) => p === '/alex0349.html' || p.startsWith('/alex0349-'),
@@ -26,6 +29,7 @@ const ROLE_ALLOWS = {
   july4v2: (p) => p === '/july4v2.html' || p.startsWith('/july4v2-'),
   july4p2: (p) => p === '/july4p2.html' || p.startsWith('/july4p2-'),
   newdam1: (p) => p === '/newdam1.html' || p.startsWith('/newdam1-'),
+  newdamv2: (p) => p === '/newdamv2.html' || p.startsWith('/newdamv2-'),
   stfl3: (p) => p === '/stfl3.html' || p.startsWith('/stfl3-'),
   aba: (p) => p === '/aba.html' || p.startsWith('/aba-'),
 };

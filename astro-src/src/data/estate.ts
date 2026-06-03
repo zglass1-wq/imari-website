@@ -1,7 +1,9 @@
 // Shared estate content used by the stable-content sections (EstateStatement,
-// EstateDetails). Confirmed identical across july4 / july4p2; corporate and
-// newdam1 carry richer variants and will simply override these defaults when
-// they are migrated. Edit once; every non-overriding page picks it up.
+// EstateDetails). The EstateDetails default below is corporate's canonical
+// property/services text — the agreed shared default. july4v2 renders a bare
+// <EstateDetails /> and now shows this (intentionally diverging from
+// july4.html's original 8-item property list). Edit once; every non-overriding
+// page picks it up.
 
 // EstateStatement (#section-estate) — the short centered statement block.
 export const defaultEstateStatement = {
@@ -20,11 +22,12 @@ export const defaultEstateDetails = {
   property: [
     '12,000 sq ft main house on one private acre of manicured gardens in central Georgetown D.C.',
     'Six bedroom suites across two floors with 15 bathrooms',
-    '1,000 sq ft detached ballroom',
+    '1,000 sq ft detached ballroom - full AV suite for presentations and panels',
     'Detached Spa House — sauna, steam room, cold plunge, hot tub',
     'Full-size pool, gym, dedicated yoga and meditation room',
     'Three-bedroom guest house for client staff — separate entrance, self-contained',
     'Gated arrival court with parking for 10 vehicles',
+    'Multiple indoor and outdoor spaces for breakouts, receptions, and gatherings for up to 300 people',
     'Estate-wide security with perimeter PTZ cameras, vetted for heads of state',
   ],
   services: [

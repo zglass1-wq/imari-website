@@ -1,0 +1,52 @@
+---
+// Closing inquiry band with full-bleed bg + contact grid (corporate, newdam).
+// Distinct from ClosingInquire (july4's single-line closing). Title + contacts
+// + bgImage are per-page; eyebrow and note default to the shared text.
+interface Contact { label: string; value: string; href: string; }
+interface Props {
+  title: string;
+  contacts?: Contact[];
+  bgImage: string;
+  bgAlt?: string;
+  eyebrow?: string;
+  note?: string;
+  id?: string;
+}
+const {
+  title,
+  contacts = [],
+  bgImage,
+  bgAlt = 'Estate grounds',
+  eyebrow = 'Begin a conversation',
+  note = 'This page is shared for planning purposes only. Please do not forward or distribute.',
+  id = 'inquiry',
+} = Astro.props as Props;
+---
+<section class="inquiry-section" id={id}>
+    <img class="inquiry-bg" src={bgImage} alt={bgAlt} />
+    <div class="inquiry-content">
+      <p class="section-eyebrow">{eyebrow}</p>
+      <h2 class="section-title" style="color:var(--parchment);font-size:clamp(1.5rem,3vw,2.1rem)">{title}</h2>
+      <div class="inquiry-contacts">
+        {contacts.map((c) => (
+        <div><p class="contact-label">{c.label}</p><a class="contact-val" href={c.href}>{c.value}</a></div>
+        ))}
+      </div>
+      <p class="inquiry-note">{note}</p>
+    </div>
+  </section>
+
+<style is:global>
+  .inquiry-section { position: relative; overflow: hidden; min-height: 520px; display: flex; align-items: center; }
+  .inquiry-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; filter: brightness(0.28) saturate(0.65); }
+  .inquiry-content { position: relative; text-align: center; padding: 7rem 2rem; width: 100%; }
+  .inquiry-body { font-size: 0.88rem; line-height: 1.9; color: rgba(245,240,232,0.5); max-width: 480px; margin: 1.5rem auto 3.5rem; }
+  .inquiry-contacts { display: flex; gap: 5rem; justify-content: center; margin-bottom: 3rem; }
+  .contact-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .contact-val { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--parchment); text-decoration: none; display: block; transition: color 0.2s; }
+  .contact-val:hover { color: var(--gold-light); }
+  .inquiry-note { font-size: 0.62rem; letter-spacing: 0.1em; color: rgba(245,240,232,0.18); }
+  @media (max-width: 900px) {
+    .inquiry-contacts { flex-direction: column; gap: 2rem; }
+  }
+</style>

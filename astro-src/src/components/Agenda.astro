@@ -1,0 +1,61 @@
+---
+// Sticky-header + timeline schedule block (corporate "A day at Imari").
+// Per-event content, no default. `title` may contain inline HTML (<br>).
+interface Period { time: string; heading: string; items: string[]; }
+interface Props {
+  eyebrow?: string;
+  title: string;
+  body: string;
+  image: string;
+  imageAlt?: string;
+  periods?: Period[];
+  id?: string;
+}
+const { eyebrow = 'The Experience', title, body, image, imageAlt = '', periods = [], id = 'section-experience' } = Astro.props as Props;
+---
+<section class="agenda-section" id={id}>
+    <div class="agenda-inner">
+      <div class="agenda-sticky">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h2 class="section-title" set:html={title}></h2>
+        <p class="section-body" style="max-width:320px">{body}</p>
+        <img src={image} alt={imageAlt} />
+      </div>
+      <div class="timeline">
+        {periods.map((p) => (
+        <div class="tl-item">
+          <div class="tl-time">{p.time}</div>
+          <div>
+            <p class="tl-heading">{p.heading}</p>
+            <ul class="tl-items">
+              {p.items.map((i) => <li>{i}</li>)}
+            </ul>
+          </div>
+        </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+<style is:global>
+  .agenda-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+  .agenda-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 400px 1fr; gap: 6rem; align-items: start; }
+  .agenda-sticky { position: sticky; top: 5rem; }
+  .agenda-sticky img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; margin-top: 2.5rem; }
+  .timeline { margin-top: 0.5rem; }
+  .tl-item { display: grid; grid-template-columns: 100px 1fr; gap: 2.5rem; padding-bottom: 3rem; position: relative; }
+  .tl-item::before { content: ''; position: absolute; left: 100px; top: 0.5rem; bottom: 0; width: 1px; background: var(--rule-dark); }
+  .tl-item:last-child::before { display: none; }
+  .tl-time { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--gold); text-align: right; padding-right: 2.5rem; padding-top: 0.1rem; position: relative; }
+  .tl-time::after { content: ''; position: absolute; right: -5px; top: 0.45rem; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); border: 2px solid var(--parchment-dark); }
+  .tl-heading { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: var(--ink); margin-bottom: 0.75rem; }
+  .tl-items { list-style: none; }
+  .tl-items li { font-size: 0.78rem; line-height: 1.8; color: var(--ink-light); padding: 0.15rem 0; display: flex; gap: 0.6rem; }
+  .tl-items li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+  @media (max-width: 900px) {
+    .agenda-section { padding: 5rem 1.5rem; }
+    .agenda-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .agenda-sticky { position: static; }
+    .agenda-sticky img { display: none; }
+  }
+</style>

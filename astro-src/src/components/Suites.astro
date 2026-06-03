@@ -1,0 +1,72 @@
+---
+// Accommodations block: sticky header + floor-grouped suite cards + footnote
+// (newdam). Per-event content, no default. `title` may contain inline HTML.
+interface Suite { name: string; detail?: string; features?: string[]; }
+interface Floor { label: string; suites: Suite[]; }
+interface Props {
+  eyebrow?: string;
+  title: string;
+  body: string;
+  image: string;
+  imageAlt?: string;
+  floors?: Floor[];
+  footnote?: string;
+  id?: string;
+}
+const { eyebrow = 'Accommodations', title, body, image, imageAlt = '', floors = [], footnote, id = 'section-suites' } = Astro.props as Props;
+---
+<section class="suites-section" id={id}>
+    <div class="suites-inner">
+      <div class="suites-sticky">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h2 class="section-title" set:html={title}></h2>
+        <p class="section-body" style="max-width:320px">{body}</p>
+        <img src={image} alt={imageAlt} />
+      </div>
+      <div>
+        {floors.map((f, idx) => (
+        <>
+          <p class={idx === 0 ? 'suite-floor-label' : 'suite-floor-label spaced'}>{f.label}</p>
+          <div class="suite-grid" style={idx === 0 ? 'margin-bottom:1px;' : undefined}>
+            {f.suites.map((s) => (
+            <div class="suite-card">
+              <p class="suite-name">{s.name}</p>
+              {s.detail && <p class="suite-detail">{s.detail}</p>}
+              {s.features && s.features.length > 0 && (
+              <ul class="suite-features">
+                {s.features.map((x) => <li>{x}</li>)}
+              </ul>
+              )}
+            </div>
+            ))}
+          </div>
+        </>
+        ))}
+        {footnote && <p class="suites-footnote">{footnote}</p>}
+      </div>
+    </div>
+  </section>
+
+<style is:global>
+  .suites-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+  .suites-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 400px 1fr; gap: 6rem; align-items: start; }
+  .suites-sticky { position: sticky; top: 5rem; }
+  .suites-sticky img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; margin-top: 2.5rem; }
+  .suite-floor-label { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .suite-floor-label.spaced { margin-top: 2rem; }
+  .suite-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 0.5rem; }
+  .suite-card { background: var(--parchment-dark); padding: 2rem; }
+  .suite-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--ink); margin-bottom: 0.4rem; }
+  .suite-detail { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--warm-mid); margin-bottom: 1rem; text-transform: uppercase; }
+  .suite-features { list-style: none; }
+  .suite-features li { font-size: 0.75rem; line-height: 1.7; color: var(--ink-light); padding: 0.2rem 0; display: flex; gap: 0.6rem; }
+  .suite-features li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+  .suites-footnote { font-size: 0.7rem; line-height: 1.7; color: var(--warm-mid); margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+  @media (max-width: 900px) {
+    .suites-section { padding: 5rem 1.5rem; }
+    .suites-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .suites-sticky { position: static; }
+    .suites-sticky img { display: none; }
+    .suite-grid { grid-template-columns: 1fr; }
+  }
+</style>
