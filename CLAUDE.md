@@ -77,7 +77,9 @@ import ClosingInquire from '../components/ClosingInquire.astro';
 </PrivatePageLayout>
 ```
 
-Include only the sections the page needs, in any order (§6, slot-based — there is no `sections` array / renderer). Stable sections (`<Gallery />`, `<EstateDetails />`, `<EstateStatement />`, `<ClosingInquire />`) render shared defaults with no props — the defaults live in `astro-src/src/data/galleries.ts` and `astro-src/src/data/estate.ts`. Per-event sections (`Hero`, `WeekendSection`, `OfferingTable`) take content every time (§4). Do **not** add client-side gate code — the middleware is the only gate.
+Include only the sections the page needs, in any order (§6, slot-based — there is no `sections` array / renderer). Stable sections (`<Gallery />`, `<EstateDetails />`, `<EstateStatement />`, `<ClosingInquire />`) render shared defaults with no props — the defaults live in `astro-src/src/data/galleries.ts` and `astro-src/src/data/estate.ts`. Per-event sections (`Hero`, `WeekendSection`/`DayCard`, `OfferingTable`, `IntroStrip`, `UseCase`, `Agenda`, `Suites`, `ServicesTable`, `AdvisorStrip`, `InquirySection`) take content every time (§4). Do **not** add client-side gate code — the middleware is the only gate.
+
+> **Known component gap:** `PhotoBand` — the 4-image horizontal band used on `alarm250.html` and `freedom250.html` — is the one live section type with no component yet (it wasn't present in the july4v2 / corporate / newdam ports the kit was built from). It touches none of the three templates. Build it as a prop-driven component **if/when alarm250 or freedom250 are migrated to Astro**, not before.
 
 ### Step 2 — Build
 
