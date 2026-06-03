@@ -4,3 +4,9 @@ templates/
 
 # Deprecated local-only page snapshots.
 private/DEPR/
+
+# Astro authoring sources (build-only tool, Approach A1). Production never runs
+# Astro — only the built .html committed into private/ ships. Keeping this out
+# of the deploy ensures Vercel sees no package.json / framework and continues
+# serving the committed static files exactly as before.
+astro-src/

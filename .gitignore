@@ -6,3 +6,8 @@
 
 # Deprecated local-only page snapshots
 private/DEPR/
+
+# Astro build tooling — only the built private/*.html is committed, not sources' deps/output
+astro-src/node_modules/
+astro-src/dist/
+astro-src/.astro/

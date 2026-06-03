@@ -1,0 +1,33 @@
+---
+// Container that holds a flexible number of DayCards. Its own title/paragraph
+// are per-page, independent of the days inside it. Renders however many days
+// it is given.
+import DayCard from './DayCard.astro';
+interface Day {
+  label: string;
+  title: string;
+  description: string;
+  image: string;
+  alt?: string;
+  meta?: string;
+}
+interface Props {
+  title: string;
+  paragraph: string;
+  eyebrow?: string;
+  days?: Day[];
+}
+const { title, paragraph, eyebrow = 'The Weekend', days = [] } = Astro.props as Props;
+---
+<section class="weekend-section" id="section-weekend">
+    <div class="weekend-inner">
+      <div class="weekend-head">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h2 class="section-title">{title}</h2>
+        <p class="section-body">{paragraph}</p>
+      </div>
+      <div class="weekend-grid">
+        {days.map((d) => <DayCard {...d} />)}
+      </div>
+    </div>
+  </section>

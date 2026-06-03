@@ -1,0 +1,21 @@
+---
+// One day in the weekend calendar. All content per-page.
+interface Props {
+  label: string;
+  title: string;
+  description: string;
+  image: string;
+  alt?: string;
+  meta?: string;
+}
+const { label, title, description, image, alt = '', meta } = Astro.props as Props;
+---
+<div class="day-card">
+          <img class="day-img" src={image} alt={alt} />
+          <div class="day-body">
+            <p class="day-date">{label}</p>
+            <p class="day-title">{title}</p>
+            <p class="day-desc">{description}</p>
+            {meta && <p class="day-meta">{meta}</p>}
+          </div>
+        </div>

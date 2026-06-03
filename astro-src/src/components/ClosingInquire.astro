@@ -1,0 +1,21 @@
+---
+// Closing contact band (#section-inquire). Stable content -> defaults to
+// shared. Page may override any field.
+import { defaultClosingInquire as d } from '../data/estate';
+const {
+  bgImage = d.bgImage,
+  bgAlt = d.bgAlt,
+  name = d.name,
+  phone = d.phone,
+  phoneHref = d.phoneHref,
+  email = d.email,
+  note = d.note,
+} = Astro.props;
+---
+<section class="closing-section" id="section-inquire">
+    <img class="closing-bg" src={bgImage} alt={bgAlt} />
+    <div class="closing-content">
+      <p class="closing-line">Inquire: {name} <a href={phoneHref}>{phone}</a> | <a href={`mailto:${email}`}>{email}</a></p>
+      <p class="closing-note">{note}</p>
+    </div>
+  </section>

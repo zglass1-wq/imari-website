@@ -1,0 +1,35 @@
+---
+// The two-column Property / Services block (#section-details). Stable content
+// -> props default to the shared estate details. Any page can override a value.
+import { defaultEstateDetails } from '../data/estate';
+const {
+  eyebrow = defaultEstateDetails.eyebrow,
+  title = defaultEstateDetails.title,
+  propertyTitle = defaultEstateDetails.propertyTitle,
+  servicesTitle = defaultEstateDetails.servicesTitle,
+  property = defaultEstateDetails.property,
+  services = defaultEstateDetails.services,
+} = Astro.props;
+---
+<section class="position-wrap" id="section-details">
+    <div class="position-inner">
+      <div class="position-statement">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h2 class="section-title" style="color:var(--parchment)">{title}</h2>
+      </div>
+      <div class="estate-grid">
+        <div class="estate-col">
+          <p class="estate-col-title">{propertyTitle}</p>
+          <ul class="estate-list">
+            {property.map((item: string) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <div class="estate-col">
+          <p class="estate-col-title">{servicesTitle}</p>
+          <ul class="estate-list">
+            {services.map((item: string) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>

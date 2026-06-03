@@ -1,0 +1,40 @@
+---
+// Shared markup/CSS/wiring. Props default to the shared gallery data; a page
+// may pass its own set, or omit <Gallery /> entirely. The thumbnails are built
+// client-side by the shared script from the injected GALLERIES data; the
+// `keys` prop selects which subgalleries render (default interior + exterior,
+// matching july4 — the shared data also carries 'site-plan' for pages that want it).
+import { defaultGalleries } from '../data/galleries';
+import type { Galleries } from '../data/galleries';
+interface Props {
+  galleries?: Galleries;
+  keys?: string[];
+  eyebrow?: string;
+  title?: string;
+}
+const {
+  galleries = defaultGalleries,
+  keys = ['interior', 'exterior'],
+  eyebrow = 'Galleries',
+  title = 'A look inside.',
+} = Astro.props as Props;
+---
+<section class="gallery-section" id="section-gallery">
+    <div class="gallery-inner">
+      <div class="gallery-header">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h2 class="section-title">{title}</h2>
+      </div>
+
+      {keys.map((key) => (
+      <div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">{galleries[key].label}</span>
+          <a class="subgallery-viewall" data-gallery={key} href="#section-gallery">View all {galleries[key].photos.length} →</a>
+        </div>
+        <div class="thumb-grid" data-gallery={key}></div>
+      </div>
+      ))}
+
+    </div>
+  </section>

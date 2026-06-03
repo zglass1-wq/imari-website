@@ -1,0 +1,12 @@
+---
+// Footer row. Content shared by default.
+const {
+  copy = '© 2026 LXIV Group. All rights reserved.',
+  conf = 'Confidential · Not for distribution',
+} = Astro.props;
+---
+<footer>
+    <img class="footer-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" />
+    <span class="footer-copy">{copy}</span>
+    <span class="footer-conf">{conf}</span>
+  </footer>
