@@ -11,7 +11,7 @@ If you're being asked to add a new password-protected page, the rest of this doc
 ## Where files live
 
 - **Public files** sit at the repo root: `imari-website.html` (homepage), `private-info.html` (the gate), `private-access.html` (legacy redirect stub).
-- **Protected files** sit in [private/](private/): `corporate.html` and the personalized/event landing pages (`alarm250.html`, `freedom250.html`, `alex0349.html`, `july4.html`, `july4v2.html`, `july4p2.html`, `newdam1.html`, `aba.html`). New and migrated pages are built from Astro sources in `astro-src/` (currently `july4v2.html`); the rest are legacy hand-authored HTML pending migration. Both serve identically.
+- **Protected files** sit in [private/](private/): `corporate.html` and the personalized/event landing pages (`alarm250.html`, `freedom250.html`, `alex0349.html`, `july4.html`, `july4v2.html`, `july4p2.html`, `newdam1.html`, `stfl3.html`, `aba.html`). New and migrated pages are built from Astro sources in `astro-src/` (currently `july4v2.html`); the rest are legacy hand-authored HTML pending migration. Both serve identically.
 
 The public URL is *not* the file path. Each protected file is mapped to a clean top-level URL via a rewrite in [vercel.json](vercel.json) — `/corporate.html` serves `/private/corporate.html`, and so on. The middleware sees and matches the **public URL** (the original request path before the rewrite), so `matcher` entries and `ROLE_ALLOWS` rules always use the public path (e.g. `/corporate.html`), never `/private/corporate.html`.
 
@@ -309,9 +309,10 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `/july4v2.html` | `private/july4v2.html` | `july4v2` | **Astro** (`astro-src/src/pages/july4v2.astro`) |
 | `/july4p2.html` | `private/july4p2.html` | `july4p2` | legacy |
 | `/newdam1.html` | `private/newdam1.html` | `newdam1` | legacy |
+| `/stfl3.html` | `private/stfl3.html` | `stfl3` | legacy (verbatim duplicate of `newdam1`; gated under `IMARI_SMART_PASSWORD`) |
 | `/aba.html` | `private/aba.html` | `aba` | legacy |
 
-> 9 protected pages today. `july4v2` is the Astro-templated rebuild of `july4`; both run in parallel during migration. The remaining legacy pages are being migrated to Astro one at a time (§7 of the design doc) — until a page's `.astro` source exists, its `private/*.html` is the original hand-authored file and the all-pages build does not touch it.
+> 10 protected pages today. `july4v2` is the Astro-templated rebuild of `july4`; both run in parallel during migration. The remaining legacy pages are being migrated to Astro one at a time (§7 of the design doc) — until a page's `.astro` source exists, its `private/*.html` is the original hand-authored file and the all-pages build does not touch it.
 
 ### Required Vercel env vars
 
@@ -326,6 +327,7 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `IMARI_JULY4V2_PASSWORD` | Astro-templated rebuild of the July 4 page (`july4v2.html`). |
 | `IMARI_JULY4P2_PASSWORD` | July 4 weekend landing page (variant p2). |
 | `IMARI_NEWDAM1_PASSWORD` | `newdam1.html` landing page. |
+| `IMARI_SMART_PASSWORD` | `stfl3.html` landing page (SmartFlyer; verbatim duplicate of `newdam1`). **Naming exception:** the role is `stfl3` but the env var is `IMARI_SMART_PASSWORD`, *not* `IMARI_STFL3_PASSWORD`. |
 | `IMARI_ABA_PASSWORD` | `aba.html` landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |
 
