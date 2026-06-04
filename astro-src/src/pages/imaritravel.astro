@@ -155,7 +155,7 @@ const suiteFloors = [
     image={CLD + 'Parlor_and_Living_Room_421_ycl671.jpg'}
     imageAlt="Imari Georgetown"
     eyebrow="Imari Georgetown"
-    title="A private estate in Georgetown —<br>fully staffed, <em>entirely yours.</em>"
+    title="A private estate in Georgetown,<br>fully staffed, <em>entirely yours.</em>"
     paragraph="Everything a discerning guest expects and more - Whole-property exclusivity, full staff, and the comfort of a true home — so your clients can host, meet, and decompress on their own terms."
     stats={[
       { num: '12,000', label: 'sq.ft.' },
@@ -192,3 +192,14 @@ const suiteFloors = [
     ]}
   />
 </PrivatePageLayout>
+
+<style is:global>
+  /* imaritravel only: advisor strip in brand Stone (BRAND.md "Stone" #C8BFB0).
+     A deliberate distinct section color (NOT the alternation pattern). The
+     --stone token isn't in the shared :root, so it's defined here page-scoped
+     on #main-content — this keeps it imaritravel-only and leaves the shared/
+     canonical AdvisorStrip styling (e.g. newdamv2) untouched. The id selector
+     (#section-advisors) outranks the component's .advisor-strip background. */
+  #main-content { --stone: #C8BFB0; }
+  #section-advisors { background: var(--stone); }
+</style>
