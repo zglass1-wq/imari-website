@@ -13,6 +13,7 @@ export const config = {
     '/july4p2.html',
     '/newdam1.html',
     '/newdamv2.html',
+    '/imaritravel.html',
     '/stfl3.html',
     '/aba.html',
   ],
@@ -28,6 +29,7 @@ const ROLE_ALLOWS = {
   july4p2: (p) => p === '/july4p2.html' || p.startsWith('/july4p2-'),
   newdam1: (p) => p === '/newdam1.html' || p.startsWith('/newdam1-'),
   newdamv2: (p) => p === '/newdamv2.html' || p.startsWith('/newdamv2-'),
+  imaritravel: (p) => p === '/imaritravel.html' || p.startsWith('/imaritravel-'),
   stfl3: (p) => p === '/stfl3.html' || p.startsWith('/stfl3-'),
   aba: (p) => p === '/aba.html' || p.startsWith('/aba-'),
 };

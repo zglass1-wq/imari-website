@@ -104,6 +104,8 @@ From `astro-src/`: `npm run build`. This recompiles **every** page and emits eac
 
 > **This is the translation step.** Astro → HTML happens here, at build time, on your machine. Vercel never runs Astro. Editing `.astro` changes nothing live until you rebuild and commit the regenerated `.html`.
 
+> **Expected: sibling CSS re-chunk churn.** Because CSS is inlined per page (`build.inlineStylesheets: 'always'`), Astro groups shared component CSS into chunks by *which set of pages share them* — so adding or changing one page can reorder/re-split the **inlined `<style>` blocks of other pages** that share components, even when you didn't touch them. This is **expected and safe**: each page is fully self-contained (no external CSS), and the churn is cosmetic — the CSS *rules* and the page's render are identical, only the `<style>`-block partitioning moves. **Policy: commit the churned sibling pages as-is** (don't revert them to keep a diff "clean"). Reverting is a manual per-build step that depends on re-proving each sibling diff is cosmetic every time, and the failure mode (accidentally reverting a sibling that genuinely changed) is worse than a noisy diff. Add a one-line note to the commit/PR when it happens, e.g. *"also re-chunks N sibling pages' inlined CSS (cosmetic, identical render)."*
+
 ### Step 3 — Wire the gate (three additive edits — never remove/modify existing entries)
 
 - **[vercel.json](vercel.json)** — add a rewrite: `{ "source": "/<slug>.html", "destination": "/private/<slug>.html" }`

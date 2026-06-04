@@ -11,6 +11,7 @@
     { "source": "/july4p2.html", "destination": "/private/july4p2.html" },
     { "source": "/newdam1.html", "destination": "/private/newdam1.html" },
     { "source": "/newdamv2.html", "destination": "/private/newdamv2.html" },
+    { "source": "/imaritravel.html", "destination": "/private/imaritravel.html" },
     { "source": "/stfl3.html", "destination": "/private/stfl3.html" },
     { "source": "/aba.html", "destination": "/private/aba.html" }
   ]
