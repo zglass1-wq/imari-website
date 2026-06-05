@@ -16,6 +16,7 @@ const ROLES = [
   { role: 'newdam1',    envVar: 'IMARI_NEWDAM1_PASSWORD',    redirect: '/newdam1.html' },
   { role: 'newdamv2',   envVar: 'IMARI_NEWDAMV2_PASSWORD',   redirect: '/newdamv2.html' },
   { role: 'imaritravel', envVar: 'IMARI_IMARITRAVEL_PASSWORD', redirect: '/imaritravel.html' },
+  { role: 'imariinvestors', envVar: 'IMARI_IMARIINVESTORS_PASSWORD', redirect: '/imariinvestors.html' },
   { role: 'stfl3',      envVar: 'IMARI_SMART_PASSWORD',      redirect: '/stfl3.html' },
   { role: 'aba',        envVar: 'IMARI_ABA_PASSWORD',        redirect: '/aba.html' },
 ];

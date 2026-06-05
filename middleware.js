@@ -14,6 +14,7 @@ export const config = {
     '/newdam1.html',
     '/newdamv2.html',
     '/imaritravel.html',
+    '/imariinvestors.html',
     '/stfl3.html',
     '/aba.html',
   ],
@@ -30,6 +31,7 @@ const ROLE_ALLOWS = {
   newdam1: (p) => p === '/newdam1.html' || p.startsWith('/newdam1-'),
   newdamv2: (p) => p === '/newdamv2.html' || p.startsWith('/newdamv2-'),
   imaritravel: (p) => p === '/imaritravel.html' || p.startsWith('/imaritravel-'),
+  imariinvestors: (p) => p === '/imariinvestors.html' || p.startsWith('/imariinvestors-'),
   stfl3: (p) => p === '/stfl3.html' || p.startsWith('/stfl3-'),
   aba: (p) => p === '/aba.html' || p.startsWith('/aba-'),
 };
