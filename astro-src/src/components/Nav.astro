@@ -14,12 +14,14 @@ const {
   exploreLabel = 'Explore the Weekend',
   planLabel = 'Plan the Stay',
   logoLink = true,
+  phone = '+1 (202) 868-6945',
+  phoneHref = 'tel:+12028686945',
 } = Astro.props;
 ---
 <nav id="site-nav">
     {logoLink ? <a href="/" aria-label="Imari home"><img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" /></a> : <img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'" />}
     <div class="nav-right">
-      <a class="nav-phone" id="nav-phone" href="tel:+12028686945">+1 (202) 868-6945</a>
+      <a class="nav-phone" id="nav-phone" href={phoneHref}>{phone}</a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
         <span></span><span></span><span></span>
       </button>
