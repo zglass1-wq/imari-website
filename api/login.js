@@ -20,6 +20,7 @@ const ROLES = [
   { role: 'imariinvestord', envVar: 'IMARI_IMARIINVESTORD_PASSWORD', redirect: '/imariinvestord.html' },
   { role: 'stfl3',      envVar: 'IMARI_SMART_PASSWORD',      redirect: '/stfl3.html' },
   { role: 'aba',        envVar: 'IMARI_ABA_PASSWORD',        redirect: '/aba.html' },
+  { role: 'stats',      envVar: 'IMARI_STATS_PASSWORD',      redirect: '/stats.html' },
 ];
 
 const COOKIE_MAX_AGE = 60 * 60 * 12; // 12 hours
@@ -48,7 +49,53 @@ function json(status, body, headers = {}) {
   });
 }
 
-export default async function handler(request) {
+// --- Server-side view analytics (Upstash Redis REST; no SDK, no package) ------
+// Recorded HERE, at the code-resolution step — i.e. for the routed-to content
+// page, not for raw /private-info.html hits. Link-preview bots (Slackbot,
+// iMessage, etc.) unfurl the shared /private-info URL but never submit a valid
+// code, so they never reach this point — no user-agent denylist needed.
+const ANALYTICS_URL = process.env.IMARI_ANALYTICS_REST_URL;
+const ANALYTICS_TOKEN = process.env.IMARI_ANALYTICS_REST_TOKEN;
+
+function safeDecode(v) {
+  try { return decodeURIComponent(v || ''); } catch { return v || ''; }
+}
+
+// Write one view as a single pipelined round-trip. Never throws into the
+// request path: no-ops if the env vars are unset, swallows any network error.
+function recordView(matched, request) {
+  if (!ANALYTICS_URL || !ANALYTICS_TOKEN) return Promise.resolve();
+  const h = request.headers;
+  const ts = Date.now();
+  const blob = JSON.stringify({
+    ts,
+    role: matched.role,
+    path: matched.redirect,
+    country: h.get('x-vercel-ip-country') || '',
+    region: h.get('x-vercel-ip-country-region') || '',
+    city: safeDecode(h.get('x-vercel-ip-city')),
+    ref: h.get('referer') || '',
+  });
+  const day = new Date(ts).toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
+  // Full history (no LTRIM): per-page log, global log, lifetime counter, and a
+  // per-day counter so "this week" is answerable.
+  const commands = [
+    ['LPUSH', `imari:events:${matched.role}`, blob],
+    ['LPUSH', 'imari:events:all', blob],
+    ['INCR', `imari:count:${matched.role}`],
+    ['INCR', `imari:daily:${matched.role}:${day}`],
+  ];
+  return fetch(`${ANALYTICS_URL}/pipeline`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${ANALYTICS_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(commands),
+  }).then(() => undefined).catch(() => undefined);
+}
+
+export default async function handler(request, context) {
   if (request.method !== 'POST') {
     return json(405, { ok: false, error: 'method_not_allowed' });
   }
@@ -78,6 +125,19 @@ export default async function handler(request) {
   }
 
   if (!matched) return json(401, { ok: false, error: 'invalid_password' });
+
+  // Record the view in the background so the response isn't delayed. The
+  // 'stats' role is the readout itself, so it isn't counted as a view. Prefer
+  // the platform's waitUntil; fall back to awaiting (a fast single round-trip)
+  // if it isn't available, so events are never silently dropped.
+  if (matched.role !== 'stats') {
+    const writeP = recordView(matched, request);
+    if (context && typeof context.waitUntil === 'function') {
+      context.waitUntil(writeP);
+    } else {
+      await writeP;
+    }
+  }
 
   const signature = await hmacHex(secret, matched.role);
   const cookie = [
