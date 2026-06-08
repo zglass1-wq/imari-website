@@ -6,8 +6,17 @@
 
 export const config = { runtime: 'edge' };
 
-const ANALYTICS_URL = process.env.IMARI_ANALYTICS_REST_URL;
-const ANALYTICS_TOKEN = process.env.IMARI_ANALYTICS_REST_TOKEN;
+// Same credential resolution as api/login.js: accept whichever REST names the
+// Vercel marketplace integration injects (Upstash-native or KV-style), with the
+// manual IMARI_* pair as a fallback. (KV_URL / REDIS_URL are not fetch-usable.)
+const ANALYTICS_URL =
+  process.env.UPSTASH_REDIS_REST_URL ||
+  process.env.KV_REST_API_URL ||
+  process.env.IMARI_ANALYTICS_REST_URL;
+const ANALYTICS_TOKEN =
+  process.env.UPSTASH_REDIS_REST_TOKEN ||
+  process.env.KV_REST_API_TOKEN ||
+  process.env.IMARI_ANALYTICS_REST_TOKEN;
 
 const enc = new TextEncoder();
 
