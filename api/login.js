@@ -54,8 +54,18 @@ function json(status, body, headers = {}) {
 // page, not for raw /private-info.html hits. Link-preview bots (Slackbot,
 // iMessage, etc.) unfurl the shared /private-info URL but never submit a valid
 // code, so they never reach this point — no user-agent denylist needed.
-const ANALYTICS_URL = process.env.IMARI_ANALYTICS_REST_URL;
-const ANALYTICS_TOKEN = process.env.IMARI_ANALYTICS_REST_TOKEN;
+// Reads whichever REST credentials the Vercel marketplace integration injects
+// (Upstash-native or KV-style), falling back to a manually-set IMARI_* pair.
+// Use only the *_REST_* values — KV_URL / REDIS_URL are redis:// strings that
+// can't be used over fetch from the Edge.
+const ANALYTICS_URL =
+  process.env.UPSTASH_REDIS_REST_URL ||
+  process.env.KV_REST_API_URL ||
+  process.env.IMARI_ANALYTICS_REST_URL;
+const ANALYTICS_TOKEN =
+  process.env.UPSTASH_REDIS_REST_TOKEN ||
+  process.env.KV_REST_API_TOKEN ||
+  process.env.IMARI_ANALYTICS_REST_TOKEN;
 
 function safeDecode(v) {
   try { return decodeURIComponent(v || ''); } catch { return v || ''; }
