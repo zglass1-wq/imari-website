@@ -196,6 +196,18 @@
     .footer-copy { font-size: 0.58rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.18); text-transform: uppercase; }
     .footer-conf { font-size: 0.58rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.32); text-transform: uppercase; }
 
+    /* Feature-list text (the "—" bullet items) bumped to 0.85rem on
+       desktop/laptop only (>=901px), where it was too small on high-density
+       screens. Scoped under #main-content so it wins over each component's
+       base rule. Mobile (<=900px) is intentionally excluded — it keeps its
+       current sizes, so the already-legible mobile layout is unchanged. */
+    @media (min-width: 901px) {
+      #main-content .estate-list li,
+      #main-content .uc-list li,
+      #main-content .suite-features li,
+      #main-content .tl-items li { font-size: 0.85rem; }
+    }
+
     /* RESPONSIVE */
     @media (max-width: 900px) {
       nav { padding: 1.1rem 1.5rem; }
