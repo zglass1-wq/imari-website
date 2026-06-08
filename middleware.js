@@ -18,6 +18,7 @@ export const config = {
     '/imariinvestord.html',
     '/stfl3.html',
     '/aba.html',
+    '/stats.html',
   ],
 };
 
@@ -36,6 +37,7 @@ const ROLE_ALLOWS = {
   imariinvestord: (p) => p === '/imariinvestord.html' || p.startsWith('/imariinvestord-'),
   stfl3: (p) => p === '/stfl3.html' || p.startsWith('/stfl3-'),
   aba: (p) => p === '/aba.html' || p.startsWith('/aba-'),
+  stats: (p) => p === '/stats.html' || p.startsWith('/stats-'),
 };
 
 const enc = new TextEncoder();
