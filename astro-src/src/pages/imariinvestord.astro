@@ -1,0 +1,191 @@
+---
+/* ============================================================================
+   TEMPLATE · LANDING  (general estate landing page: property / service / venue)
+   Source example: newdam.
+
+   HOW TO USE: copy this file to  astro-src/src/pages/<slug>.astro , then edit
+   it down and run `npm run build`. Templates live in src/templates/ and are
+   NOT built or gated — only pages in src/pages/ are.
+
+   ⚠️ LEFTOVER-CONTENT CHECKLIST — change EVERY item before going live:
+     [ ] <PrivatePageLayout>: title, ogTitle, ogDescription, ogImage, ogUrl (→ https://imari.cc/<slug>.html)
+     [ ] Nav drawer: navLinks, navPlanLinks, navExploreLabel, navPlanLabel
+     [ ] <Hero>: eyebrow, title, paragraph, image, stats[]
+     [ ] <IntroStrip>: text
+     [ ] <Gallery>: keys (which subgalleries), or pass galleries={...} to override the shared set
+     [ ] <UseCase> × N: id, num, title, description, items[], image, alt, reverse (alternate true/false)
+     [ ] <Suites>: title, body, image, EVERY floor + suite (name/detail/features[]), footnote
+     [ ] <InquirySection>: title + EVERY contact (label/value/href)
+     [ ] Gate (CLAUDE.md → "Authoring & launching a private page"): add the vercel.json rewrite,
+         middleware.js matcher + ROLE_ALLOWS, api/login.js ROLES, and set IMARI_<SLUG>_PASSWORD in Vercel
+   ============================================================================ */
+import PrivatePageLayout from '../layouts/PrivatePageLayout.astro';
+import CanonicalStyles from '../components/CanonicalStyles.astro';
+import Hero from '../components/Hero.astro';
+import IntroStrip from '../components/IntroStrip.astro';
+import Gallery from '../components/Gallery.astro';
+import UseCase from '../components/UseCase.astro';
+import Suites from '../components/Suites.astro';
+import InquirySection from '../components/InquirySection.astro';
+
+const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
+
+const navLinks = [
+  { href: '#section-gallery', label: 'Galleries' },
+  { href: '#section-property', label: 'The Property' },
+  { href: '#section-service', label: 'The Service' },
+  { href: '#section-venue', label: 'The Venue' },
+  { href: '#section-security', label: 'The Security' },
+  { href: '#section-extras', label: 'The Extras' },
+  { href: '#section-suites', label: 'Accommodations' },
+];
+const navPlanLinks = [
+  { href: '#inquiry', label: 'Inquire' },
+];
+
+const useCases = [
+  {
+    id: 'section-property', num: '01', title: 'The Property', reverse: false,
+    image: CLD + 'LXIVDC_GARDENS134_d5aklw.jpg', alt: 'Estate gardens',
+    description: 'A 12,000 sq ft house on a walled, gated acre of gardens in Georgetown. Six suites, a 1,000 sq ft ballroom, a spa house, and a separate guest house for client staff.',
+    items: [
+      '12,000 sq ft main house on one private acre in Georgetown D.C.',
+      'Manicured gardens and greenhouse designed by Rose Greely (1930), updated by Perry Wheeler — designer of the White House Rose Garden',
+      'Gated arrival court with parking for 10 vehicles',
+      'In the main house: 6 bedroom suites across two floors with 15 bathrooms',
+      'Entertainment & living spaces flow naturally across the first floor — Parlor, Living Room, Orangerie, and formal Dining Room',
+      "Chef's Kitchen — commercial-grade, built for serious cooking at any scale",
+      'Elevator in main residence',
+      'Private gym, dedicated yoga/meditation room, full-size swimming pool, and detached Spa House with sauna, steam room, cold plunge, and hot tub',
+      'Detached 1,000 sq ft ballroom',
+      'Multiple indoor and outdoor spaces for breakouts, receptions, and gatherings',
+      'Three-bedroom guest house — separate entrance and self-contained — for client staff (security, EAs, nannies). Available at additional cost.',
+    ],
+  },
+  {
+    id: 'section-service', num: '02', title: 'The Service', reverse: true,
+    image: CLD + 'Dining_Bar_Cart_126_rtdr2u.jpg', alt: 'Dining room bar cart',
+    description: "A full team on property from arrival to departure — concierge, butler, housekeeping, Michelin-star chefs — coordinating everything so the client doesn't have to ask twice.",
+    items: [
+      '24/7 dedicated concierge managing all logistics end-to-end — planning, reservations, transportation, and on-site coordination',
+      'Butler-led arrival, daily service, and evening turndown',
+      'Full housekeeping team — daily service and full property reset after events and overnight',
+      'In-residence garment care — laundry, pressing, steaming',
+      "Property team functions as an extension of the planner's own team",
+      'Farm-sourced breakfast daily — fresh fruit, eggs made to order, pastries, organic yogurt, cold-pressed juices, coffee, tea',
+      'Stocked kitchen customized in advance to guest preferences',
+      'Michelin-star chefs available for meals and private dinners',
+      'Welcome champagne, unpacking service, and private guided estate introduction on arrival',
+      'Custom floral arrangements styled throughout the estate prior to arrival',
+    ],
+  },
+  {
+    id: 'section-venue', num: '03', title: 'The Venue', reverse: false,
+    image: CLD + 'Living_Room_280_i5lyva.jpg', alt: 'Living room',
+    description: 'A purpose-built venue for hosting, from 24-person dinners to 300-person receptions. Full AV, full production, full team.',
+    items: [
+      "Up to 60 seated at king's tables or 70 at rounds in the ballroom",
+      'Up to 24 for private dinners in the formal dining room',
+      'Up to 300 for larger receptions and cocktail events across the property',
+      'Full event planning and production — ideation through execution',
+      'Full AV suite for presentations, panels, and production',
+      'Custom menus designed for the occasion and guests',
+      'Flow from work session to cocktail hour to dinner without changing venues',
+    ],
+  },
+  {
+    id: 'section-security', num: '04', title: 'The Security', reverse: true,
+    image: CLD + 'LXIVDC_GARDENS102_bv6kmk.jpg', alt: 'Estate gardens',
+    description: 'Whole-property exclusivity, private arrival, perimeter cameras, NDA-bound staff. Vetted and used by heads of state.',
+    items: [
+      'Complete property exclusivity — no other guests, no lobby, no shared spaces',
+      'Private arrival court — arrivals and departures unseen, no street exposure',
+      'Integrated estate-wide security system with perimeter PTZ cameras, designed and vetted for heads of state and senior officials',
+      'All staff bound by confidentiality agreement before entering the property',
+      'Armed security personnel available',
+    ],
+  },
+  {
+    id: 'section-extras', num: '05', title: 'The Extras', reverse: false,
+    image: CLD + 'Spa_House_1058_d3cilj.jpg', alt: 'Estate gardens',
+    description: 'Your client asks; we sort it. Wellness, styling, transportation — those are the starting points, not the limits.',
+    items: [
+      'Central Georgetown — 1 block from the Four Seasons, minutes from the White House and the Capitol',
+      'Private wellness programming — massage therapy, acupuncture, IV therapy, yoga instruction, personal training, med-spa treatments',
+      'Custom wardrobe and personal styling',
+      'Private airport and train transfers included for arrival and departure',
+      'Private car and driver available for the duration of the stay',
+      'Supercar access and private aviation coordination available on request',
+    ],
+  },
+];
+
+const suiteFloors = [
+  { label: 'Second Floor', suites: [
+    { name: 'Georgetown Suite', detail: '1100 Sqft · King', features: ['Largest suite in the main house', 'Overlooks the manicured Rose Greely gardens', 'En-suite bath with double vanity', 'Walk-in closet', 'Private office with fireplace'] },
+    { name: 'Premier Suite', detail: '750 Sqft · King', features: ['Attached to dedicated meditation/yoga room', 'Spa bath with soaking tub and walk-in shower', 'Private dressing room', 'Motorized blackout shades'] },
+    { name: 'Executive Suite', detail: '400 Sqft · King', features: ['Overlooking scenic Olive Street', 'En-suite bath with walk-in shower', 'Fireplace in bedroom'] },
+  ] },
+  { label: 'Third Floor', suites: [
+    { name: 'Garden Suite', detail: '350 Sqft · Queen', features: ['Direct views of the manicured grounds', 'En-suite bath with dual vanity and walk-in shower', 'Quiet placement within the residence'] },
+    { name: 'Deluxe Suite 1', detail: '300 Sqft · Queen', features: ['Above the Executive Suite', 'En-suite bath with walk-in shower', 'Gracious proportions and natural light'] },
+    { name: 'Deluxe Suite 2', detail: '300 Sqft · Queen', features: ['Bright and intimate with Olive Street facing windows', 'En-suite bath', 'Ideal for single guests or associates'] },
+  ] },
+];
+
+---
+<PrivatePageLayout
+  title="Imari · Investor Landing"
+  ogTitle="Imari Georgetown · A Private Estate"
+  ogDescription="Whole-property exclusivity, full staff, and the comfort of a true home in the heart of Georgetown."
+  ogImage={CLD.replace('f_auto,q_auto/', 'f_auto,q_auto,w_1200,h_630,c_fill,g_auto/') + 'Parlor_and_Living_Room_421_ycl671.jpg'}
+  ogUrl="https://imari.cc/imariinvestord.html"
+  navLinks={navLinks}
+  navPlanLinks={navPlanLinks}
+  navExploreLabel="Explore the Estate"
+  navPlanLabel="Inquire about Investment"
+  navLogoLink={false}
+  navPhone="+1 (805) 637-4323"
+  navPhoneHref="tel:+18056374323"
+>
+  <CanonicalStyles />
+
+  <Hero
+    image={CLD + 'Parlor_and_Living_Room_421_ycl671.jpg'}
+    imageAlt="Imari Georgetown"
+    eyebrow="Imari Georgetown"
+    title="A private estate in Georgetown <br>fully staffed, <em>entirely yours.</em>"
+    paragraph="Imari Georgetown is the first in our network of ultra-prime private estates in major-metros worldwide. The next up is NYC Upper East Side - the perfect place to stay, host, and enjoy the city."
+    stats={[
+      { num: '12,000', label: 'sq.ft.' },
+      { num: '1', label: 'Acre of Gardens' },
+      { num: '6', label: 'Bedroom Suites' },
+      { num: '3', label: 'Staff Bedrooms' },
+      { num: '300', label: 'Event Capacity' },
+    ]}
+  />
+
+  <IntroStrip text="Imari is a private estate available for the exclusive occupancy of a single party. Comfortable luxury on one private acre. Full staff, complete security, seven star service - a residence built to host, to hold court, to headquarter." />
+
+  <Gallery keys={['interior', 'exterior', 'site-plan']} />
+
+  {useCases.map((uc) => <UseCase {...uc} />)}
+
+  <Suites
+    title="The<br>accommodations."
+    body="Each suite is distinct and finished to the same exceptional standard. Three king, three queen — across three floors of a 12,000 square foot main house."
+    image={CLD + 'GT_Bedroom_222_nrkmzw.jpg'}
+    imageAlt="Georgetown Suite"
+    floors={suiteFloors}
+    footnote="An attached three-bedroom guest house (3 bed · 3 bath · kitchen · living room · office) is available at additional cost."
+  />
+
+  <InquirySection
+    title="To learn more about investing inquire with Darryl Tang."
+    bgImage={CLD + 'LXIVDC_GARDENS157_wtqzaq.jpg'}
+    contacts={[
+      { label: 'Call', value: '+1 (805) 637-4323', href: 'tel:+18056374323' },
+      { label: 'Email', value: 'darryl@trakvest.com', href: 'mailto:darryl@trakvest.com' },
+    ]}
+  />
+</PrivatePageLayout>
