@@ -15,6 +15,7 @@
     { "source": "/imariinvestors.html", "destination": "/private/imariinvestors.html" },
     { "source": "/imariinvestord.html", "destination": "/private/imariinvestord.html" },
     { "source": "/stfl3.html", "destination": "/private/stfl3.html" },
-    { "source": "/aba.html", "destination": "/private/aba.html" }
+    { "source": "/aba.html", "destination": "/private/aba.html" },
+    { "source": "/stats.html", "destination": "/private/stats.html" }
   ]
 }
