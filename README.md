@@ -33,6 +33,11 @@ Set these in **Vercel → Project Settings → Environment Variables** (Producti
 | `IMARI_JULY4P2_PASSWORD` | Password that unlocks `july4p2.html`. Family-tilt variant of the Salute to America 250 weekend page. |
 | `IMARI_NEWDAM1_PASSWORD` | Password that unlocks `newdam1.html`. Personalized landing page (duplicate of the alex0349 page) prepared for Ruurd. |
 | `IMARI_ABA_PASSWORD` | Password that unlocks `aba.html`. ABA Showcase day page (lunch + dinner, November 2026). |
+| `IMARI_STATS_PASSWORD` | Password that unlocks `stats.html`, the server-side view-analytics readout. Set by hand. |
+
+### Server-side view analytics (Upstash Redis)
+
+`api/login.js` records each gated-page access (at the code-resolution step) into Upstash Redis over its REST API, and `api/stats.js` reads it back for `stats.html`. The Redis credentials are **provisioned by the Vercel Storage → Redis (Upstash) integration**, so you don't set them by hand — it injects `KV_REST_API_URL` and `KV_REST_API_TOKEN` (the code also accepts `UPSTASH_REDIS_REST_URL`/`_TOKEN`, or a manual `IMARI_ANALYTICS_REST_URL`/`_TOKEN` fallback). Confirm the integration is attached to **both Production and Preview**. If these are unset the recording silently no-ops — the site is unaffected. (`KV_URL` / `REDIS_URL` are `redis://` strings and are not used.)
 
 After updating env vars, **redeploy** — Vercel does not hot-reload env vars into Edge functions.
 
