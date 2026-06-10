@@ -287,6 +287,23 @@ Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The mid
 
 ---
 
+## Server-side view analytics
+
+Client-side Vercel Web Analytics runs on every page, but ad-blockers eat it — so gated-page accesses are *also* counted **server-side**, where nothing client can block them. This is the unblockable "true floor"; the client-side numbers stay as the nicer segmentation for non-blocking visitors. **No npm package, no root `package.json`** — the static-no-build architecture is preserved (it's plain `fetch` to Upstash's REST API from the Edge).
+
+**Where the view is recorded — and why there:** in [api/login.js](api/login.js), at the **code-resolution step** — the moment a valid code matches a content role and resolves to a destination page. It is **not** recorded on raw `/private-info.html` hits. Because every shared link points at `/private-info` (the code does the routing), link-preview bots (Slackbot, iMessage, etc.) unfurl that URL but never submit a valid code — so they never reach the recording point and **wash out with no user-agent denylist**. A recorded "view" therefore means "a code unlocked this page," not "a raw page load" (refreshes/return-visits within the 12h cookie aren't re-counted). The write is backgrounded via `context.waitUntil`, **no-ops silently if the Redis env vars are unset**, and swallows network errors — analytics can never break login. The `stats` role is the readout itself and is excluded from counting.
+
+**Data model (Upstash Redis, full history — no cap):**
+- `imari:count:<role>` — lifetime counter per page (`INCR`).
+- `imari:daily:<role>:<YYYY-MM-DD>` — per-day counter (UTC) so "this week" is answerable.
+- `imari:events:<role>` and `imari:events:all` — full per-page and global logs (`LPUSH`, no `LTRIM`); each entry is `{ ts, role, path, country, region, city, ref }` (geo from Vercel's `x-vercel-ip-*` headers).
+
+**The readout:** [api/stats.js](api/stats.js) is a gated Edge function returning per-page totals, a last-7-days breakdown, and the recent 100 events as JSON. It is **its own gate** — `/api/*` isn't behind the middleware matcher, so it re-checks the `imari_auth` cookie for the `stats` role (same HMAC check as the middleware) and 401s otherwise. [private/stats.html](private/stats.html) is a minimal hand-authored page (no Astro, no client analytics — it's an internal tool) that fetches it. Gated like any page: `stats` role, `/stats.html` matcher + `ROLE_ALLOWS` entry, `vercel.json` rewrite, `IMARI_STATS_PASSWORD`.
+
+**Credentials** come from the **Vercel Storage → Redis (Upstash) integration** (attach it to *both* Production and Preview). The code resolves them from `KV_REST_API_URL`/`KV_REST_API_TOKEN` (what the integration currently injects), or `UPSTASH_REDIS_REST_URL`/`_TOKEN`, or a manual `IMARI_ANALYTICS_REST_URL`/`_TOKEN` fallback. Ignore `KV_URL` / `REDIS_URL` — those are `redis://` strings, not fetch-usable from the Edge. **Heads-up:** the integration provisions a single store shared by Preview and Production, so preview-testing accesses land in the same counts as production — flush the `imari:*` keys in the Upstash console if you need clean live numbers.
+
+---
+
 ## Gotchas
 
 - **Always redeploy after changing env vars in Vercel.** Vercel doesn't hot-reload env vars into Edge functions. Either trigger a manual redeploy or push any commit.
@@ -310,6 +327,7 @@ Note: rotating `IMARI_AUTH_SECRET` does **not** require any code change. The mid
 | [middleware.js](middleware.js) | Edge middleware. Gates protected routes. Defines the `matcher` (which paths it runs on) and `ROLE_ALLOWS` (which role can see which path). |
 | [api/login.js](api/login.js) | Edge Function. Validates submitted password against env vars, sets the signed auth cookie. Defines the `ROLES` array. |
 | [api/logout.js](api/logout.js) | Edge Function. Clears the auth cookie. |
+| [api/stats.js](api/stats.js) | Edge Function. Gated JSON readout of server-side view analytics (self-checks the `stats`-role cookie). See "Server-side view analytics". |
 | [private-info.html](private-info.html) | The unified public gate. One password field. |
 | [private-access.html](private-access.html) | Redirect stub pointing at `private-info.html` (kept for backward compatibility with shared links). |
 | [private/](private/) | Folder holding every protected HTML file. Served at clean top-level URLs via rewrites. |
@@ -351,6 +369,8 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `IMARI_SMART_PASSWORD` | `stfl3.html` landing page (SmartFlyer; verbatim duplicate of `newdam1`). **Naming exception:** the role is `stfl3` but the env var is `IMARI_SMART_PASSWORD`, *not* `IMARI_STFL3_PASSWORD`. |
 | `IMARI_ABA_PASSWORD` | `aba.html` landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |
+| `IMARI_STATS_PASSWORD` | Unlocks `/stats.html`, the server-side view-analytics readout. Set by hand. |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | Upstash Redis REST creds for view analytics. **Provisioned by the Vercel Storage → Redis integration** (both Production + Preview), not set by hand. See "Server-side view analytics". |
 
 ---
 
