@@ -13,6 +13,7 @@ const ROLES = [
   { role: 'july4',      envVar: 'IMARI_JULY4_PASSWORD',      redirect: '/july4.html' },
   { role: 'july4v2',    envVar: 'IMARI_JULY4V2_PASSWORD',    redirect: '/july4v2.html' },
   { role: 'grandprix250', envVar: 'IMARI_GRANDPRIX250_PASSWORD', redirect: '/grandprix250.html' },
+  { role: 'gp250corp',  envVar: 'IMARI_GP250CORP_PASSWORD',  redirect: '/gp250corp.html' },
   { role: 'july4p2',    envVar: 'IMARI_JULY4P2_PASSWORD',    redirect: '/july4p2.html' },
   { role: 'newdam1',    envVar: 'IMARI_NEWDAM1_PASSWORD',    redirect: '/newdam1.html' },
   { role: 'newdamv2',   envVar: 'IMARI_NEWDAMV2_PASSWORD',   redirect: '/newdamv2.html' },
