@@ -10,6 +10,7 @@
     { "source": "/july4v2.html", "destination": "/private/july4v2.html" },
     { "source": "/grandprix250.html", "destination": "/private/grandprix250.html" },
     { "source": "/gp250corp.html", "destination": "/private/gp250corp.html" },
+    { "source": "/gp250gov.html", "destination": "/private/gp250gov.html" },
     { "source": "/july4p2.html", "destination": "/private/july4p2.html" },
     { "source": "/newdam1.html", "destination": "/private/newdam1.html" },
     { "source": "/newdamv2.html", "destination": "/private/newdamv2.html" },
