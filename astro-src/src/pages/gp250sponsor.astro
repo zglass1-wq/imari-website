@@ -1,0 +1,88 @@
+---
+import PrivatePageLayout from '../layouts/PrivatePageLayout.astro';
+import Hero from '../components/Hero.astro';
+import WeekendSection from '../components/WeekendSection.astro';
+import EstateStatement from '../components/EstateStatement.astro';
+import Gallery from '../components/Gallery.astro';
+import EstateDetails from '../components/EstateDetails.astro';
+import OfferingTable from '../components/OfferingTable.astro';
+import ClosingInquire from '../components/ClosingInquire.astro';
+
+const heroBg = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/wall-texture_skicra.jpg';
+const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
+
+const days = [
+  {
+    label: 'Friday · August 21',
+    title: 'Arrival Dinner and Driver Briefing',
+    description:
+      'The weekend opens at the estate. A private chef dinner, then a racing briefing from a former driver who has run these streets. Your guests learn what they are about to watch before the first engine fires. The night ends on your own terms, at home.',
+    image: CLD + 'CleanShot_2026-06-10_at_12.44.04_2x_baxunw.png',
+    alt: 'Private chef dinner at the estate',
+    meta: '60 people',
+  },
+  {
+    label: 'Saturday · August 22',
+    title: 'Qualifying, then the Gala',
+    description:
+      'Practice and qualifying on the Mall set the grid for Sunday. Back at the estate, a cocktail hour and a private start to the evening. When the moment is right, cars take you to the black-tie Pre-Prix 250 gala at the Washington Hilton. Afterward, the car brings you home.',
+    image: CLD + 'CleanShot_2026-06-10_at_12.43.23_2x_lrm9bi.png',
+    alt: 'Candlelit cocktail setting at Imari',
+    meta: '30 people',
+  },
+  {
+    label: 'Sunday · August 23',
+    title: 'Race Day on the Mall',
+    description:
+      'Race day from a private suite at the circuit, the main event live on FOX, the field at full speed against the monuments. Your guests watch the event your name is on from the best seats you can give them. When the checkered flag falls, the celebration moves back to the estate and runs as long as the night holds.',
+    image: CLD + 'CleanShot_2026-06-10_at_12.43.14_2x_h8cwth.png',
+    alt: 'Race day at the circuit',
+    meta: '200 people',
+  },
+];
+
+const offeringRows = [
+  { key: 'Dates', value: 'Check in Friday, August 21. Check out Monday, August 24. Three nights.' },
+  { key: 'Occupancy', value: 'Nine to eighteen overnight guests. Up to two hundred at evening events.' },
+  { key: 'Location', value: 'Central Georgetown. Minutes from the National Mall circuit. Less than two miles from the White House.' },
+  { key: 'Included', value: 'Sole-occupancy residence for the stay. Full-service car and driver. Dedicated butler staff. Concierge facilitation of every event on and around the property. Private circuit-suite and gala access coordinated end to end.' },
+  { key: 'Pricing', value: '$ 75,000 - $ 150,000 based on planned events and number of guests' },
+];
+---
+<PrivatePageLayout
+  title="Imari · Freedom 250 Grand Prix Weekend"
+  ogTitle="Freedom 250 Grand Prix Weekend · Imari Georgetown"
+  ogDescription="Turn your Freedom 250 sponsorship into three days of hosting at a private estate minutes from the circuit."
+  ogUrl="https://imari.cc/gp250sponsor.html"
+>
+  <Hero
+    title="The <em>Freedom 250</em><br>Grand Prix weekend"
+    paragraph="You are already part of the race. A private estate, fully staffed, minutes from the circuit gives your sponsorship a home. Three days to host the clients, partners, and guests who turn track presence into a relationship that lasts, while the first IndyCar street race runs the National Mall."
+    bgImage={heroBg}
+    stats={[
+      { num: 'Aug 21-24', label: '3 Nights, sole occupancy' },
+      { num: '12,000', label: 'sq.ft.' },
+      { num: '18', label: 'Overnight guests' },
+      { num: '200', label: 'Event guests' },
+    ]}
+  />
+
+  <WeekendSection
+    title="Your sponsorship, with a place to bring people home to."
+    paragraph="The Freedom 250 Grand Prix is the first IndyCar street race ever run on the National Mall, and your name is already on the weekend. A private acre in central Georgetown gives you somewhere to take the people you want close when the track goes quiet. Branded access by day, a fully staffed residence minutes away by night. A private chef dinner and a driver's briefing to open. Qualifying and a black-tie gala through the middle. Race day from a private suite, then a celebration at the estate."
+    days={days}
+  />
+
+  <EstateStatement />
+
+  <Gallery />
+
+  <EstateDetails />
+
+  <OfferingTable
+    body="A single party holds the residence for the entire weekend. The specifics below are the foundation. The rest is built around your activation and the guests you are bringing to the race."
+    rows={offeringRows}
+  />
+
+  <ClosingInquire />
+</PrivatePageLayout>
