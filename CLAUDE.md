@@ -384,8 +384,8 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `/newdam1.html` | `private/newdam1.html` | `newdam1` | legacy |
 | `/newdamv2.html` | `private/newdamv2.html` | `newdamv2` | **Astro** (newdam landing, v2) |
 | `/imaritravel.html` | `private/imaritravel.html` | `imaritravel` | **Astro** (travel-advisor landing) |
-| `/imariinvestors.html` | `private/imariinvestors.html` | `imariinvestors` | **Astro** (investor landing) |
-| `/imariinvestord.html` | `private/imariinvestord.html` | `imariinvestord` | **Astro** (investor landing, variant) |
+| `/imariinvestors.html` | `private/imariinvestors.html` | `imariinvestors` | **Astro** (investor landing — Mounzer's contact info) |
+| `/imariinvestord.html` | `private/imariinvestord.html` | `imariinvestord` | **Astro** (investor landing — identical to `imariinvestors` except Darryl's contact info) |
 | `/stfl3.html` | `private/stfl3.html` | `stfl3` | legacy (verbatim duplicate of `newdam1`; gated under `IMARI_SMART_PASSWORD`) |
 | `/aba.html` | `private/aba.html` | `aba` | legacy |
 
@@ -409,8 +409,8 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `IMARI_NEWDAM1_PASSWORD` | `newdam1.html` landing page. |
 | `IMARI_NEWDAMV2_PASSWORD` | `newdamv2.html` landing page (Astro; newdam v2). |
 | `IMARI_IMARITRAVEL_PASSWORD` | `imaritravel.html` travel-advisor landing page (Astro). |
-| `IMARI_IMARIINVESTORS_PASSWORD` | `imariinvestors.html` investor landing page (Astro). |
-| `IMARI_IMARIINVESTORD_PASSWORD` | `imariinvestord.html` investor landing page, variant (Astro). |
+| `IMARI_IMARIINVESTORS_PASSWORD` | `imariinvestors.html` investor landing page (Astro; Mounzer's contact info). |
+| `IMARI_IMARIINVESTORD_PASSWORD` | `imariinvestord.html` investor landing page (Astro; identical to `imariinvestors` except Darryl's contact info). |
 | `IMARI_SMART_PASSWORD` | `stfl3.html` landing page (SmartFlyer; verbatim duplicate of `newdam1`). **Naming exception:** the role is `stfl3` but the env var is `IMARI_SMART_PASSWORD`, *not* `IMARI_STFL3_PASSWORD`. |
 | `IMARI_ABA_PASSWORD` | `aba.html` landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |
