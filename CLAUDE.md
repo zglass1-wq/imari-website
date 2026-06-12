@@ -386,6 +386,8 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `/imaritravel.html` | `private/imaritravel.html` | `imaritravel` | **Astro** (travel-advisor landing) |
 | `/imariinvestors.html` | `private/imariinvestors.html` | `imariinvestors` | **Astro** (investor landing — Mounzer's contact info) |
 | `/imariinvestord.html` | `private/imariinvestord.html` | `imariinvestord` | **Astro** (investor landing — identical to `imariinvestors` except Darryl's contact info) |
+| `/rocktravel.html` | `private/rocktravel.html` | `rocktravel` | **Astro** (newdamv2 landing — eyebrow "prepared for Rock Hopper Travel") |
+| `/tag.html` | `private/tag.html` | `tag` | **Astro** (newdamv2 landing — eyebrow "prepared for TAG") |
 | `/stfl3.html` | `private/stfl3.html` | `stfl3` | legacy (verbatim duplicate of `newdam1`; gated under `IMARI_SMART_PASSWORD`) |
 | `/aba.html` | `private/aba.html` | `aba` | legacy |
 
@@ -411,6 +413,8 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `IMARI_IMARITRAVEL_PASSWORD` | `imaritravel.html` travel-advisor landing page (Astro). |
 | `IMARI_IMARIINVESTORS_PASSWORD` | `imariinvestors.html` investor landing page (Astro; Mounzer's contact info). |
 | `IMARI_IMARIINVESTORD_PASSWORD` | `imariinvestord.html` investor landing page (Astro; identical to `imariinvestors` except Darryl's contact info). |
+| `IMARI_ROCKTRAVEL_PASSWORD` | `rocktravel.html` travel landing page (Astro; newdamv2 with "prepared for Rock Hopper Travel"). |
+| `IMARI_TAG_PASSWORD` | `tag.html` travel landing page (Astro; newdamv2 with "prepared for TAG"). |
 | `IMARI_SMART_PASSWORD` | `stfl3.html` landing page (SmartFlyer; verbatim duplicate of `newdam1`). **Naming exception:** the role is `stfl3` but the env var is `IMARI_SMART_PASSWORD`, *not* `IMARI_STFL3_PASSWORD`. |
 | `IMARI_ABA_PASSWORD` | `aba.html` landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |

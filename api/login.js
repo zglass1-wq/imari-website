@@ -21,6 +21,8 @@ const ROLES = [
   { role: 'imaritravel', envVar: 'IMARI_IMARITRAVEL_PASSWORD', redirect: '/imaritravel.html' },
   { role: 'imariinvestors', envVar: 'IMARI_IMARIINVESTORS_PASSWORD', redirect: '/imariinvestors.html' },
   { role: 'imariinvestord', envVar: 'IMARI_IMARIINVESTORD_PASSWORD', redirect: '/imariinvestord.html' },
+  { role: 'rocktravel', envVar: 'IMARI_ROCKTRAVEL_PASSWORD', redirect: '/rocktravel.html' },
+  { role: 'tag',        envVar: 'IMARI_TAG_PASSWORD',        redirect: '/tag.html' },
   { role: 'stfl3',      envVar: 'IMARI_SMART_PASSWORD',      redirect: '/stfl3.html' },
   { role: 'aba',        envVar: 'IMARI_ABA_PASSWORD',        redirect: '/aba.html' },
   { role: 'stats',      envVar: 'IMARI_STATS_PASSWORD',      redirect: '/stats.html' },

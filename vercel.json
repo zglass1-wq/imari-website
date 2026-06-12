@@ -17,6 +17,8 @@
     { "source": "/imaritravel.html", "destination": "/private/imaritravel.html" },
     { "source": "/imariinvestors.html", "destination": "/private/imariinvestors.html" },
     { "source": "/imariinvestord.html", "destination": "/private/imariinvestord.html" },
+    { "source": "/rocktravel.html", "destination": "/private/rocktravel.html" },
+    { "source": "/tag.html", "destination": "/private/tag.html" },
     { "source": "/stfl3.html", "destination": "/private/stfl3.html" },
     { "source": "/aba.html", "destination": "/private/aba.html" },
     { "source": "/stats.html", "destination": "/private/stats.html" }
