@@ -4,6 +4,7 @@
 
 export const config = {
   matcher: [
+    '/',
     '/corporate.html',
     '/alarm250.html',
     '/freedom250.html',
@@ -76,8 +77,88 @@ function readCookie(request, name) {
   return null;
 }
 
-export default async function middleware(request) {
+// --- Public homepage view analytics (geo-only, bot-filtered) ------------------
+// The homepage is public, so there's no gate to wash out bots. We classify each
+// hit by User-Agent: real visitors get a timestamped, geo-only event (NO IP),
+// suspected bots only bump a visible tally so nothing is silently dropped. This
+// runs for '/' ONLY and never gates the homepage. Same Upstash REST write as
+// api/login.js (no SDK, no package); credentials resolve from whichever names
+// the Vercel Storage integration injects.
+const ANALYTICS_URL =
+  process.env.UPSTASH_REDIS_REST_URL ||
+  process.env.KV_REST_API_URL ||
+  process.env.IMARI_ANALYTICS_REST_URL;
+const ANALYTICS_TOKEN =
+  process.env.UPSTASH_REDIS_REST_TOKEN ||
+  process.env.KV_REST_API_TOKEN ||
+  process.env.IMARI_ANALYTICS_REST_TOKEN;
+
+// Heuristic UA denylist — crawlers, social/link-preview unfurlers, headless
+// browsers, and HTTP libraries. Imperfect by nature (bad bots spoof real UAs),
+// which is why filtered hits are tallied, not just dropped. Empty UA = bot.
+const BOT_RE = /bot|crawl|spider|slurp|mediapartners|apis-google|google-inspectiontool|feedfetcher|bingpreview|facebookexternalhit|facebot|embedly|outbrain|pinterest|slackbot|slack-imgproxy|twitterbot|telegrambot|discordbot|whatsapp|linkedinbot|skypeuripreview|redditbot|applebot|petalbot|yandex|baidu|duckduck|semrush|ahrefs|mj12|dotbot|headless|phantomjs|python-requests|aiohttp|axios|node-fetch|go-http-client|curl|wget|libwww|httpclient|java\/|okhttp|scrapy/i;
+
+function isBot(ua) {
+  return !ua || BOT_RE.test(ua);
+}
+
+function safeDecode(v) {
+  try { return decodeURIComponent(v || ''); } catch { return v || ''; }
+}
+
+// Write one homepage hit. Real visitor → geo-only event + counters; suspected
+// bot → tally only (no event, no geo). Never throws into the request path.
+function recordHomeView(request) {
+  if (!ANALYTICS_URL || !ANALYTICS_TOKEN) return Promise.resolve();
+  const h = request.headers;
+  let commands;
+  if (isBot(h.get('user-agent'))) {
+    commands = [['INCR', 'imari:home:bots']];
+  } else {
+    const ts = Date.now();
+    const blob = JSON.stringify({
+      ts,
+      path: '/',
+      country: h.get('x-vercel-ip-country') || '',
+      region: h.get('x-vercel-ip-country-region') || '',
+      city: safeDecode(h.get('x-vercel-ip-city')),
+      ref: h.get('referer') || '',
+    });
+    const day = new Date(ts).toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
+    commands = [
+      ['LPUSH', 'imari:events:home', blob],
+      ['INCR', 'imari:count:home'],
+      ['INCR', `imari:daily:home:${day}`],
+    ];
+  }
+  return fetch(`${ANALYTICS_URL}/pipeline`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${ANALYTICS_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(commands),
+  }).then(() => undefined).catch(() => undefined);
+}
+
+export default async function middleware(request, event) {
   const url = new URL(request.url);
+
+  // Public homepage: record the visit and pass through — NEVER gated. Must come
+  // before the gate logic below. Backgrounded via event.waitUntil so the
+  // homepage response isn't delayed (awaited fallback if unavailable).
+  if (url.pathname === '/') {
+    if (request.method === 'GET') {
+      const writeP = recordHomeView(request);
+      if (event && typeof event.waitUntil === 'function') {
+        event.waitUntil(writeP);
+      } else {
+        await writeP;
+      }
+    }
+    return;
+  }
+
   const secret = process.env.IMARI_AUTH_SECRET;
   const cookie = readCookie(request, 'imari_auth');
 
