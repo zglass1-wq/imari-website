@@ -25,6 +25,7 @@ const ROLES = [
   { role: 'tag',        envVar: 'IMARI_TAG_PASSWORD',        redirect: '/tag.html' },
   { role: 'stfl3',      envVar: 'IMARI_SMART_PASSWORD',      redirect: '/stfl3.html' },
   { role: 'aba',        envVar: 'IMARI_ABA_PASSWORD',        redirect: '/aba.html' },
+  { role: 'imariinfo26', envVar: 'IMARI_IMARIINFO26_PASSWORD', redirect: '/imariinfo26.html' },
   { role: 'stats',      envVar: 'IMARI_STATS_PASSWORD',      redirect: '/stats.html' },
 ];
 
