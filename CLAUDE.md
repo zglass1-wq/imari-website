@@ -11,7 +11,7 @@ If you're being asked to add a new password-protected page, the rest of this doc
 ## Where files live
 
 - **Public files** sit at the repo root: `imari-website.html` (homepage), `private-info.html` (the gate), `private-access.html` (legacy redirect stub).
-- **Protected files** sit in [private/](private/): `corporate.html` and the personalized/event landing pages (`alarm250.html`, `freedom250.html`, `alex0349.html`, `july4.html`, `july4v2.html`, `july4p2.html`, `newdam1.html`, `stfl3.html`, `aba.html`). New and migrated pages are built from Astro sources in `astro-src/` (currently `july4v2.html`); the rest are legacy hand-authored HTML pending migration. Both serve identically.
+- **Protected files** sit in [private/](private/): `corporate.html` plus the personalized/event landing pages. The full URL ⇄ file ⇄ role mapping (and which pages are Astro-built vs. legacy hand-authored) lives in the [Currently protected paths](#currently-protected-paths) table near the bottom. New and migrated pages are built from Astro sources in `astro-src/`; the remaining legacy pages are hand-authored HTML pending migration. Both serve identically.
 
 The public URL is *not* the file path. Each protected file is mapped to a clean top-level URL via a rewrite in [vercel.json](vercel.json) — `/corporate.html` serves `/private/corporate.html`, and so on. The middleware sees and matches the **public URL** (the original request path before the rewrite), so `matcher` entries and `ROLE_ALLOWS` rules always use the public path (e.g. `/corporate.html`), never `/private/corporate.html`.
 
@@ -120,11 +120,42 @@ Add env var `IMARI_<SLUG>_PASSWORD` = the code to share, in **both Production an
 
 ### Step 5 — Verify behind the gate
 
-Push the branch (triggers a Vercel preview). In an incognito window, enter the code and confirm the page renders and behaves correctly. For a **ported** page, compare against the original until indistinguishable — that's the real acceptance test.
+In an incognito window, enter the code and confirm the page renders and behaves
+correctly. For a **ported** page, compare against the original until
+indistinguishable — that's the real acceptance test.
 
-### Step 6 — Commit & PR
+Because these pages commit straight to `main` (Step 6), there's no preview branch
+to verify on first. Verify **before** committing using the local build: serve the
+built `private/<slug>.html` (it's fully self-contained, CSS inlined) and confirm
+every section renders, all images resolve, and no template/leftover content
+remains. The one thing a local file can't exercise is the gate itself (middleware
+runs only on Vercel), so do the incognito gate check immediately **after** the
+push deploys: visit `/<slug>.html` logged-out → bounces to `/private-info`; enter
+the code → lands on the page.
 
-Commit on a feature branch (repo convention). The commit includes the new `.astro` source, the rebuilt `private/<slug>.html` (**plus any other `private/*.html` that changed** if you touched a shared component), and the three gate edits. Open the PR only after gated verification passes.
+### Step 6 — Commit to `main` (single commit, no branch, no PR)
+
+Private pages are low-blast-radius (gated, single-file, built from a verified
+template) and nothing references a new page until its Vercel password is set.
+**Commit directly to `main` as one commit** — no feature branch, no PR. This
+matches the existing-password flow below and keeps page launches fast.
+
+The single commit includes the new `.astro` source, the rebuilt
+`private/<slug>.html` (**plus any other `private/*.html` that changed** if you
+touched a shared component), and the three gate edits. Vercel auto-deploys from
+`main`; the push is the launch.
+
+> **The guardrail is the pre-commit build + verify (Step 5), not a branch.** On
+> `main` there is no second look, so the green local build and the section/leftover
+> verification are mandatory before you commit. Skipping them is the only real risk
+> this convention carries.
+
+> **One exception:** if a change touches the **shared gate or auth** files in a
+> non-additive way (rewriting `middleware.js` logic, `api/login.js`, the auth
+> cookie/secret handling) rather than just adding the three standard per-page
+> entries, put *that* on a branch + PR — those files affect every page, not just
+> the new one. A normal new-page commit (additive gate entries only) goes straight
+> to `main`.
 
 ### What you give the client
 
@@ -346,12 +377,19 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `/alex0349.html` | `private/alex0349.html` | `alex0349` | legacy |
 | `/july4.html` | `private/july4.html` | `july4` | legacy (original; kept while july4v2 is verified) |
 | `/july4v2.html` | `private/july4v2.html` | `july4v2` | **Astro** (`astro-src/src/pages/july4v2.astro`) |
+| `/gp250corp.html` | `private/gp250corp.html` | `gp250corp` | **Astro** (Grand Prix weekend — client-relationship variant) |
+| `/gp250gov.html` | `private/gp250gov.html` | `gp250gov` | **Astro** (Grand Prix weekend — government-affairs variant) |
+| `/gp250sponsor.html` | `private/gp250sponsor.html` | `gp250sponsor` | **Astro** (Grand Prix weekend — sponsor variant) |
 | `/july4p2.html` | `private/july4p2.html` | `july4p2` | legacy |
 | `/newdam1.html` | `private/newdam1.html` | `newdam1` | legacy |
+| `/newdamv2.html` | `private/newdamv2.html` | `newdamv2` | **Astro** (newdam landing, v2) |
+| `/imaritravel.html` | `private/imaritravel.html` | `imaritravel` | **Astro** (travel-advisor landing) |
+| `/imariinvestors.html` | `private/imariinvestors.html` | `imariinvestors` | **Astro** (investor landing) |
+| `/imariinvestord.html` | `private/imariinvestord.html` | `imariinvestord` | **Astro** (investor landing, variant) |
 | `/stfl3.html` | `private/stfl3.html` | `stfl3` | legacy (verbatim duplicate of `newdam1`; gated under `IMARI_SMART_PASSWORD`) |
 | `/aba.html` | `private/aba.html` | `aba` | legacy |
 
-> 10 protected pages today. `july4v2` is the Astro-templated rebuild of `july4`; both run in parallel during migration. The remaining legacy pages are being migrated to Astro one at a time (§7 of the design doc) — until a page's `.astro` source exists, its `private/*.html` is the original hand-authored file and the all-pages build does not touch it.
+> `july4v2` is the Astro-templated rebuild of `july4`; both run in parallel during migration. The three `gp250*` pages are Astro-built audience variants of the **same** Freedom 250 Grand Prix weekend (same structure, day cards, estate/gallery/details, and offering rows; only the audience-facing copy slots differ), each with its own role and password so a code unlocks only its own variant. The remaining legacy pages are being migrated to Astro one at a time (§7 of the design doc) — until a page's `.astro` source exists, its `private/*.html` is the original hand-authored file and the all-pages build does not touch it.
 
 ### Required Vercel env vars
 
@@ -364,8 +402,15 @@ Public URL → file (every protected file lives in [private/](private/) and is e
 | `IMARI_ALEX0349_PASSWORD` | Personalized landing page for Alex Endo. |
 | `IMARI_JULY4_PASSWORD` | Salute to America 250 weekend landing page (legacy original). |
 | `IMARI_JULY4V2_PASSWORD` | Astro-templated rebuild of the July 4 page (`july4v2.html`). |
+| `IMARI_GP250CORP_PASSWORD` | Grand Prix weekend, client-relationship variant (`gp250corp.html`). |
+| `IMARI_GP250GOV_PASSWORD` | Grand Prix weekend, government-affairs variant (`gp250gov.html`). |
+| `IMARI_GP250SPONSOR_PASSWORD` | Grand Prix weekend, sponsor variant (`gp250sponsor.html`). |
 | `IMARI_JULY4P2_PASSWORD` | July 4 weekend landing page (variant p2). |
 | `IMARI_NEWDAM1_PASSWORD` | `newdam1.html` landing page. |
+| `IMARI_NEWDAMV2_PASSWORD` | `newdamv2.html` landing page (Astro; newdam v2). |
+| `IMARI_IMARITRAVEL_PASSWORD` | `imaritravel.html` travel-advisor landing page (Astro). |
+| `IMARI_IMARIINVESTORS_PASSWORD` | `imariinvestors.html` investor landing page (Astro). |
+| `IMARI_IMARIINVESTORD_PASSWORD` | `imariinvestord.html` investor landing page, variant (Astro). |
 | `IMARI_SMART_PASSWORD` | `stfl3.html` landing page (SmartFlyer; verbatim duplicate of `newdam1`). **Naming exception:** the role is `stfl3` but the env var is `IMARI_SMART_PASSWORD`, *not* `IMARI_STFL3_PASSWORD`. |
 | `IMARI_ABA_PASSWORD` | `aba.html` landing page. |
 | `IMARI_<ROLE>_PASSWORD` | One per new role added. |
