@@ -33,6 +33,9 @@
     .events .when { color: var(--muted); }
     .events .geo { color: var(--accent); font-size: .82rem; grid-column: 1 / -1; }
     .empty { color: var(--muted); font-style: italic; padding: .6rem .2rem; }
+    .tag { font-size: .68rem; font-weight: 500; letter-spacing: .02em; color: var(--muted);
+           text-transform: none; background: #f0ebe1; border: 1px solid var(--line);
+           border-radius: 999px; padding: .12rem .5rem; margin-left: .4rem; vertical-align: middle; }
     .err { color: #a23; }
     footer { margin-top: 3rem; color: var(--muted); font-size: .78rem; }
     a.logout { color: var(--accent); }
@@ -61,6 +64,11 @@
     <section id="recent-wrap" hidden>
       <h2>Recent accesses</h2>
       <ul class="events" id="recent"></ul>
+    </section>
+
+    <section id="home-wrap" hidden>
+      <h2>Homepage visits <span class="tag" id="home-bots"></span></h2>
+      <ul class="events" id="home-recent"></ul>
     </section>
 
     <footer>
@@ -138,6 +146,25 @@
             }).join('');
           }
           document.getElementById('recent-wrap').hidden = false;
+
+          // Homepage visits (geo-only) + filtered-bot tally
+          var home = d.home || { recent: [], bots: 0 };
+          var botsEl = document.getElementById('home-bots');
+          botsEl.textContent = (home.bots || 0) + ' bots filtered';
+          var hul = document.getElementById('home-recent');
+          if (!home.recent || !home.recent.length) {
+            hul.innerHTML = '<li class="empty">No homepage visits yet.</li>';
+          } else {
+            hul.innerHTML = home.recent.map(function (ev) {
+              var geo = geoStr(ev);
+              return '<li>' +
+                '<span class="page">/</span>' +
+                '<span class="when">' + esc(fmtTime(ev.ts)) + '</span>' +
+                (geo ? '<span class="geo">' + esc(geo) + '</span>' : '') +
+              '</li>';
+            }).join('');
+          }
+          document.getElementById('home-wrap').hidden = false;
 
           statusEl.hidden = true;
         })

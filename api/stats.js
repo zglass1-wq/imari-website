@@ -103,17 +103,24 @@ export default async function handler(request) {
   const dailyKeys = [];
   for (const r of roles) for (const d of days) dailyKeys.push(`imari:daily:${r}:${d}`);
 
-  // 3) Totals + per-day + recent global events, in one pipeline.
+  // 3) Totals + per-day + recent global (gated) events + the homepage log and
+  //    its filtered-bot tally, in one pipeline. The homepage's total/per-day
+  //    flow through the SCAN above (imari:count:home); its event log is a
+  //    separate key (imari:events:home) so it doesn't mix into the gated feed.
   const RECENT = 100;
   const cmds = [
     countKeys.length ? ['MGET', ...countKeys] : ['PING'],
     dailyKeys.length ? ['MGET', ...dailyKeys] : ['PING'],
     ['LRANGE', 'imari:events:all', '0', String(RECENT - 1)],
+    ['LRANGE', 'imari:events:home', '0', String(RECENT - 1)],
+    ['GET', 'imari:home:bots'],
   ];
   const res = await pipeline(cmds);
   const totalsArr = countKeys.length ? (res[0]?.result || []) : [];
   const dailyArr = dailyKeys.length ? (res[1]?.result || []) : [];
   const recentArr = res[2]?.result || [];
+  const homeArr = res[3]?.result || [];
+  const homeBots = Number(res[4]?.result || 0);
 
   const counts = {};
   roles.forEach((r, i) => { counts[r] = Number(totalsArr[i] || 0); });
@@ -125,9 +132,12 @@ export default async function handler(request) {
     for (const d of days) { daily[r][d] = Number(dailyArr[di++] || 0); }
   }
 
-  const recent = recentArr
+  const parseEvents = (arr) => arr
     .map((s) => { try { return JSON.parse(s); } catch { return null; } })
     .filter(Boolean);
 
-  return json(200, { ok: true, days, counts, daily, recent });
+  const recent = parseEvents(recentArr);
+  const home = { recent: parseEvents(homeArr), bots: homeBots };
+
+  return json(200, { ok: true, days, counts, daily, recent, home });
 }
