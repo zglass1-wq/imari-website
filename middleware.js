@@ -25,6 +25,7 @@ export const config = {
     '/stfl3.html',
     '/aba.html',
     '/imariinfo26.html',
+    '/recovery.html',
     '/stats.html',
   ],
 };
@@ -50,6 +51,7 @@ const ROLE_ALLOWS = {
   stfl3: (p) => p === '/stfl3.html' || p.startsWith('/stfl3-'),
   aba: (p) => p === '/aba.html' || p.startsWith('/aba-'),
   imariinfo26: (p) => p === '/imariinfo26.html' || p.startsWith('/imariinfo26-'),
+  recovery: (p) => p === '/recovery.html' || p.startsWith('/recovery-'),
   stats: (p) => p === '/stats.html' || p.startsWith('/stats-'),
 };
 

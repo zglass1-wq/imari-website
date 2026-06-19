@@ -22,6 +22,7 @@
     { "source": "/stfl3.html", "destination": "/private/stfl3.html" },
     { "source": "/aba.html", "destination": "/private/aba.html" },
     { "source": "/imariinfo26.html", "destination": "/private/imariinfo26.html" },
+    { "source": "/recovery.html", "destination": "/private/recovery.html" },
     { "source": "/stats.html", "destination": "/private/stats.html" }
   ]
 }

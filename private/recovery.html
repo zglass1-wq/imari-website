@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imari · A Place to Recover</title>
+  <link rel="icon" type="image/svg+xml" href="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-gingko_bh78d8.svg">
+  <!-- Social / iMessage preview -->
+  <meta property="og:title" content="Imari Georgetown · A Place to Recover">
+  <meta property="og:description" content="A calm, private estate in the heart of Georgetown for guests who want a quiet place to rest and recover after a medical appointment or procedure. Discreet, hotel-style support throughout the stay.">
+  <meta property="og:image" content="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-gingko_bh78d8.svg">
+  <meta property="og:url" content="https://imari.cc/recovery.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment: #f5f0e8;
+      --parchment-dark: #ede6d6;
+      --ink: #1a1712;
+      --ink-light: #3d3830;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --warm-mid: #8c7b60;
+      --rule: rgba(184,151,90,0.22);
+      --rule-dark: rgba(184,151,90,0.45);
+      --ember: #1C1A15;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+    /* Keep anchored sections clear of the fixed nav */
+    [id^="section-"] { scroll-margin-top: 90px; }
+
+    body {
+      background: var(--parchment);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      min-height: 100vh;
+    }
+
+    main { opacity: 1; }
+
+    /* NAV — persistent at all widths: logo (left) · phone + hamburger (right) */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; transition: background 0.3s, padding 0.3s; }
+    nav.scrolled { background: rgba(245,240,232,0.97); box-shadow: 0 1px 0 rgba(184,151,90,0.15); padding: 0.6rem 3rem; }
+    .nav-logo { width: 88px; transition: opacity 0.3s, width 0.3s; }
+    nav.scrolled .nav-logo { width: 56px; }
+    .nav-right { display: flex; align-items: center; gap: 1.75rem; }
+    .nav-phone { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment); text-decoration: none; white-space: nowrap; transition: color 0.2s, opacity 0.2s; }
+    .nav-phone:hover { opacity: 0.6; }
+    nav.scrolled .nav-phone { color: var(--warm-mid); }
+    nav.scrolled .nav-phone:hover { color: var(--gold); opacity: 1; }
+    .nav-toggle { display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 30px; padding: 4px; background: none; border: 0; cursor: pointer; }
+    .nav-toggle span { display: block; width: 24px; height: 1.5px; background: var(--parchment); transition: background 0.3s; }
+    nav.scrolled .nav-toggle span { background: var(--warm-mid); }
+
+    /* NAV DRAWER — slides in from the right */
+    .drawer-backdrop { position: fixed; inset: 0; z-index: 150; background: rgba(26,23,18,0.45); opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+    .drawer-backdrop.open { opacity: 1; visibility: visible; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 160; width: 360px; max-width: 100%; background: var(--parchment); box-shadow: -16px 0 48px rgba(26,23,18,0.20); transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; padding: 1.75rem 2.5rem 2.5rem; overflow-y: auto; }
+    .drawer.open { transform: translateX(0); }
+    .drawer-close { align-self: flex-end; background: none; border: 0; cursor: pointer; font-size: 1.7rem; line-height: 1; color: var(--warm-mid); padding: 0.25rem 0.1rem; transition: color 0.2s; }
+    .drawer-close:hover { color: var(--gold); }
+    .drawer-inner { margin-top: 1.25rem; }
+    .drawer-inner .section-eyebrow { margin-bottom: 1rem; }
+    .drawer-links { display: flex; flex-direction: column; }
+    .drawer-links a { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 1.25rem; line-height: 1.3; color: var(--ink); text-decoration: none; padding: 0.5rem 0; transition: color 0.2s; }
+    .drawer-links a:hover { color: var(--gold); }
+    .drawer-divider { height: 1px; background: var(--rule); margin: 1.75rem 0; }
+
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: flex-end; background: var(--ember) center/cover no-repeat; }
+    .hero-content { position: relative; padding: 0 3rem 5rem; max-width: 900px; }
+    .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-light); font-weight: 400; text-shadow: 0 1px 4px rgba(0,0,0,0.9); margin-bottom: 1.5rem; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2.6rem, 5.4vw, 4.6rem); line-height: 1.08; color: var(--parchment); margin-bottom: 2rem; }
+    .hero-title em { font-style: italic; color: var(--gold-light); }
+    .hero-sub { font-size: 0.92rem; line-height: 1.85; color: rgba(245,240,232,0.72); max-width: 640px; margin-bottom: 3rem; }
+    .hero-stats { display: flex; gap: 4rem; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--parchment); display: block; line-height: 1; }
+    .stat-label { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-top: 0.3rem; display: block; }
+
+    /* SECTION HELPERS */
+    .section-eyebrow { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
+    .section-body { font-size: 0.9rem; line-height: 1.9; color: var(--ink-light); }
+
+    /* GALLERY */
+    .gallery-section { background: var(--parchment-dark); padding: 7rem 3rem; }
+    .gallery-inner { max-width: 1200px; margin: 0 auto; }
+    .gallery-header { margin-bottom: 3.5rem; }
+    .subgallery { margin-bottom: 3.5rem; }
+    .subgallery:last-child { margin-bottom: 0; }
+    .subgallery-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: 0.75rem; margin-bottom: 0.85rem; border-bottom: 1px solid var(--rule); }
+    .subgallery-label { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 1.5rem; color: var(--ink); }
+    .subgallery-viewall { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); text-decoration: none; white-space: nowrap; cursor: pointer; transition: opacity 0.2s; }
+    .subgallery-viewall:hover { opacity: 0.6; }
+    .thumb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .thumb { aspect-ratio: 4 / 3; overflow: hidden; cursor: pointer; background: var(--parchment-dark); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease, opacity 0.3s; }
+    .thumb:hover img { transform: scale(1.04); opacity: 0.9; }
+
+    /* LIGHTBOX */
+    .lightbox { position: fixed; inset: 0; z-index: 300; display: none; align-items: center; justify-content: center; background: rgba(26,23,18,0.95); }
+    .lightbox.open { display: flex; }
+    .lb-img { max-width: 90vw; max-height: 80vh; object-fit: contain; display: block; }
+    .lb-label { position: absolute; top: 1.6rem; left: 1.8rem; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+    .lb-counter { position: absolute; top: 1.5rem; right: 4.2rem; font-size: 0.72rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.6); font-variant-numeric: tabular-nums; }
+    .lb-close { position: absolute; top: 1.05rem; right: 1.5rem; background: none; border: 0; cursor: pointer; font-size: 1.9rem; line-height: 1; color: rgba(245,240,232,0.6); transition: color 0.2s; }
+    .lb-close:hover { color: rgba(245,240,232,1); }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 0; cursor: pointer; font-size: 3rem; line-height: 1; color: rgba(245,240,232,0.3); padding: 1rem; transition: color 0.2s; user-select: none; }
+    .lb-nav:hover { color: rgba(245,240,232,0.85); }
+    .lb-prev { left: 0.5rem; }
+    .lb-next { right: 0.5rem; }
+
+    /* POSITIONING */
+    .position-wrap { background: var(--ember); padding: 7rem 3rem; }
+    .position-inner { max-width: 1360px; margin: 0 auto; }
+    .position-statement { max-width: 760px; margin: 0 auto 5rem; text-align: center; }
+    .position-statement p:not(.section-eyebrow) { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 2.8vw, 2.4rem); font-weight: 300; line-height: 1.45; color: var(--parchment); }
+    .position-statement p:not(.section-eyebrow) em { color: var(--gold-light); font-style: italic; }
+    .estate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(200,191,176,0.1); border: 1px solid rgba(200,191,176,0.1); }
+    .estate-col { background: var(--ember); padding: 2.75rem 2.25rem; }
+    .estate-col-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-style: italic; font-weight: 300; color: var(--parchment); margin-bottom: 1.5rem; line-height: 1.2; }
+    .estate-list { list-style: none; border-top: 1px solid var(--rule); }
+    .estate-list li { font-size: 0.78rem; line-height: 1.7; color: rgba(245,240,232,0.7); padding: 0.7rem 0; border-bottom: 1px solid var(--rule); display: flex; gap: 0.75rem; }
+    .estate-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+    /* WEEKEND CALENDAR */
+    .weekend-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+    .weekend-inner { max-width: 1200px; margin: 0 auto; }
+    .weekend-head { text-align: center; max-width: 880px; margin: 0 auto 4rem; }
+    .weekend-head .section-body { max-width: 780px; margin: 1.5rem auto 0; text-align: left; }
+    .weekend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .day-card { background: var(--parchment); border: 1px solid var(--rule); padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .day-img { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.9); }
+    .day-body { padding: 2rem 1.8rem 2.4rem; flex: 1; display: flex; flex-direction: column; }
+    .day-date { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .day-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; color: var(--ink); line-height: 1.2; margin-bottom: 0.8rem; }
+    .day-desc { font-size: 0.82rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.2rem; }
+    .day-meta { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-mid); margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--rule); }
+
+    /* PHOTO BAND */
+    .photo-band { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr 0.9fr; height: 340px; overflow: hidden; }
+    .photo-band > div { width: 100%; height: 100%; filter: brightness(0.9); transition: filter 0.5s; }
+    .photo-band > div:hover { filter: brightness(1.02); }
+
+    /* PROPERTY */
+    .property-section { background: var(--ink); padding: 7rem 3rem; overflow: hidden; }
+    .property-inner { max-width: 1200px; margin: 0 auto; }
+    .property-header { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-bottom: 5rem; align-items: end; }
+    .property-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(184,151,90,0.12); border: 1px solid rgba(184,151,90,0.12); margin-bottom: 4px; }
+    .prop-col { background: rgba(26,23,18,0.5); padding: 2.5rem; }
+    .prop-col-title { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(184,151,90,0.15); }
+    .prop-list { list-style: none; }
+    .prop-list li { font-size: 0.82rem; line-height: 1.7; color: rgba(245,240,232,0.7); padding: 0.55rem 0; border-bottom: 1px solid rgba(184,151,90,0.08); display: flex; gap: 0.75rem; }
+    .prop-list li::before { content: '·'; color: var(--gold); font-size: 1.2rem; line-height: 1.3; flex-shrink: 0; }
+    .prop-photos { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 300px; gap: 4px; margin-top: 4px; }
+    .prop-photos > div { width: 100%; height: 100%; filter: brightness(0.82) saturate(0.85); transition: filter 0.4s; }
+    .prop-photos > div:hover { filter: brightness(0.95) saturate(1); }
+
+    /* POSSIBILITIES */
+    .possibilities-section { padding: 7rem 3rem; background: var(--parchment-dark); }
+    .possibilities-inner { max-width: 1100px; margin: 0 auto; }
+    .possibilities-head { text-align: center; margin-bottom: 3.5rem; }
+    .possibilities-cue { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.35rem; color: var(--ink); margin-top: 1rem; }
+    .possibilities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; background: var(--rule); border: 1px solid var(--rule); }
+    .pos-item { background: var(--parchment); padding: 1.4rem 1.8rem; border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); display: flex; gap: 1rem; align-items: baseline; font-size: 0.86rem; line-height: 1.7; color: var(--ink-light); }
+    .pos-item::before { content: '·'; color: var(--gold); font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
+
+    /* OFFERING */
+    .offering-section { padding: 7rem 3rem; background: var(--parchment); }
+    .offering-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; }
+    .offering-head { position: sticky; top: 5rem; }
+    .offering-list { list-style: none; border-top: 1px solid var(--rule); }
+    .offering-list li { display: grid; grid-template-columns: 180px 1fr; gap: 2rem; padding: 1.4rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+    .offering-key { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+    .offering-val { font-size: 0.92rem; line-height: 1.7; color: var(--ink-light); }
+
+    /* CLOSING */
+    .closing-section { position: relative; overflow: hidden; min-height: 480px; display: flex; align-items: center; }
+    .closing-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; filter: brightness(0.3) saturate(0.65); }
+    .closing-content { position: relative; text-align: center; padding: 7rem 2rem; width: 100%; }
+    .closing-line { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.5rem, 3vw, 2.4rem); color: var(--parchment); line-height: 1.4; max-width: 820px; margin: 0 auto 2.5rem; }
+    .closing-line a { color: var(--gold-light); text-decoration: none; transition: color 0.2s; }
+    .closing-line a:hover { color: var(--parchment); }
+    .closing-note { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.32); }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid rgba(184,151,90,0.08); padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { width: 68px; opacity: 0.45; }
+    .footer-copy { font-size: 0.58rem; letter-spacing: 0.15em; color: rgba(245,240,232,0.18); text-transform: uppercase; }
+    .footer-conf { font-size: 0.58rem; letter-spacing: 0.12em; color: rgba(184,151,90,0.32); text-transform: uppercase; }
+
+    /* Feature-list text (the "—" bullet items) bumped to 0.85rem on
+       desktop/laptop only (>=901px), where it was too small on high-density
+       screens. Scoped under #main-content so it wins over each component's
+       base rule. Mobile (<=900px) is intentionally excluded — it keeps its
+       current sizes, so the already-legible mobile layout is unchanged. */
+    @media (min-width: 901px) {
+      #main-content .estate-list li,
+      #main-content .uc-list li,
+      #main-content .suite-features li,
+      #main-content .tl-items li { font-size: 0.85rem; }
+      #main-content .uc-desc { font-size: 0.9rem; }
+      #main-content .suites-footnote { font-size: 0.8rem; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.1rem 1.5rem; }
+      nav.scrolled { padding: 0.85rem 1.5rem; }
+      .nav-logo { width: 72px; }
+      nav.scrolled .nav-logo { width: 52px; }
+      .nav-right { gap: 1.1rem; }
+      .drawer { width: 100%; padding: 1.5rem 1.75rem 2.5rem; }
+      .hero-content { padding: 0 1.5rem 4rem; }
+      .hero-stats { gap: 2rem; flex-wrap: wrap; }
+      .gallery-section { padding: 5rem 1.5rem; }
+      .gallery-header { margin-bottom: 2.5rem; }
+      .subgallery { margin-bottom: 2.5rem; }
+      .position-wrap { padding: 5rem 1.5rem; }
+      .position-statement { margin: 0 auto 3rem; }
+      .estate-grid { grid-template-columns: 1fr; }
+      .estate-col { padding: 2rem 1.5rem; }
+      .weekend-section { padding: 5rem 1.5rem; }
+      .weekend-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .day-img { height: 200px; }
+      .photo-band { grid-template-columns: 1fr 1fr; height: 220px; }
+      .photo-band > div:nth-child(3), .photo-band > div:nth-child(4) { display: none; }
+      .property-section { padding: 5rem 1.5rem; }
+      .property-header { grid-template-columns: 1fr; gap: 2rem; }
+      .property-cols { grid-template-columns: 1fr; }
+      .prop-photos { grid-template-columns: 1fr 1fr; }
+      .prop-photos > div:nth-child(3) { display: none; }
+      .possibilities-section { padding: 5rem 1.5rem; }
+      .possibilities-grid { grid-template-columns: 1fr; }
+      .offering-section { padding: 5rem 1.5rem; }
+      .offering-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .offering-head { position: static; }
+      .offering-list li { grid-template-columns: 1fr; gap: 0.4rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .thumb-grid { grid-template-columns: repeat(2, 1fr); }
+      .lb-counter { right: 3.6rem; font-size: 0.66rem; }
+      .lb-nav { font-size: 2.2rem; padding: 0.5rem; }
+      .lb-img { max-width: 94vw; }
+    }
+  </style>
+  <!-- Vercel Web Analytics (enable in Vercel dashboard → Analytics) -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+<style>.intro-strip{background:var(--ink);padding:4rem 3rem;display:flex;align-items:center;gap:4rem;justify-content:center}.intro-rule{width:60px;height:1px;background:var(--gold);flex-shrink:0}.intro-text{font-family:Cormorant Garamond,serif;font-size:clamp(1.15rem,2.2vw,1.55rem);font-weight:300;font-style:italic;color:#f5f0e8cc;line-height:1.55;max-width:680px;text-align:center}@media(max-width:900px){.intro-strip{padding:3.5rem 1.5rem;gap:0}.intro-rule{display:none}}.use-case{display:grid;grid-template-columns:1fr 1fr;min-height:580px;border-bottom:1px solid var(--rule)}.use-case.reverse{direction:rtl}.use-case.reverse>*{direction:ltr}.uc-image-wrap{overflow:hidden}.uc-image-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s ease}.use-case:hover .uc-image-wrap img{transform:scale(1.04)}.uc-body-wrap{padding:4.5rem 4rem;display:flex;flex-direction:column;justify-content:center;background:var(--parchment)}.use-case.alt .uc-body-wrap{background:var(--parchment-dark)}.uc-num{font-family:Cormorant Garamond,serif;font-size:.8rem;color:var(--gold);letter-spacing:.1em;margin-bottom:1.25rem}.uc-title{font-family:Cormorant Garamond,serif;font-size:1.9rem;font-weight:400;color:var(--ink);margin-bottom:1rem;line-height:1.15}.uc-desc{font-size:.82rem;line-height:1.9;color:var(--ink-light);margin-bottom:2rem}.uc-list{list-style:none;border-top:1px solid var(--rule);padding-top:1.25rem}.uc-list li{font-size:.75rem;line-height:1.65;color:var(--warm-mid);padding:.3rem 0;border-bottom:1px solid var(--rule);display:flex;gap:.75rem}.uc-list li:before{content:"—";color:var(--gold);flex-shrink:0}@media(max-width:900px){.use-case{grid-template-columns:1fr;min-height:auto}.use-case.reverse{direction:ltr}.uc-image-wrap{height:300px}.uc-body-wrap{padding:2.5rem 1.5rem}}.inquiry-section{position:relative;overflow:hidden;min-height:520px;display:flex;align-items:center}.inquiry-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%;filter:brightness(.28) saturate(.65)}.inquiry-content{position:relative;text-align:center;padding:7rem 2rem;width:100%}.inquiry-body{font-size:.88rem;line-height:1.9;color:#f5f0e880;max-width:480px;margin:1.5rem auto 3.5rem}.inquiry-contacts{display:flex;gap:5rem;justify-content:center;margin-bottom:3rem}.contact-label{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}.contact-val{font-family:Cormorant Garamond,serif;font-size:1.15rem;color:var(--parchment);text-decoration:none;display:block;transition:color .2s}.contact-val:hover{color:var(--gold-light)}.inquiry-note{font-size:.62rem;letter-spacing:.1em;color:#f5f0e82e}@media(max-width:900px){.inquiry-contacts{flex-direction:column;gap:2rem}}
+.agenda-section{padding:7rem 3rem;background:var(--parchment-dark)}.agenda-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:400px 1fr;gap:6rem;align-items:start}.agenda-sticky{position:sticky;top:5rem}.agenda-sticky img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;margin-top:2.5rem}.timeline{margin-top:.5rem}.tl-item{display:grid;grid-template-columns:100px 1fr;gap:2.5rem;padding-bottom:3rem;position:relative}.tl-item:before{content:"";position:absolute;left:100px;top:.5rem;bottom:0;width:1px;background:var(--rule-dark)}.tl-item:last-child:before{display:none}.tl-time{font-family:Cormorant Garamond,serif;font-size:1rem;color:var(--gold);text-align:right;padding-right:2.5rem;padding-top:.1rem;position:relative}.tl-time:after{content:"";position:absolute;right:-5px;top:.45rem;width:9px;height:9px;border-radius:50%;background:var(--gold);border:2px solid var(--parchment-dark)}.tl-heading{font-family:Cormorant Garamond,serif;font-size:1.35rem;color:var(--ink);margin-bottom:.75rem}.tl-items{list-style:none}.tl-items li{font-size:.78rem;line-height:1.8;color:var(--ink-light);padding:.15rem 0;display:flex;gap:.6rem}.tl-items li:before{content:"—";color:var(--gold);flex-shrink:0}@media(max-width:900px){.agenda-section{padding:5rem 1.5rem}.agenda-inner{grid-template-columns:1fr;gap:3rem}.agenda-sticky{position:static}.agenda-sticky img{display:none}}
+.page--collateral .hero-content{max-width:820px}.page--collateral .hero-title{font-size:clamp(2.8rem,6vw,5rem);line-height:1.05}.page--collateral .hero-sub{font-size:.88rem;max-width:640px}.page--collateral .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}.page--collateral .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom right,#1a171273,#1a171200 55%),linear-gradient(to bottom,#1a171226,#1a17121a 40%,#1a1712c7)}.page--collateral .section-body{font-size:.88rem}.page--collateral .gallery-section{background:var(--parchment)}.page--collateral .inquiry-note{color:#f5f0e873}@media(max-width:900px){.page--collateral .hero-stats{gap:2.5rem}}
+</style></head>
+<body>
+
+<main id="main-content" class="page--collateral">
+
+  <nav id="site-nav">
+    <img id="nav-logo" class="nav-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'">
+    <div class="nav-right">
+      <a class="nav-phone" id="nav-phone" href="tel:+12028686945">+1 (202) 868-6945</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- NAV DRAWER -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="drawer" id="nav-drawer" aria-hidden="true" aria-label="Site menu">
+    <button class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+    <div class="drawer-inner">
+      <p class="section-eyebrow">Explore</p>
+      <div class="drawer-links">
+        <a href="#section-gallery">Galleries</a><a href="#section-suite">The Suite</a><a href="#section-nourishment">Nourishment</a><a href="#section-concierge">Concierge &amp; Logistics</a><a href="#section-care">On-Site Care</a><a href="#section-estate">The Estate</a><a href="#section-details">Estate Details</a><a href="#section-experience">A Day at Imari</a>
+      </div>
+      <div class="drawer-divider"></div>
+      <p class="section-eyebrow">Plan a Visit</p>
+      <div class="drawer-links">
+        <a href="#inquiry">Inquire</a>
+      </div>
+    </div>
+  </aside>
+
+  
+  <div class="hero"><img class="hero-img" src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS134_d5aklw.jpg" alt="Imari Georgetown"><div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Imari Georgetown · A Place to Recover</p>
+      <h1 class="hero-title">A quiet place to<br><em>rest and recover.</em></h1>
+      <p class="hero-sub">A calm, private estate in the heart of Georgetown for guests who want a quiet place to rest after a medical appointment or procedure. Spacious suites, natural light, unobtrusive service, and an atmosphere built for uninterrupted recovery.</p>
+      <div class="hero-stats">
+        <div><span class="stat-num">12,000</span><span class="stat-label">sq.ft.</span></div><div><span class="stat-num">1</span><span class="stat-label">Acre of Gardens</span></div><div><span class="stat-num">6</span><span class="stat-label">Bedroom Suites</span></div><div><span class="stat-num">24/7</span><span class="stat-label">On-Site Support</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-strip">
+    <div class="intro-rule"></div>
+    <p class="intro-text">A purpose-built private estate designed for comfort, privacy, and ease during recovery. Our team provides discreet, hotel-style support throughout the stay, so the only thing a guest has to do is rest.</p>
+    <div class="intro-rule"></div>
+  </div>
+
+  <div class="use-case" id="section-suite">
+    <div class="uc-image-wrap">
+      <img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Bedroom_222_nrkmzw.jpg" alt="Georgetown Suite">
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">01</p>
+      <h2 class="uc-title">A Suite Built for Rest</h2>
+      <p class="uc-desc">Recovery asks for quiet, light, and space. Suites are large and full of natural light, with soft finishes and an atmosphere that supports uninterrupted rest. Guests stay in their own room and move at their own pace, with the rest of the estate available whenever they want it and never imposed on them.</p>
+      <ul class="uc-list">
+        <li>Spacious king and queen suites across three floors of the main house</li><li>Natural light, soft finishes, and a calm, unhurried atmosphere</li><li>Quiet, unobtrusive housekeeping keeps the suite comfortable throughout the stay</li><li>Stay in-suite or take the full estate in complete privacy</li>
+      </ul>
+    </div>
+  </div><div class="use-case reverse alt" id="section-nourishment">
+    <div class="uc-image-wrap">
+      <img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Dining_105_xyaxbx.jpg" alt="Dining">
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">02</p>
+      <h2 class="uc-title">Nourishment Through Recovery</h2>
+      <p class="uc-desc">Recovery-focused meals are prepared fresh and served wherever the guest chooses, in-suite or anywhere on the property. The kitchen works from natural, low-sodium menus designed for the recovery period, and meals, tea service, and hydration are brought directly to the guest who would rather not leave the room.</p>
+      <ul class="uc-list">
+        <li>Natural, low-sodium meals and snacks served in-suite or anywhere on premises</li><li>Fresh cold-pressed juices, bone broths, soups, local yogurt and fruit, ginger tea</li><li>Meals guided by recovery needs and dietary direction</li><li>Tea service and hydration brought directly to the suite</li>
+      </ul>
+    </div>
+  </div><div class="use-case" id="section-concierge">
+    <div class="uc-image-wrap">
+      <img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Office_207_lsjhg8.jpg" alt="Georgetown Office">
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">03</p>
+      <h2 class="uc-title">Everything Handled</h2>
+      <p class="uc-desc">The point of a recovery stay is to set down the day-to-day. Our concierge manages the details a guest would rather not handle while recovering, from appointment scheduling to errands to pharmacy coordination. Butler service covers in-room needs and comfort requests with extended hours, and a black car handles every trip to and from the procedure and any follow-ups.</p>
+      <ul class="uc-list">
+        <li>Concierge handles scheduling, errands, and pharmacy coordination</li><li>Daily butler support with extended hours focused on rest and comfort</li><li>Black car service to and from the procedure and all follow-ups</li><li>Outside arrangements coordinated so the guest does not have to</li>
+      </ul>
+    </div>
+  </div><div class="use-case reverse alt" id="section-care">
+    <div class="uc-image-wrap">
+      <img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Living_Room_331_spepzh.jpg" alt="Living Room">
+    </div>
+    <div class="uc-body-wrap">
+      <p class="uc-num">04</p>
+      <h2 class="uc-title">Care Comes to You</h2>
+      <p class="uc-desc">Physicians, nurses, and other providers are welcome at the property for next-day check-ins or follow-up care when they prefer their patients stay on-site. The estate gives them a private, well-organized setting to work in, and gives the guest the comfort of recovering in one place without travel between appointments.</p>
+      <ul class="uc-list">
+        <li>Providers welcome on-site for check-ins and follow-up care</li><li>Private, controlled arrival with no public lobby and no other guests</li><li>Security and access control vetted for heads of state and influential figures</li><li>A single calm setting for the full recovery period, no travel between visits</li>
+      </ul>
+    </div>
+  </div><section class="position-wrap" id="section-estate">
+    <div class="position-inner">
+      <div class="position-statement" style="margin-bottom: 0;">
+        <p class="section-eyebrow">The Estate</p>
+        <p>Imari is a private estate available for the exclusive occupancy of a single party. <em>Comfortable luxury on one private acre.</em> Full staff, complete security, seven star service - a residence built to host, to hold court, to headquarter.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" id="section-gallery">
+    <div class="gallery-inner">
+      <div class="gallery-header">
+        <p class="section-eyebrow">Galleries</p>
+        <h2 class="section-title">A look inside.</h2>
+      </div>
+
+      <div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">Interior</span>
+          <a class="subgallery-viewall" data-gallery="interior" href="#section-gallery">View all 28 →</a>
+        </div>
+        <div class="thumb-grid" data-gallery="interior"></div>
+      </div><div class="subgallery">
+        <div class="subgallery-head">
+          <span class="subgallery-label">Exterior</span>
+          <a class="subgallery-viewall" data-gallery="exterior" href="#section-gallery">View all 23 →</a>
+        </div>
+        <div class="thumb-grid" data-gallery="exterior"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="position-wrap" id="section-details">
+    <div class="position-inner">
+      <div class="position-statement">
+        <p class="section-eyebrow">Estate Details</p>
+        <h2 class="section-title" style="color:var(--parchment)">On the grounds, and at your service.</h2>
+      </div>
+      <div class="estate-grid">
+        <div class="estate-col">
+          <p class="estate-col-title">The Property.</p>
+          <ul class="estate-list">
+            <li>12,000 sq ft main house on one private acre of manicured gardens in central Georgetown D.C.</li><li>Six bedroom suites across two floors with 15 bathrooms</li><li>1,000 sq ft detached ballroom - full AV suite for presentations and panels</li><li>Detached Spa House — sauna, steam room, cold plunge, hot tub</li><li>Full-size pool, gym, dedicated yoga and meditation room</li><li>Three-bedroom guest house for client staff — separate entrance, self-contained</li><li>Gated arrival court with parking for 10 vehicles</li><li>Multiple indoor and outdoor spaces for breakouts, receptions, and gatherings for up to 300 people</li><li>Estate-wide security with perimeter PTZ cameras, vetted for heads of state</li>
+          </ul>
+        </div>
+        <div class="estate-col">
+          <p class="estate-col-title">The Services.</p>
+          <ul class="estate-list">
+            <li>24/7 dedicated concierge managing logistics end-to-end</li><li>Butler-led arrival, daily service, evening turndown</li><li>Full housekeeping team — daily service and full property reset</li><li>Farm-sourced breakfast daily — eggs to order, pastries, cold-pressed juices</li><li>Stocked kitchen customized in advance to guest preferences</li><li>Michelin-star chefs available for meals and private dinners</li><li>Wellness on property — massage, acupuncture, IV therapy, yoga, personal training</li><li>Supercar access and private aviation coordination on request</li><li>Armed security personnel available</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="agenda-section" id="section-experience">
+    <div class="agenda-inner">
+      <div class="agenda-sticky">
+        <p class="section-eyebrow">The Experience</p>
+        <h2 class="section-title">A day at<br>Imari.</h2>
+        <p class="section-body" style="max-width:320px">Every detail handled. Every transition quiet. A sample of what a recovery day on-property can look like, shaped entirely around the guest.</p>
+        <img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS157_wtqzaq.jpg" alt="Gardens">
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-time">Morning</div>
+          <div>
+            <p class="tl-heading">Wake gently.</p>
+            <ul class="tl-items">
+              <li>Cold-pressed juice, ginger tea, and a light breakfast brought to the suite</li><li>In-room nurse visit or scheduled IV therapy, arranged through your providers</li><li>Quiet time to rest, read, or sit in the gardens at your own pace</li><li>Housekeeping refreshes the suite without disturbance</li>
+            </ul>
+          </div>
+        </div><div class="tl-item">
+          <div class="tl-time">Afternoon</div>
+          <div>
+            <p class="tl-heading">Restore.</p>
+            <ul class="tl-items">
+              <li>Recovery-focused lunch, low-sodium and prepared fresh, served wherever you like</li><li>In-suite recovery massage or gentle bodywork by appointment</li><li>Time in the spa house, sauna, or by the pool if cleared and desired</li><li>Concierge handles pharmacy runs, errands, and any outside coordination</li>
+            </ul>
+          </div>
+        </div><div class="tl-item">
+          <div class="tl-time">Evening</div>
+          <div>
+            <p class="tl-heading">Settle. Sleep.</p>
+            <ul class="tl-items">
+              <li>Nourishing dinner of soups, broths, and fresh local fare</li><li>Provider follow-up or next-day check-in scheduled on-site as needed</li><li>Butler attends to comfort requests through extended evening hours</li><li>Turndown and a full, quiet reset of the suite while you rest</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="inquiry-section" id="inquiry">
+    <img class="inquiry-bg" src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Yard_045_vgr6lu.jpg" alt="Estate grounds">
+    <div class="inquiry-content">
+      <p class="section-eyebrow">Begin a conversation</p>
+      <h2 class="section-title" style="color:var(--parchment);font-size:clamp(1.5rem,3vw,2.1rem)">Inquire with Blaine Stephens for availability.</h2>
+      <div class="inquiry-contacts">
+        <div><p class="contact-label">Call</p><a class="contact-val" href="tel:+18165929207">+1 (816) 592-9207</a></div><div><p class="contact-label">Email</p><a class="contact-val" href="mailto:blaine@imari.cc">blaine@imari.cc</a></div>
+      </div>
+      <p class="inquiry-note">Imari does not provide medical or nursing services. Our role is to create a quiet, well-organized environment and to support guests with non-medical assistance that enhances comfort, privacy, and ease during the recovery period.</p>
+    </div>
+  </section>
+
+
+  <footer>
+    <img class="footer-logo" src="https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg" alt="Imari" onerror="this.style.display='none'">
+    <span class="footer-copy">© 2026 LXIV Group. All rights reserved.</span>
+    <span class="footer-conf">Confidential · Not for distribution</span>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Photo gallery">
+    <span class="lb-label" id="lb-label"></span>
+    <span class="lb-counter" id="lb-counter"></span>
+    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&lsaquo;</button>
+    <img class="lb-img" id="lb-img" src="" alt="">
+    <button class="lb-nav lb-next" id="lb-next" aria-label="Next photo">&rsaquo;</button>
+  </div>
+
+</main>
+
+<script>(function(){const GALLERIES = {"interior":{"label":"Interior","photos":[{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Living_Room_280_i5lyva.jpg","alt":"Living Room"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Dining_105_xyaxbx.jpg","alt":"Dining Room"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Bedroom_245_j5ffcp.jpg","alt":"Georgetown Suite"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Bath_544_zjd6ff.jpg","alt":"Georgetown Suite Bath"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Parlor_and_Living_Room_421_ycl671.jpg","alt":"Parlor and Living Room"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Parlor_361_ark39j.jpg","alt":"Parlor"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Kitchen_154_avquj8.jpg","alt":"Kitchen"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Living_Room_331_spepzh.jpg","alt":"Living Room"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Parlor_373_vkelnj.jpg","alt":"Parlor"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Parlor_410_xj8g1z.jpg","alt":"Parlor"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Parlor_390_lktsk9.jpg","alt":"Parlor"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Sunroom_179_ggdnkh.jpg","alt":"Sunroom / Orangerie"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Foyer_479_kfbbnh.jpg","alt":"Foyer"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Stairs_with_Chair_465_clsrg0.jpg","alt":"Staircase"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/DC_-_Bar_kdizki.jpg","alt":"Bar"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Office_207_lsjhg8.jpg","alt":"Office / Study"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Dining_AND_Kitchen_166_dleo0l.jpg","alt":"Dining and Kitchen"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Dining_Room_Detail_451_kv9zwm.jpg","alt":"Dining Room Detail"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Dining_Bar_Cart_126_rtdr2u.jpg","alt":"Dining Bar Cart"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Kitchen_134_s5cazd.jpg","alt":"Kitchen"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Premier_611_fksc2s.jpg","alt":"Premier Suite"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Premier_Bath_633_aa3abf.jpg","alt":"Premier Suite Bath"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Premier_Closet_642_qzbb9i.jpg","alt":"Premier Suite Closet"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Bath_568_vgfoie.jpg","alt":"Georgetown Suite Bath"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Her_Closet_594_zgfrgl.jpg","alt":"Dressing Room"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Executive_014_w1rp8a.jpg","alt":"Executive Suite"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Executive_Bath_040_cp3scq.jpg","alt":"Executive Suite Bath"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Deluxe_2_061_txugmc.jpg","alt":"Suite"}]},"exterior":{"label":"Exterior","photos":[{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS064_ybjkpl.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS125_zpibxr.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS046_q59bby.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS194_dzlttv.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS184_jgnpcn.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS026_nx1u73.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS056_oed2fk.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS052_ccsvbe.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS007_q2e2y0.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS073_d8t7nt.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS089_zmpr9g.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS102_bv6kmk.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS103_rqir72.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS113_v7dpbk.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS134_d5aklw.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS147_yvgkkd.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS035_ly1k2d.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS157_wtqzaq.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS169_kg6m0s.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS201_hodm01.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS218_v7wjnb.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS223_klaapo.jpg","alt":"Gardens"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Spa_House_1058_d3cilj.jpg","alt":"Spa House"}]},"site-plan":{"label":"Site Plan","photos":[{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GardenPlan_qkwnln.png","alt":"Garden Plan"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/FirstFloorPlan_jyuexv.png","alt":"First Floor Plan"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/SecondFloorPlan_a9lyke.png","alt":"Second Floor Plan"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/ThirdFloorPlan_yq3lno.png","alt":"Third Floor Plan"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Ballroom-BANQUETDINING_hyqzx6.jpg","alt":"Ballroom — Banquet Dining"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Ballroom-SEATEDDINING_ykemyx.jpg","alt":"Ballroom — Seated Dining"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Ballroom-BOARDMEETING_kbtijh.jpg","alt":"Ballroom — Board Meeting"},{"src":"https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Ballroom-LECTURE_nil4at.jpg","alt":"Ballroom — Lecture"}]}};
+
+  /* ============ NAV: scroll state ============ */
+  const nav = document.getElementById('site-nav');
+  const navLogo = document.getElementById('nav-logo');
+  const LOGO_LIGHT = 'https://res.cloudinary.com/dsp45h9a1/image/upload/imari-parchment_oactji.svg';
+  const LOGO_DARK = 'https://res.cloudinary.com/dsp45h9a1/image/upload/imari-gingko_bh78d8.svg';
+
+  window.addEventListener('scroll', () => {
+    const heroH = document.querySelector('.hero').offsetHeight;
+    const scrolled = window.scrollY > heroH - 80;
+    nav.classList.toggle('scrolled', scrolled);
+    navLogo.src = scrolled ? LOGO_DARK : LOGO_LIGHT;
+  });
+
+  /* ============ NAV DRAWER ============ */
+  const navToggle = document.getElementById('nav-toggle');
+  const drawer = document.getElementById('nav-drawer');
+  const drawerBackdrop = document.getElementById('drawer-backdrop');
+  const drawerClose = document.getElementById('drawer-close');
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawerBackdrop.classList.add('open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerBackdrop.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    if (!isLightboxOpen()) document.body.style.overflow = '';
+  }
+  navToggle.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+  /* ============ THUMBNAILS + VIEW ALL ============ */
+  Object.keys(GALLERIES).forEach(key => {
+    const g = GALLERIES[key];
+    const grid = document.querySelector('.thumb-grid[data-gallery="' + key + '"]');
+    if (grid) {
+      g.photos.slice(0, 4).forEach((p, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'thumb';
+        const img = document.createElement('img');
+        img.src = p.src; img.alt = p.alt || ''; img.loading = 'lazy';
+        cell.appendChild(img);
+        cell.addEventListener('click', () => openLightbox(key, i));
+        grid.appendChild(cell);
+      });
+    }
+    const viewall = document.querySelector('.subgallery-viewall[data-gallery="' + key + '"]');
+    if (viewall) {
+      viewall.textContent = 'View all ' + g.photos.length + ' →';
+      viewall.addEventListener('click', e => { e.preventDefault(); openLightbox(key, 0); });
+    }
+  });
+
+  /* ============ LIGHTBOX ============ */
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbLabel = document.getElementById('lb-label');
+  const lbCounter = document.getElementById('lb-counter');
+  let lbPhotos = null, lbIndex = 0, touchX = null;
+
+  function isLightboxOpen() { return lb.classList.contains('open'); }
+
+  function openLightbox(key, idx) {
+    const g = GALLERIES[key];
+    lbPhotos = g.photos; lbIndex = idx;
+    lbLabel.textContent = g.label;
+    renderLightbox();
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function renderLightbox() {
+    const p = lbPhotos[lbIndex];
+    lbImg.src = p.src; lbImg.alt = p.alt || '';
+    lbCounter.textContent = (lbIndex + 1) + ' / ' + lbPhotos.length;
+  }
+  function stepLightbox(d) {
+    if (!lbPhotos) return;
+    lbIndex = (lbIndex + d + lbPhotos.length) % lbPhotos.length;
+    renderLightbox();
+  }
+  function closeLightbox() {
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden', 'true');
+    lbPhotos = null;
+    if (!drawer.classList.contains('open')) document.body.style.overflow = '';
+  }
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', e => { e.stopPropagation(); stepLightbox(-1); });
+  document.getElementById('lb-next').addEventListener('click', e => { e.stopPropagation(); stepLightbox(1); });
+  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+  document.addEventListener('keydown', e => {
+    if (isLightboxOpen()) {
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') stepLightbox(-1);
+      else if (e.key === 'ArrowRight') stepLightbox(1);
+    } else if (drawer.classList.contains('open') && e.key === 'Escape') {
+      closeDrawer();
+    }
+  });
+
+  lb.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) stepLightbox(dx < 0 ? 1 : -1);
+    touchX = null;
+  });
+})();</script>
+</body>
+</html>

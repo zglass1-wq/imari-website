@@ -1,0 +1,165 @@
+---
+import PrivatePageLayout from '../layouts/PrivatePageLayout.astro';
+import Hero from '../components/Hero.astro';
+import IntroStrip from '../components/IntroStrip.astro';
+import UseCase from '../components/UseCase.astro';
+import EstateStatement from '../components/EstateStatement.astro';
+import Gallery from '../components/Gallery.astro';
+import EstateDetails from '../components/EstateDetails.astro';
+import Agenda from '../components/Agenda.astro';
+import InquirySection from '../components/InquirySection.astro';
+
+const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
+
+const navLinks = [
+  { href: '#section-gallery', label: 'Galleries' },
+  { href: '#section-suite', label: 'The Suite' },
+  { href: '#section-nourishment', label: 'Nourishment' },
+  { href: '#section-concierge', label: 'Concierge & Logistics' },
+  { href: '#section-care', label: 'On-Site Care' },
+  { href: '#section-estate', label: 'The Estate' },
+  { href: '#section-details', label: 'Estate Details' },
+  { href: '#section-experience', label: 'A Day at Imari' },
+];
+const navPlanLinks = [{ href: '#inquiry', label: 'Inquire' }];
+
+const useCases = [
+  {
+    id: 'section-suite', num: '01', title: 'A Suite Built for Rest', reverse: false,
+    image: CLD + 'GT_Bedroom_222_nrkmzw.jpg', alt: 'Georgetown Suite',
+    description: 'Recovery asks for quiet, light, and space. Suites are large and full of natural light, with soft finishes and an atmosphere that supports uninterrupted rest. Guests stay in their own room and move at their own pace, with the rest of the estate available whenever they want it and never imposed on them.',
+    items: [
+      'Spacious king and queen suites across three floors of the main house',
+      'Natural light, soft finishes, and a calm, unhurried atmosphere',
+      'Quiet, unobtrusive housekeeping keeps the suite comfortable throughout the stay',
+      'Stay in-suite or take the full estate in complete privacy',
+    ],
+  },
+  {
+    id: 'section-nourishment', num: '02', title: 'Nourishment Through Recovery', reverse: true,
+    image: CLD + 'Dining_105_xyaxbx.jpg', alt: 'Dining',
+    description: 'Recovery-focused meals are prepared fresh and served wherever the guest chooses, in-suite or anywhere on the property. The kitchen works from natural, low-sodium menus designed for the recovery period, and meals, tea service, and hydration are brought directly to the guest who would rather not leave the room.',
+    items: [
+      'Natural, low-sodium meals and snacks served in-suite or anywhere on premises',
+      'Fresh cold-pressed juices, bone broths, soups, local yogurt and fruit, ginger tea',
+      'Meals guided by recovery needs and dietary direction',
+      'Tea service and hydration brought directly to the suite',
+    ],
+  },
+  {
+    id: 'section-concierge', num: '03', title: 'Everything Handled', reverse: false,
+    image: CLD + 'GT_Office_207_lsjhg8.jpg', alt: 'Georgetown Office',
+    description: 'The point of a recovery stay is to set down the day-to-day. Our concierge manages the details a guest would rather not handle while recovering, from appointment scheduling to errands to pharmacy coordination. Butler service covers in-room needs and comfort requests with extended hours, and a black car handles every trip to and from the procedure and any follow-ups.',
+    items: [
+      'Concierge handles scheduling, errands, and pharmacy coordination',
+      'Daily butler support with extended hours focused on rest and comfort',
+      'Black car service to and from the procedure and all follow-ups',
+      'Outside arrangements coordinated so the guest does not have to',
+    ],
+  },
+  {
+    id: 'section-care', num: '04', title: 'Care Comes to You', reverse: true,
+    image: CLD + 'Living_Room_331_spepzh.jpg', alt: 'Living Room',
+    description: 'Physicians, nurses, and other providers are welcome at the property for next-day check-ins or follow-up care when they prefer their patients stay on-site. The estate gives them a private, well-organized setting to work in, and gives the guest the comfort of recovering in one place without travel between appointments.',
+    items: [
+      'Providers welcome on-site for check-ins and follow-up care',
+      'Private, controlled arrival with no public lobby and no other guests',
+      'Security and access control vetted for heads of state and influential figures',
+      'A single calm setting for the full recovery period, no travel between visits',
+    ],
+  },
+];
+
+const agendaPeriods = [
+  { time: 'Morning', heading: 'Wake gently.', items: [
+    'Cold-pressed juice, ginger tea, and a light breakfast brought to the suite',
+    'In-room nurse visit or scheduled IV therapy, arranged through your providers',
+    'Quiet time to rest, read, or sit in the gardens at your own pace',
+    'Housekeeping refreshes the suite without disturbance',
+  ] },
+  { time: 'Afternoon', heading: 'Restore.', items: [
+    'Recovery-focused lunch, low-sodium and prepared fresh, served wherever you like',
+    'In-suite recovery massage or gentle bodywork by appointment',
+    'Time in the spa house, sauna, or by the pool if cleared and desired',
+    'Concierge handles pharmacy runs, errands, and any outside coordination',
+  ] },
+  { time: 'Evening', heading: 'Settle. Sleep.', items: [
+    'Nourishing dinner of soups, broths, and fresh local fare',
+    'Provider follow-up or next-day check-in scheduled on-site as needed',
+    'Butler attends to comfort requests through extended evening hours',
+    'Turndown and a full, quiet reset of the suite while you rest',
+  ] },
+];
+---
+<PrivatePageLayout
+  title="Imari · A Place to Recover"
+  ogTitle="Imari Georgetown · A Place to Recover"
+  ogDescription="A calm, private estate in the heart of Georgetown for guests who want a quiet place to rest and recover after a medical appointment or procedure. Discreet, hotel-style support throughout the stay."
+  ogUrl="https://imari.cc/recovery.html"
+  pageVariant="collateral"
+  navLinks={navLinks}
+  navPlanLinks={navPlanLinks}
+  navExploreLabel="Explore"
+  navPlanLabel="Plan a Visit"
+  navLogoLink={false}
+>
+  <Hero
+    image={CLD + 'LXIVDC_GARDENS134_d5aklw.jpg'}
+    imageAlt="Imari Georgetown"
+    eyebrow="Imari Georgetown · A Place to Recover"
+    title="A quiet place to<br><em>rest and recover.</em>"
+    paragraph="A calm, private estate in the heart of Georgetown for guests who want a quiet place to rest after a medical appointment or procedure. Spacious suites, natural light, unobtrusive service, and an atmosphere built for uninterrupted recovery."
+    stats={[
+      { num: '12,000', label: 'sq.ft.' },
+      { num: '1', label: 'Acre of Gardens' },
+      { num: '6', label: 'Bedroom Suites' },
+      { num: '24/7', label: 'On-Site Support' },
+    ]}
+  />
+
+  <IntroStrip text="A purpose-built private estate designed for comfort, privacy, and ease during recovery. Our team provides discreet, hotel-style support throughout the stay, so the only thing a guest has to do is rest." />
+
+  {useCases.map((uc) => <UseCase {...uc} />)}
+
+  <EstateStatement />
+
+  <Gallery />
+
+  <EstateDetails />
+
+  <Agenda
+    title="A day at<br>Imari."
+    body="Every detail handled. Every transition quiet. A sample of what a recovery day on-property can look like, shaped entirely around the guest."
+    image={CLD + 'LXIVDC_GARDENS157_wtqzaq.jpg'}
+    imageAlt="Gardens"
+    periods={agendaPeriods}
+  />
+
+  <InquirySection
+    title="Inquire with Blaine Stephens for availability."
+    bgImage={CLD + 'Yard_045_vgr6lu.jpg'}
+    contacts={[
+      { label: 'Call', value: '+1 (816) 592-9207', href: 'tel:+18165929207' },
+      { label: 'Email', value: 'blaine@imari.cc', href: 'mailto:blaine@imari.cc' },
+    ]}
+    note="Imari does not provide medical or nursing services. Our role is to create a quiet, well-organized environment and to support guests with non-medical assistance that enhances comfort, privacy, and ease during the recovery period."
+  />
+</PrivatePageLayout>
+
+<style is:global>
+  /* Collateral page-type variant: shared-selector values cloned from corporate.
+     Scoped under .page--collateral (on <main>) so they win by specificity and
+     touch only this page. */
+  .page--collateral .hero-content { max-width: 820px; }
+  .page--collateral .hero-title { font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.05; }
+  .page--collateral .hero-sub { font-size: 0.88rem; max-width: 640px; }
+  .page--collateral .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+  .page--collateral .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom right, rgba(26,23,18,0.45) 0%, rgba(26,23,18,0) 55%), linear-gradient(to bottom, rgba(26,23,18,0.15) 0%, rgba(26,23,18,0.1) 40%, rgba(26,23,18,0.78) 100%); }
+  .page--collateral .section-body { font-size: 0.88rem; }
+  .page--collateral .gallery-section { background: var(--parchment); }
+  /* Medical disclaimer needs to be legible (default .inquiry-note is near-invisible boilerplate). */
+  .page--collateral .inquiry-note { color: rgba(245,240,232,0.45); }
+  @media (max-width: 900px) {
+    .page--collateral .hero-stats { gap: 2.5rem; }
+  }
+</style>
