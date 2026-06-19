@@ -46,6 +46,17 @@ Private pages are **authored in Astro** (`astro-src/`) and compiled to plain sta
 
 Naming: pick a short slug, e.g. `aba`, `july4v2`, `smith-wedding`. The slug is used identically across the page file (`astro-src/src/pages/<slug>.astro`), the build output (`private/<slug>.html`), and all three gate entries.
 
+### Prompting for a one-pass build
+
+The cleanest launches happen when the instruction settles the decisions up front that otherwise force a round-trip mid-build. A one-pass prompt ideally includes:
+
+- **The slug, role, and intended env var** — e.g. *"slug `recovery`, gate it, password will be `IMARI_RECOVERY_PASSWORD`."* The env var is only ever **set in Vercel by you** (never in code); naming it up front just removes a question. The page-type/template can usually be inferred from the request ("a collateral page", "a July 4th offering"), but naming it removes all doubt.
+- **An explicit "wire the gate and commit to `main` in one commit"** when that's the goal. Without it, the gate edits (`vercel.json`, `middleware.js`, `api/login.js`) are a non-trivial, multi-file change, so expect a pause to confirm before they're touched.
+- **Any style or content intent baked into the draft** — "the disclaimer must be legible," "hero darker," "no gallery." Discovering intent in review costs a rebuild; stating it in the draft bakes it in the first time.
+- **A "stop and check" flag on anything in the draft that may not match the components** — e.g. a prop the component doesn't actually accept. Say which slot the content should land in (or to add a real prop), rather than letting it silently drop. (See the `footnote`/`note` distinction in `InquirySection`.)
+
+Regardless of how thin the prompt is, the build always: copies the matching template, render-verifies before committing, confirms every Cloudinary image key resolves, and keeps the gate edits additive. The list above just trades review round-trips for a single clean pass.
+
 ### Templates — the fastest start (§7b)
 
 Don't author from a blank file — **copy the matching template** from [`astro-src/src/templates/`](astro-src/src/templates/). Each is a complete, verified working example of its page-type with the **canonical (converged) look** baked in (via `<CanonicalStyles />`); you edit it down to the new page. Templates live in `src/templates/` and are **never built or gated** — only `src/pages/` is routed, and they're `_`-prefixed as a second guard — so a template never emits a `private/*.html`.
