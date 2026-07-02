@@ -7,7 +7,6 @@ export const config = { runtime: 'edge' };
 
 const ROLES = [
   { role: 'corporate',  envVar: 'IMARI_CORPORATE_PASSWORD',  redirect: '/corporate.html' },
-  { role: 'alarm250',   envVar: 'IMARI_ALARM250_PASSWORD',   redirect: '/alarm250.html' },
   { role: 'freedom250', envVar: 'IMARI_FREEDOM250_PASSWORD', redirect: '/freedom250.html' },
   { role: 'alex0349',   envVar: 'IMARI_ALEX0349_PASSWORD',   redirect: '/alex0349.html' },
   { role: 'july4',      envVar: 'IMARI_JULY4_PASSWORD',      redirect: '/july4.html' },

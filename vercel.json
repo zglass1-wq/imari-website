@@ -3,7 +3,6 @@
     { "source": "/", "destination": "/imari-website.html" },
     { "source": "/private-info", "destination": "/private-info.html" },
     { "source": "/corporate.html", "destination": "/private/corporate.html" },
-    { "source": "/alarm250.html", "destination": "/private/alarm250.html" },
     { "source": "/freedom250.html", "destination": "/private/freedom250.html" },
     { "source": "/alex0349.html", "destination": "/private/alex0349.html" },
     { "source": "/july4.html", "destination": "/private/july4.html" },
