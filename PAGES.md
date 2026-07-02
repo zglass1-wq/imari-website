@@ -10,7 +10,7 @@ There are three types of private page in this repo. Each is purpose-built for a 
 
 | Type | Currently | Pitched at | Audience | Tone | Galleries |
 |---|---|---|---|---|---|
-| **Specific Offer** | alarm250 · freedom250 · july4 | A specific event/weekend | Single prospect or short list | Salesy, glance-and-decide; replaces a 1-pager | Interior + Exterior (no Site Plan) |
+| **Specific Offer** | freedom250 · july4 | A specific event/weekend | Single prospect or short list | Salesy, glance-and-decide; replaces a 1-pager | Interior + Exterior (no Site Plan) |
 | **Landing** | alex0349 | The property generally | Personalized — one named recipient | Factual; sophisticated reader making a decision | Full set (Interior + Exterior + Site Plan) |
 | **Collateral** | corporate | A specific use case for a defined audience | Audience-wide, not personalized | Sales-leaning; varies by purpose; short and punchy | Interior + Exterior (shared block) — omit if a piece argues against it |
 
@@ -20,7 +20,7 @@ There are three types of private page in this repo. Each is purpose-built for a 
 
 A page built to pitch a specific event or weekend to a small list. The recipient is glancing at it to decide whether to reach out — make the decision easy. Replaces a one-page PDF.
 
-**Pages currently of this type:** [alarm250](private/alarm250.html), [freedom250](private/freedom250.html), [july4](private/july4.html)
+**Pages currently of this type:** [freedom250](private/freedom250.html), [july4](private/july4.html)
 
 ### Sections (in order)
 
