@@ -6,7 +6,6 @@ export const config = {
   matcher: [
     '/',
     '/corporate.html',
-    '/freedom250.html',
     '/alex0349.html',
     '/july4.html',
     '/july4v2.html',
@@ -31,7 +30,6 @@ export const config = {
 
 const ROLE_ALLOWS = {
   corporate: (p) => p === '/corporate.html' || p.startsWith('/corporate-'),
-  freedom250: (p) => p === '/freedom250.html' || p.startsWith('/freedom250-'),
   alex0349: (p) => p === '/alex0349.html' || p.startsWith('/alex0349-'),
   july4: (p) => p === '/july4.html' || p.startsWith('/july4-'),
   july4v2: (p) => p === '/july4v2.html' || p.startsWith('/july4v2-'),

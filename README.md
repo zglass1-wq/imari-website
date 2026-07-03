@@ -12,7 +12,7 @@ Static marketing site for Imari, deployed on Vercel. Two protected sections (`ag
 Protected paths (declared in [middleware.js](middleware.js)):
 
 - `/corporate.html`
-- `/alarm250.html`, `/freedom250.html`, `/alex0349.html`, `/july4.html` (personalized one-off landing pages)
+- `/freedom250.html`, `/alex0349.html`, `/july4.html` (personalized one-off landing pages)
 
 The protected HTML files live in [private/](private/) and are served at clean, top-level URLs via rewrites in [vercel.json](vercel.json). Middleware runs on the public URL (e.g. `/corporate.html`) before the rewrite to `/private/corporate.html` is applied.
 
@@ -26,7 +26,6 @@ Set these in **Vercel → Project Settings → Environment Variables** (Producti
 |---|---|
 | `IMARI_AUTH_SECRET` | Random server-side secret used to sign the auth cookie. Generate with `openssl rand -hex 32`. **Never share or commit.** |
 | `IMARI_CORPORATE_PASSWORD` | Password that unlocks `corporate.html`. Share with corporate & institutional partners. |
-| `IMARI_ALARM250_PASSWORD` | Password that unlocks `alarm250.html`. Single-prospect page for Alarm.com × UFC Freedom 250. |
 | `IMARI_FREEDOM250_PASSWORD` | Password that unlocks `freedom250.html`. Generalized UFC Freedom 250 weekend page for any corporate prospect. |
 | `IMARI_ALEX0349_PASSWORD` | Password that unlocks `alex0349.html`. Personalized agent page that mirrors the main agents landing; also grants access to the shared `agents-*` galleries. |
 | `IMARI_JULY4_PASSWORD` | Password that unlocks `july4.html`. Personalized 4th of July weekend landing page. |
