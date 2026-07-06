@@ -94,7 +94,7 @@
       min-height: 680px;
       overflow: hidden;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
     }
     .hero-bg {
@@ -175,39 +175,42 @@
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom,
-        rgba(28,26,21,0.1) 0%,
-        rgba(28,26,21,0.55) 45%,
-        rgba(28,26,21,0.65) 65%,
-        rgba(28,26,21,0.88) 100%
+      /* scrim weighted to the bottom band where the text sits; top of the photo stays clear */
+      background: linear-gradient(to top,
+        rgba(28,26,21,0.94) 0px,
+        rgba(28,26,21,0.85) 160px,
+        rgba(28,26,21,0.6) 340px,
+        rgba(28,26,21,0.28) 460px,
+        rgba(28,26,21,0) 580px
       );
     }
     .hero-content {
       position: relative;
       text-align: center;
       max-width: 860px;
-      padding: 0 40px;
-      /* nudged below center so more of the hero image shows above the text */
-      top: 7vh;
+      /* compressed into a band at the bottom so the top of the photo stays clear */
+      padding: 0 40px 92px;
       z-index: 2;
     }
     .hero-headline {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(40px, 5vw, 64px);
+      font-size: clamp(32px, 3.6vw, 44px);
       font-weight: 300;
       font-style: italic;
       line-height: 1.08;
       color: var(--parchment);
-      margin-bottom: 28px;
+      margin-bottom: 16px;
       opacity: 0;
       animation: fadeUp 1s ease 0.65s forwards;
     }
     .hero-sub {
-      font-size: 13px;
-      letter-spacing: 0.05em;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(16px, 1.7vw, 20px);
       color: var(--stone);
-      line-height: 1.85;
-      margin-bottom: 32px;
+      line-height: 1.4;
+      margin-bottom: 26px;
       opacity: 0;
       animation: fadeUp 1s ease 0.9s forwards;
     }
@@ -215,8 +218,8 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 28px 44px;
-      margin-bottom: 44px;
+      gap: 18px 34px;
+      margin-bottom: 30px;
       opacity: 0;
       animation: fadeUp 1s ease 1s forwards;
     }
@@ -228,7 +231,7 @@
     }
     .hero-stat-num {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(30px, 3.4vw, 46px);
+      font-size: clamp(24px, 2.6vw, 32px);
       font-weight: 300;
       line-height: 1;
       color: var(--parchment);
@@ -715,9 +718,18 @@
       .position-wrap, .estate-wrap, .how-wrap, .amenities-wrap, .security-wrap, .pullquote-wrap, .inquiry-wrap { padding: 80px 24px; }
       .carousel-slide { height: 60vh; }
       .carousel-btn { width: 40px; height: 40px; font-size: 14px; }
-      .hero-stats { gap: 20px 28px; }
-      /* content nearly fills the viewport on phones — keep it centered, no downward nudge */
-      .hero-content { top: 0; }
+      .hero-stats { gap: 16px 24px; }
+      .hero-content { padding-bottom: 52px; }
+      /* the bottom text band is taller on phones — extend the scrim up to keep it legible */
+      .hero-overlay {
+        background: linear-gradient(to top,
+          rgba(28,26,21,0.95) 0px,
+          rgba(28,26,21,0.9) 300px,
+          rgba(28,26,21,0.7) 480px,
+          rgba(28,26,21,0.3) 600px,
+          rgba(28,26,21,0) 700px
+        );
+      }
       .value-grid, .amenities-grid { grid-template-columns: 1fr; }
       .inquiry-inner { grid-template-columns: 1fr; gap: 52px; }
       .private-access-inner { grid-template-columns: 1fr; gap: 36px; }
@@ -761,9 +773,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1 class="hero-headline">A private estate in Georgetown — fully staffed, entirely yours.</h1>
-      <p class="hero-sub">
-        Whole property exclusivity, full staff, and the comfort of a true home. Host, meet, and decompress on your own terms.
-      </p>
+      <p class="hero-sub">Host, meet, and decompress on your own terms.</p>
       <div class="hero-stats">
         <div class="hero-stat"><span class="hero-stat-num">12,000</span><span class="hero-stat-label">Sq. Ft.</span></div>
         <div class="hero-stat"><span class="hero-stat-num">1</span><span class="hero-stat-label">Acre of Gardens</span></div>
@@ -778,10 +788,6 @@
     <button class="hero-carousel-btn prev" id="hero-carousel-prev" aria-label="Previous background image">&#10094;</button>
     <button class="hero-carousel-btn next" id="hero-carousel-next" aria-label="Next background image">&#10095;</button>
     <div class="hero-carousel-dots" id="hero-carousel-dots"></div>
-    <div class="scroll-indicator" aria-hidden="true">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
   </section>
 
   <!-- POSITIONING -->
