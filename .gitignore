@@ -11,3 +11,4 @@ private/DEPR/
 astro-src/node_modules/
 astro-src/dist/
 astro-src/.astro/
+.vercel
