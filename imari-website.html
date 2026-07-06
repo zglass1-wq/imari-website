@@ -100,9 +100,69 @@
     .hero-bg {
       position: absolute;
       inset: -12% 0;
-      background: url('https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Dining_Fireplace_170_jra41e.jpg') center 65%/cover no-repeat;
       will-change: transform;
     }
+    /* Hero background crossfade carousel (parallax lives on .hero-bg; crossfade on the layers) */
+    .hero-carousel-track { position: absolute; inset: 0; }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.9s ease;
+      will-change: opacity;
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 65%;
+      display: block;
+    }
+    /* Hero carousel controls — deliberately lighter/minimal vs. the gallery's boxed buttons */
+    .hero-carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: rgba(240,235,227,0.55);
+      font-size: 22px;
+      line-height: 1;
+      transition: color 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hero-carousel-btn:hover { color: rgba(240,235,227,0.95); }
+    .hero-carousel-btn.prev { left: 18px; }
+    .hero-carousel-btn.next { right: 18px; }
+    .hero-carousel-dots {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+    .hero-carousel-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(200,191,176,0.3);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .hero-carousel-dot.active { background: var(--ochre); transform: scale(1.3); }
     /* Gradient at top for nav legibility */
     .hero-top-fade {
       position: absolute;
@@ -141,10 +201,10 @@
     }
     .hero-headline {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(56px, 8vw, 108px);
+      font-size: clamp(40px, 5vw, 64px);
       font-weight: 300;
       font-style: italic;
-      line-height: 1.05;
+      line-height: 1.08;
       color: var(--parchment);
       margin-bottom: 28px;
       opacity: 0;
@@ -155,13 +215,41 @@
       letter-spacing: 0.05em;
       color: var(--stone);
       line-height: 1.85;
-      margin-bottom: 48px;
+      margin-bottom: 32px;
       opacity: 0;
       animation: fadeUp 1s ease 0.9s forwards;
     }
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 28px 44px;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeUp 1s ease 1s forwards;
+    }
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 3.4vw, 46px);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--parchment);
+    }
+    .hero-stat-label {
+      font-size: 9px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
     .hero-ctas {
       opacity: 0;
-      animation: fadeUp 1s ease 1.1s forwards;
+      animation: fadeUp 1s ease 1.15s forwards;
       display: flex;
       gap: 16px;
       justify-content: center;
@@ -635,6 +723,7 @@
       .position-wrap, .estate-wrap, .how-wrap, .amenities-wrap, .security-wrap, .pullquote-wrap, .inquiry-wrap { padding: 80px 24px; }
       .carousel-slide { height: 60vh; }
       .carousel-btn { width: 40px; height: 40px; font-size: 14px; }
+      .hero-stats { gap: 20px 28px; }
       .value-grid, .amenities-grid { grid-template-columns: 1fr; }
       .inquiry-inner { grid-template-columns: 1fr; gap: 52px; }
       .private-access-inner { grid-template-columns: 1fr; gap: 36px; }
@@ -665,19 +754,37 @@
 
   <!-- HERO -->
   <section class="hero" id="top">
-    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-bg" id="hero-bg">
+      <div class="hero-carousel-track" id="hero-carousel-track">
+        <div class="hero-slide active"><img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Dining_Fireplace_170_jra41e.jpg" alt="" fetchpriority="high"></div>
+        <div class="hero-slide"><img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Living_Room_280_i5lyva.jpg" alt="" loading="lazy"></div>
+        <div class="hero-slide"><img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/LXIVDC_GARDENS035_ly1k2d.jpg" alt="" loading="lazy"></div>
+        <div class="hero-slide"><img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/Parlor_390_lktsk9.jpg" alt="" loading="lazy"></div>
+        <div class="hero-slide"><img src="https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/GT_Bedroom_245_j5ffcp.jpg" alt="" loading="lazy"></div>
+      </div>
+    </div>
     <div class="hero-top-fade"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">LXIV Group &nbsp;·&nbsp; Private Estate Hospitality</p>
-      <h1 class="hero-headline">The Art of Arrival.</h1>
+      <h1 class="hero-headline">A private estate in Georgetown — fully staffed, entirely yours.</h1>
       <p class="hero-sub">
-        A private estate with a full staff. Entirely yours.
+        Whole property exclusivity, full staff, and the comfort of a true home. Host, meet, and decompress on your own terms.
       </p>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="hero-stat-num">12,000</span><span class="hero-stat-label">Sq. Ft.</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">1</span><span class="hero-stat-label">Acre of Gardens</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">6</span><span class="hero-stat-label">Bedroom Suites</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">3</span><span class="hero-stat-label">Staff Bedrooms</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">300</span><span class="hero-stat-label">Event Capacity</span></div>
+      </div>
       <div class="hero-ctas">
         <a href="#inquiry" class="btn-primary">Inquire</a>
       </div>
     </div>
+    <button class="hero-carousel-btn prev" id="hero-carousel-prev" aria-label="Previous background image">&#10094;</button>
+    <button class="hero-carousel-btn next" id="hero-carousel-next" aria-label="Next background image">&#10095;</button>
+    <div class="hero-carousel-dots" id="hero-carousel-dots"></div>
     <div class="scroll-indicator" aria-hidden="true">
       <span>Scroll</span>
       <div class="scroll-line"></div>
@@ -996,6 +1103,50 @@
       nav.classList.toggle('scrolled', y > 60);
       if (heroBg) heroBg.style.transform = `translateY(${y * 0.25}px)`;
     }, { passive: true });
+
+    // ── Hero background carousel (crossfade; namespaced, independent of the gallery carousel) ──
+    (function () {
+      const heroTrack = document.getElementById('hero-carousel-track');
+      if (!heroTrack) return;
+      const heroLayers = heroTrack.querySelectorAll('.hero-slide');
+      const heroDotsWrap = document.getElementById('hero-carousel-dots');
+      const heroTotal = heroLayers.length;
+      if (!heroTotal || !heroDotsWrap) return;
+
+      const heroReduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const HERO_INTERVAL = 6000;
+      let heroCurrent = 0;
+      let heroTimer = null;
+
+      const heroDots = [];
+      heroLayers.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'hero-carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Show background image ${i + 1}`);
+        dot.addEventListener('click', () => { heroGoTo(i); heroResetTimer(); });
+        heroDotsWrap.appendChild(dot);
+        heroDots.push(dot);
+      });
+
+      function heroGoTo(n) {
+        heroCurrent = (n + heroTotal) % heroTotal;
+        heroLayers.forEach((l, i) => l.classList.toggle('active', i === heroCurrent));
+        heroDots.forEach((d, i) => d.classList.toggle('active', i === heroCurrent));
+      }
+      function heroStartTimer() {
+        if (heroReduceMotion) return;
+        heroTimer = setInterval(() => heroGoTo(heroCurrent + 1), HERO_INTERVAL);
+      }
+      function heroResetTimer() {
+        if (heroTimer) clearInterval(heroTimer);
+        heroStartTimer();
+      }
+
+      document.getElementById('hero-carousel-prev').addEventListener('click', () => { heroGoTo(heroCurrent - 1); heroResetTimer(); });
+      document.getElementById('hero-carousel-next').addEventListener('click', () => { heroGoTo(heroCurrent + 1); heroResetTimer(); });
+
+      heroStartTimer();
+    })();
 
     // ── Carousel ──
     const track = document.getElementById('carousel-track');
