@@ -187,17 +187,9 @@
       text-align: center;
       max-width: 860px;
       padding: 0 40px;
+      /* nudged below center so more of the hero image shows above the text */
+      top: 7vh;
       z-index: 2;
-    }
-    .hero-eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: #d4b07a;
-      margin-bottom: 28px;
-      opacity: 0;
-      animation: fadeUp 0.9s ease 0.4s forwards;
     }
     .hero-headline {
       font-family: 'Cormorant Garamond', serif;
@@ -724,6 +716,8 @@
       .carousel-slide { height: 60vh; }
       .carousel-btn { width: 40px; height: 40px; font-size: 14px; }
       .hero-stats { gap: 20px 28px; }
+      /* content nearly fills the viewport on phones — keep it centered, no downward nudge */
+      .hero-content { top: 0; }
       .value-grid, .amenities-grid { grid-template-columns: 1fr; }
       .inquiry-inner { grid-template-columns: 1fr; gap: 52px; }
       .private-access-inner { grid-template-columns: 1fr; gap: 36px; }
@@ -766,7 +760,6 @@
     <div class="hero-top-fade"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="hero-eyebrow">LXIV Group &nbsp;·&nbsp; Private Estate Hospitality</p>
       <h1 class="hero-headline">A private estate in Georgetown — fully staffed, entirely yours.</h1>
       <p class="hero-sub">
         Whole property exclusivity, full staff, and the comfort of a true home. Host, meet, and decompress on your own terms.
