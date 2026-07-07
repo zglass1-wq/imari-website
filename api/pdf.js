@@ -9,8 +9,11 @@
 //      for arbitrary paths).
 //   3. Confirms the cookie's role is allowed to see `/<slug>.html` via the same
 //      ROLE_ALLOWS predicate the gate uses (authorization parity).
-//   4. Mints a short-lived HMAC token bound to the slug and 302-redirects to the
-//      render service, which verifies the token and streams the PDF back.
+//   4. Checks the cache (credential-free Last-Modified HEAD, 30-day TTL) and
+//      returns JSON: `{ mode:'cached', url }` (native Cloudinary fl_attachment
+//      download, no render) or `{ mode:'render', url }` (a slug-bound HMAC-token
+//      render-service URL the client fetches). A cache-read failure degrades to
+//      'render', never to an error.
 //
 // /api/* is NOT behind the middleware matcher, so this route self-checks the
 // cookie (exactly like api/stats.js). It never sees an access code — those live
@@ -35,6 +38,8 @@ const ALLOWED_SLUGS = new Set([
 ]);
 
 const TOKEN_TTL_MS = 120 * 1000; // 120s: covers mint → redirect → render start
+const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days: re-render on expiry
+const CACHE_PROBE_TIMEOUT_MS = 2500; // cap the HEAD probe so a slow CDN can't stall the decision
 
 // --- Verbatim helpers from middleware.js / api/stats.js (byte-for-byte). ------
 const enc = new TextEncoder();
@@ -68,6 +73,33 @@ function json(status, body) {
     status,
     headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
   });
+}
+
+// Cache-read (fail-safe): is there a cached PDF for this slug younger than the
+// TTL? Credential-free HEAD to the public Cloudinary delivery URL, reading
+// Last-Modified. EVERY failure mode — no cloud configured, timeout/abort,
+// network error, non-200, missing/unparseable Last-Modified — returns false,
+// i.e. "treat as a miss and render". There is no path where a flaky probe
+// throws or yields anything but a boolean, so a cache-read failure can only
+// ever degrade to "slower but works", never break the download.
+async function isCachedFresh(cloud, slug) {
+  if (!cloud) return false;
+  const url = `https://res.cloudinary.com/${cloud}/raw/upload/collateral/${slug}.pdf`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), CACHE_PROBE_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, { method: 'HEAD', signal: controller.signal, cache: 'no-store' });
+    if (!res.ok) return false; // 404 (never cached / busted) or any non-200
+    const lm = res.headers.get('last-modified');
+    if (!lm) return false;
+    const age = Date.now() - Date.parse(lm);
+    if (!Number.isFinite(age)) return false; // unparseable date → miss
+    return age < CACHE_TTL_MS;
+  } catch {
+    return false; // timeout / abort / network error → miss (fall through to render)
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export default async function handler(request) {
@@ -106,17 +138,23 @@ export default async function handler(request) {
     return json(403, { ok: false, error: 'forbidden' });
   }
 
-  // --- Mint the slug-bound token and hand off to the render service. ----------
+  // --- Cache check (fail-safe read): a fresh cached PDF → hand the client the
+  // native Cloudinary download URL (fl_attachment, CORS-open), skipping the
+  // render entirely. Any probe failure returns false above → fall through to
+  // the render path below. --------------------------------------------------
+  const cloud = process.env.PDF_CLOUDINARY_CLOUD;
+  if (await isCachedFresh(cloud, slug)) {
+    const cachedUrl = `https://res.cloudinary.com/${cloud}/raw/upload/fl_attachment:imari-${slug}/collateral/${slug}.pdf`;
+    return json(200, { ok: true, mode: 'cached', url: cachedUrl });
+  }
+
+  // --- Miss: mint the slug-bound token and return the render-service URL. ------
   // sig = HMAC-SHA256(PDF_SHARED_SECRET, `${slug}.${exp}`), hex — byte-for-byte
   // what server.js verifies (same secret, same "${slug}.${exp}" input, same hex
   // encoding). exp is epoch ms (server.js checks `Date.now() > exp`).
   const exp = Date.now() + TOKEN_TTL_MS;
   const sig = await hmacHex(pdfSecret, `${slug}.${exp}`);
   const token = `${slug}.${exp}.${sig}`;
-
-  const target = `${renderUrl.replace(/\/$/, '')}/pdf?token=${token}`;
-  return new Response(null, {
-    status: 302,
-    headers: { location: target, 'cache-control': 'no-store' },
-  });
+  const renderTarget = `${renderUrl.replace(/\/$/, '')}/pdf?token=${token}`;
+  return json(200, { ok: true, mode: 'render', url: renderTarget });
 }

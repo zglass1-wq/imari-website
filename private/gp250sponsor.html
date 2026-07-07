@@ -328,6 +328,16 @@
 
     function clearTimers() { for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]); timers = []; }
 
+    // Immediate on-click acknowledgment, shown before the hit/miss decision
+    // resolves, so a slow decision fetch never reads as a dead click. Replaced
+    // by the label sequence on a miss, or hidden by finish() on a hit.
+    function showAck() {
+      clearTimers();
+      pill.hidden = false;
+      pill.classList.remove('is-error');
+      label.textContent = 'Preparing…';
+    }
+
     function startStages() {
       pill.hidden = false;
       pill.classList.remove('is-error');
@@ -364,6 +374,52 @@
       return p;
     }
 
+    function errCopy(e) {
+      return (e && e.kind === 'auth')
+        ? 'Access expired — reload the page.'
+        : 'Couldn’t generate the PDF. Try again.';
+    }
+
+    // Cache hit: top-level anchor click to the CORS-open Cloudinary
+    // fl_attachment URL → native streamed download (no fetch, no blob, no
+    // labels). Cloudinary's Content-Disposition sets the filename.
+    function nativeDownload(url) {
+      var a = document.createElement('a');
+      a.href = url;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function downloadBlob(blob, slug) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'imari-' + slug + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+    }
+
+    // Cache miss, hop 2: fetch the render-service URL (CORS-reflected) and save
+    // the streamed blob. Returns a promise whose rejection propagates to the
+    // single outer .catch, so the icon always re-enables.
+    function renderHop(renderUrl, slug) {
+      return fetch(renderUrl).then(function (res) {
+        var ct = res.headers.get('content-type') || '';
+        if (res.ok && ct.indexOf('application/pdf') !== -1) {
+          return res.blob().then(function (blob) {
+            if (!blob || (blob.type && blob.type.indexOf('pdf') === -1)) throw { kind: 'render' };
+            finish();
+            downloadBlob(blob, slug);
+          });
+        }
+        throw { kind: (res.status === 401 || res.status === 403) ? 'auth' : 'render' };
+      });
+    }
+
     btn.addEventListener('click', function () {
       if (busy) return;
       var slug = deriveSlug();
@@ -371,33 +427,31 @@
       busy = true;
       btn.disabled = true;
       btn.setAttribute('aria-busy', 'true');
-      startStages();
+      showAck(); // instant feedback before hit/miss is known — never a dead click
 
+      // Hop 1: the cache decision (fast). No labels yet — we don't know hit vs
+      // miss. Labels start only if the decision says 'render'.
       fetch('/api/pdf?page=' + encodeURIComponent(slug), { credentials: 'same-origin' })
         .then(function (res) {
+          if (!res.ok) throw { kind: (res.status === 401 || res.status === 403) ? 'auth' : 'render' };
           var ct = res.headers.get('content-type') || '';
-          if (res.ok && ct.indexOf('application/pdf') !== -1) {
-            return res.blob().then(function (blob) {
-              if (!blob || (blob.type && blob.type.indexOf('pdf') === -1)) throw { kind: 'render' };
-              finish();
-              var url = URL.createObjectURL(blob);
-              var a = document.createElement('a');
-              a.href = url;
-              a.download = 'imari-' + slug + '.pdf';
-              document.body.appendChild(a);
-              a.click();
-              a.remove();
-              setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
-            });
+          if (ct.indexOf('application/json') === -1) throw { kind: 'render' };
+          return res.json();
+        })
+        .then(function (data) {
+          if (data && data.mode === 'cached' && data.url) {
+            finish();                 // no labels ran; this just re-enables the icon
+            nativeDownload(data.url);
+            return;
           }
-          // Not a PDF: 401/403 = re-gate (auth), anything else = render broke.
-          throw { kind: (res.status === 401 || res.status === 403) ? 'auth' : 'render' };
+          if (data && data.mode === 'render' && data.url) {
+            startStages();            // labels only on a real render (the ~57s path)
+            return renderHop(data.url, slug); // hop-2 rejection → outer .catch below
+          }
+          throw { kind: 'render' };    // unexpected/empty decision
         })
         .catch(function (e) {
-          var kind = e && e.kind;
-          fail(kind === 'auth'
-            ? 'Access expired — reload the page.'
-            : 'Couldn’t generate the PDF. Try again.');
+          fail(errCopy(e));
         });
     });
   })();
