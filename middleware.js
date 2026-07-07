@@ -2,6 +2,10 @@
 // A request is allowed through only if it carries an `imari_auth` cookie
 // whose value is a valid `{role}.{hmac}` pair signed with IMARI_AUTH_SECRET.
 
+// ROLE_ALLOWS is single-sourced (shared with api/pdf.js) so authorization can't
+// drift between the gate and the PDF route.
+import { ROLE_ALLOWS } from './lib/role-allows.js';
+
 export const config = {
   matcher: [
     '/',
@@ -28,28 +32,6 @@ export const config = {
   ],
 };
 
-const ROLE_ALLOWS = {
-  corporate: (p) => p === '/corporate.html' || p.startsWith('/corporate-'),
-  alex0349: (p) => p === '/alex0349.html' || p.startsWith('/alex0349-'),
-  july4: (p) => p === '/july4.html' || p.startsWith('/july4-'),
-  july4v2: (p) => p === '/july4v2.html' || p.startsWith('/july4v2-'),
-  gp250corp: (p) => p === '/gp250corp.html' || p.startsWith('/gp250corp-'),
-  gp250gov: (p) => p === '/gp250gov.html' || p.startsWith('/gp250gov-'),
-  gp250sponsor: (p) => p === '/gp250sponsor.html' || p.startsWith('/gp250sponsor-'),
-  july4p2: (p) => p === '/july4p2.html' || p.startsWith('/july4p2-'),
-  newdam1: (p) => p === '/newdam1.html' || p.startsWith('/newdam1-'),
-  newdamv2: (p) => p === '/newdamv2.html' || p.startsWith('/newdamv2-'),
-  imaritravel: (p) => p === '/imaritravel.html' || p.startsWith('/imaritravel-'),
-  imariinvestors: (p) => p === '/imariinvestors.html' || p.startsWith('/imariinvestors-'),
-  imariinvestord: (p) => p === '/imariinvestord.html' || p.startsWith('/imariinvestord-'),
-  rocktravel: (p) => p === '/rocktravel.html' || p.startsWith('/rocktravel-'),
-  tag: (p) => p === '/tag.html' || p.startsWith('/tag-'),
-  stfl3: (p) => p === '/stfl3.html' || p.startsWith('/stfl3-'),
-  aba: (p) => p === '/aba.html' || p.startsWith('/aba-'),
-  imariinfo26: (p) => p === '/imariinfo26.html' || p.startsWith('/imariinfo26-'),
-  recovery: (p) => p === '/recovery.html' || p.startsWith('/recovery-'),
-  stats: (p) => p === '/stats.html' || p.startsWith('/stats-'),
-};
 
 const enc = new TextEncoder();
 
