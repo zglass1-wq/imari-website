@@ -11,7 +11,6 @@ export const config = {
     '/',
     '/corporate.html',
     '/alex0349.html',
-    '/july4.html',
     '/july4v2.html',
     '/gp250corp.html',
     '/gp250gov.html',
