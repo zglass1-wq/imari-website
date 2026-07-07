@@ -13,7 +13,6 @@ const ROLES = [
   { role: 'gp250gov',   envVar: 'IMARI_GP250GOV_PASSWORD',   redirect: '/gp250gov.html' },
   { role: 'gp250sponsor', envVar: 'IMARI_GP250SPONSOR_PASSWORD', redirect: '/gp250sponsor.html' },
   { role: 'july4p2',    envVar: 'IMARI_JULY4P2_PASSWORD',    redirect: '/july4p2.html' },
-  { role: 'newdam1',    envVar: 'IMARI_NEWDAM1_PASSWORD',    redirect: '/newdam1.html' },
   { role: 'newdamv2',   envVar: 'IMARI_NEWDAMV2_PASSWORD',   redirect: '/newdamv2.html' },
   { role: 'imaritravel', envVar: 'IMARI_IMARITRAVEL_PASSWORD', redirect: '/imaritravel.html' },
   { role: 'imariinvestors', envVar: 'IMARI_IMARIINVESTORS_PASSWORD', redirect: '/imariinvestors.html' },

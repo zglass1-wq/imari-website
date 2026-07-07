@@ -16,7 +16,6 @@ export const config = {
     '/gp250gov.html',
     '/gp250sponsor.html',
     '/july4p2.html',
-    '/newdam1.html',
     '/newdamv2.html',
     '/imaritravel.html',
     '/imariinvestors.html',
