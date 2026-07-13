@@ -53,19 +53,27 @@ const {
   navPhone,
   navPhoneHref,
 } = Astro.props as Props;
+
+// Self-referential canonical / og:url: prefer the explicit per-page ogUrl prop,
+// otherwise derive from the current path against the configured site
+// (https://imari.cc). Never points a page at the homepage.
+const pageUrl = ogUrl ?? new URL(Astro.url.pathname, Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Gated, confidential page: keep it out of every search index. -->
+  <meta name="robots" content="noindex, nofollow" />
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href={favicon} />
+  <link rel="canonical" href={pageUrl} />
   <!-- Social / iMessage preview -->
   <meta property="og:title" content={ogTitle} />
   <meta property="og:description" content={ogDescription} />
   <meta property="og:image" content={ogImage} />
-  <meta property="og:url" content={ogUrl} />
+  <meta property="og:url" content={pageUrl} />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />

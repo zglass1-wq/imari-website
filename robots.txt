@@ -1,0 +1,39 @@
+# Public homepage is crawlable. Everything gated is disallowed below.
+# NOTE: robots.txt only requests that crawlers skip these URLs — it does not
+# prevent indexing. The gated pages also carry <meta name="robots"
+# content="noindex, nofollow"> and are protected server-side by the auth
+# middleware (a request without a valid access-code cookie is 302-redirected to
+# the gate, so no confidential content is ever served to a crawler).
+
+User-agent: *
+Allow: /$
+
+# The access-code gate
+Disallow: /private-info.html
+Disallow: /private-info
+
+# Raw file paths (defense-in-depth; public URLs are the clean ones below)
+Disallow: /private/
+
+# Access-code target pages
+Disallow: /corporate.html
+Disallow: /alex0349.html
+Disallow: /july4v2.html
+Disallow: /gp250corp.html
+Disallow: /gp250gov.html
+Disallow: /gp250sponsor.html
+Disallow: /july4p2.html
+Disallow: /newdam1.html
+Disallow: /newdamv2.html
+Disallow: /imaritravel.html
+Disallow: /imariinvestors.html
+Disallow: /imariinvestord.html
+Disallow: /rocktravel.html
+Disallow: /tag.html
+Disallow: /stfl3.html
+Disallow: /aba.html
+Disallow: /imariinfo26.html
+Disallow: /recovery.html
+Disallow: /stats.html
+
+Sitemap: https://imari.cc/sitemap.xml

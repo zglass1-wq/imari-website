@@ -28,6 +28,15 @@ export const config = {
     '/imariinfo26.html',
     '/recovery.html',
     '/stats.html',
+    // Raw physical file paths. The clean public URLs above are rewritten to
+    // these (vercel.json), but the /private/* paths are ALSO directly
+    // reachable on the filesystem — so they must be gated too, or they bypass
+    // the gate entirely. No ROLE_ALLOWS predicate matches a '/private/…' path
+    // (they match '/corporate.html', not '/private/corporate.html'), so any
+    // direct hit here falls through to the 302 → /private-info.html below,
+    // regardless of cookie. Middleware runs on the ORIGINAL request path before
+    // the rewrite, so the clean-URL flow never reaches this entry.
+    '/private/:path*',
   ],
 };
 

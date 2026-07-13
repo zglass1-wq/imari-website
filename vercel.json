@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "imari-website-beta.vercel.app" }],
+      "destination": "https://imari.cc/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/", "destination": "/imari-website.html" },
     { "source": "/private-info", "destination": "/private-info.html" },
