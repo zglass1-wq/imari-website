@@ -35,6 +35,10 @@ interface Props {
   navLogoLink?: boolean;
   navPhone?: string;
   navPhoneHref?: string;
+  // Per-page footer confidentiality line. Undefined → Footer's shared default
+  // ('Confidential · Not for distribution'). Override for pages meant to be
+  // forwarded (e.g. a members page shared onward by the recipient).
+  footerConf?: string;
 }
 const {
   title,
@@ -52,6 +56,7 @@ const {
   navLogoLink,
   navPhone,
   navPhoneHref,
+  footerConf,
 } = Astro.props as Props;
 
 // Self-referential canonical / og:url: prefer the explicit per-page ogUrl prop,
@@ -331,7 +336,7 @@ const pageUrl = ogUrl ?? new URL(Astro.url.pathname, Astro.site).href;
 
   <slot />
 
-  <Footer />
+  <Footer conf={footerConf} />
 
   <Lightbox />
 
