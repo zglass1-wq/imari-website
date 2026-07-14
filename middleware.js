@@ -27,6 +27,7 @@ export const config = {
     '/aba.html',
     '/imariinfo26.html',
     '/recovery.html',
+    '/execbranch.html',
     '/stats.html',
     // Raw physical file paths. The clean public URLs above are rewritten to
     // these (vercel.json), but the /private/* paths are ALSO directly
