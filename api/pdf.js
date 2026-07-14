@@ -34,7 +34,7 @@ export const config = { runtime: 'edge' };
 const ALLOWED_SLUGS = new Set([
   'imariinvestord', 'imariinvestors', 'imaritravel', 'imariinfo26', 'recovery',
   'newdamv2', 'newdam1', 'rocktravel', 'tag', 'stfl3', 'alex0349', 'aba',
-  'corporate', 'gp250corp', 'gp250gov', 'gp250sponsor', 'july4v2', 'july4', 'july4p2',
+  'corporate', 'execbranch', 'gp250corp', 'gp250gov', 'gp250sponsor', 'july4v2', 'july4', 'july4p2',
 ]);
 
 const TOKEN_TTL_MS = 120 * 1000; // 120s: covers mint → redirect → render start
