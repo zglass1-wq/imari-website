@@ -119,7 +119,7 @@ const suiteFloors = [
     imageAlt="Imari Georgetown"
     eyebrow="Prepared for Executive Branch Members"
     title="A private estate in Georgetown –<br>fully staffed,<em>entirely yours.</em>"
-    paragraph="Imari Georgetown is a private estate, three blocks from the Executive Branch — where members can convene, entertain, and stay. Whether the evening calls for a seated dinner, a reception, a working session, or simply a private place to land when you're in town, the property is yours alone."
+    paragraph="Imari Georgetown is a private estate, three blocks from the Executive Branch — where guests can convene, entertain, and stay. Whether the evening calls for a seated dinner, a reception, a working session, or simply a private place to land when you're in town, the property is yours alone."
     stats={[
       { num: '12,000', label: 'sq.ft.' },
       { num: '1', label: 'Acre of Gardens' },
@@ -131,7 +131,7 @@ const suiteFloors = [
 
   <IntroStrip text="Imari Georgetown is a purpose-built private estate for discerning guests. Whole-property exclusivity, complete security, dedicated concierge, Michelin-star culinary, and logistics handled end-to-end – so your experience exceeds expectations." />
 
-  <Gallery />
+  <Gallery keys={['interior', 'exterior', 'site-plan']} />
 
   {useCases.map((uc) => <UseCase {...uc} />)}
 
