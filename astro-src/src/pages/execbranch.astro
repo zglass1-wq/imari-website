@@ -12,10 +12,9 @@ const CLD = 'https://res.cloudinary.com/dsp45h9a1/image/upload/f_auto,q_auto/';
 
 const navLinks = [
   { href: '#section-gallery', label: 'Galleries' },
-  { href: '#section-host', label: 'Host & Entertain' },
-  { href: '#section-convene', label: 'Convene & Meet' },
-  { href: '#section-stay', label: 'Stay in Town' },
+  { href: '#section-property', label: 'The Property' },
   { href: '#section-service', label: 'The Service' },
+  { href: '#section-host', label: 'Host & Entertain' },
   { href: '#section-security', label: 'Privacy & Security' },
   { href: '#section-suites', label: 'Accommodations' },
 ];
@@ -23,12 +22,46 @@ const navPlanLinks = [{ href: '#inquiry', label: 'Inquire' }];
 
 const useCases = [
   {
+    id: 'section-property', num: '01', title: 'The Property', reverse: false,
+    image: CLD + 'LXIVDC_GARDENS134_d5aklw.jpg', alt: 'Estate gardens',
+    description: 'A 12,000 sq ft house on a walled, gated acre of gardens in Georgetown. Six suites, a 1,000 sq ft ballroom, a spa house, and a separate guest house for client staff.',
+    items: [
+      '12,000 sq ft main house on one private acre in Georgetown D.C.',
+      'Manicured gardens and greenhouse designed by Rose Greely (1930), updated by Perry Wheeler — designer of the White House Rose Garden',
+      'Gated arrival court with parking for 10 vehicles',
+      'In the main house: 6 bedroom suites across two floors with 15 bathrooms',
+      'Entertainment & living spaces flow naturally across the first floor — Parlor, Living Room, Orangerie, and formal Dining Room',
+      "Chef's Kitchen — commercial-grade, built for serious cooking at any scale",
+      'Elevator in main residence',
+      'Private gym, dedicated yoga/meditation room, full-size swimming pool, and detached Spa House with sauna, steam room, cold plunge, and hot tub',
+      'Detached 1,000 sq ft ballroom',
+      'Multiple indoor and outdoor spaces for breakouts, receptions, and gatherings',
+      'Three-bedroom guest house — separate entrance and self-contained — for client staff (security, EAs, nannies). Available at additional cost.',
+    ],
+  },
+  {
+    id: 'section-service', num: '02', title: 'The Service', reverse: true,
+    image: CLD + 'Dining_Bar_Cart_126_rtdr2u.jpg', alt: 'Dining room bar cart',
+    description: "A full team on property from arrival to departure — concierge, butler, housekeeping, Michelin-star chefs — coordinating everything so the client doesn't have to ask twice.",
+    items: [
+      '24/7 dedicated concierge managing all logistics end-to-end — planning, reservations, transportation, and on-site coordination',
+      'Butler-led arrival, daily service, and evening turndown',
+      'Full housekeeping team — daily service and full property reset after events and overnight',
+      'In-residence garment care — laundry, pressing, steaming',
+      "Property team functions as an extension of the planner's own team",
+      'Farm-sourced breakfast daily — fresh fruit, eggs made to order, pastries, organic yogurt, cold-pressed juices, coffee, tea',
+      'Stocked kitchen customized in advance to guest preferences',
+      'Michelin-star chefs available for meals and private dinners',
+      'Welcome champagne, unpacking service, and private guided estate introduction on arrival',
+      'Custom floral arrangements styled throughout the estate prior to arrival',
+    ],
+  },
+  {
     id: 'section-host', num: '01', title: 'Host & Entertain', reverse: false,
     image: CLD + 'Living_Room_280_i5lyva.jpg', alt: 'Living room set for entertaining',
     description: 'From an intimate dinner to a 300-guest reception, the estate is a venue built for hosting. Bring your own catering and bar, or hand the evening entirely to our team and Michelin-star kitchen — either way, the property is yours alone for the night.',
     items: [
-      'Whole-property exclusivity — no other guests, no lobby, no shared spaces',
-      'Up to 60 seated in the 1,000 sq ft ballroom, 24 at a formal dining table, or 300 for a standing reception',
+      'Up to 60 seated in the 1,000 sq ft ballroom, 24 in the formal dining room, or 300+ for a standing reception',
       'Bring your own catering and bar service, or let our Michelin-star chefs and sommeliers handle it',
       'Full event planning and production, from ideation through execution',
       'Parlor, Orangerie, gardens, and ballroom flow from cocktails to dinner without changing venues',
@@ -36,46 +69,9 @@ const useCases = [
     ],
   },
   {
-    id: 'section-convene', num: '02', title: 'Convene & Meet', reverse: true,
-    image: CLD + 'GT_Office_207_lsjhg8.jpg', alt: 'Georgetown office',
-    description: "Washington's most consequential conversations happen away from the office. The estate gives you a private, unhurried setting for roundtables, board meetings, and leadership sessions — no competing agenda, no reason to leave until the work is done.",
-    items: [
-      'Ballroom with customizable layouts for up to 60 seated',
-      'Breakout space across stately rooms, gardens, and the grounds',
-      'Full AV suite for presentations, panels, and production',
-      'Seamless flow from working session to cocktail hour to dinner without changing venues',
-      'A private estate makes a statement no hotel ballroom can match',
-    ],
-  },
-  {
-    id: 'section-stay', num: '03', title: 'Stay in Town', reverse: false,
-    image: CLD + 'Living_Room_331_spepzh.jpg', alt: 'Living room',
-    description: 'Rather than scattering your days across hotels and borrowed rooms, make the estate your base in Washington. Six suites and a connected guest house let you and your guests stay, meet, and host without ever changing venues.',
-    items: [
-      'Six bedroom suites — three king, three queen — plus an attached three-bedroom guest house',
-      'Gated arrival court and no public lobby — every arrival controlled and private',
-      'One block from the Four Seasons, minutes from the White House and the Capitol',
-      'Farm-to-table breakfast, in-residence dining, and a 24/7 concierge',
-      'A place to stay, meet, and host on your own terms while you are in town',
-    ],
-  },
-  {
-    id: 'section-service', num: '04', title: 'The Service', reverse: true,
-    image: CLD + 'Dining_Bar_Cart_126_rtdr2u.jpg', alt: 'Dining room bar cart',
-    description: "A full team on property from arrival to departure — concierge, butler, housekeeping, and Michelin-star chefs — anticipating every need so you never have to ask twice.",
-    items: [
-      '24/7 dedicated concierge managing logistics end-to-end',
-      'Butler-led arrival, daily service, and evening turndown',
-      'Full housekeeping team and complete property reset after every event',
-      'Michelin-star chefs for meals and private dinners; kitchen stocked to your preferences',
-      'Farm-sourced breakfast daily, welcome champagne, and floral styling on arrival',
-      'Private wellness on request — massage, IV therapy, personal training, spa treatments',
-    ],
-  },
-  {
     id: 'section-security', num: '05', title: 'Privacy & Security', reverse: false,
     image: CLD + 'LXIVDC_GARDENS102_bv6kmk.jpg', alt: 'Estate gardens',
-    description: 'Whole-property exclusivity, private arrival, and NDA-bound staff. Vetted and used by heads of state — discretion is the default here, not an upgrade.',
+    description: 'Whole-property exclusivity, private arrival, perimeter cameras, NDA-bound staff. Vetted and used by heads of state — discretion is the default here, not an upgrade.',
     items: [
       'Complete property exclusivity — no other guests, no shared spaces',
       'Private arrival court — arrivals and departures unseen, no street exposure',
@@ -96,6 +92,9 @@ const suiteFloors = [
     { name: 'Garden Suite', detail: '350 Sqft · Queen', features: ['Direct views of the manicured grounds', 'En-suite bath with dual vanity and walk-in shower', 'Quiet placement within the residence'] },
     { name: 'Deluxe Suite 1', detail: '300 Sqft · Queen', features: ['Above the Executive Suite', 'En-suite bath with walk-in shower', 'Gracious proportions and natural light'] },
     { name: 'Deluxe Suite 2', detail: '300 Sqft · Queen', features: ['Bright and intimate with Olive Street facing windows', 'En-suite bath', 'Ideal for single guests or associates'] },
+  ] },
+  { label: 'Additional Accommodations', suites: [
+    { name: 'Guest House', detail: 'Private · Attached', features: ['Attached 3 bedroom guest house', 'Living Room, Kitchen, Office', 'Security Office'] },
   ] },
 ];
 ---
@@ -141,7 +140,7 @@ const suiteFloors = [
     image={CLD + 'GT_Bedroom_222_nrkmzw.jpg'}
     imageAlt="Georgetown Suite"
     floors={suiteFloors}
-    footnote="An attached three-bedroom guest house (3 bed · 3 bath · kitchen · living room · office) is available for accompanying staff or guests."
+    footnote=""
   />
 
   <InquirySection
