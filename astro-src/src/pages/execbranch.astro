@@ -158,12 +158,21 @@ const suiteFloors = [
   />
 
   <InquirySection
-    title="Inquire with Blaine Stephens for availability."
+    title="Inquire with Amber Chang for availability."
     bgImage={CLD + 'LXIVDC_GARDENS157_wtqzaq.jpg'}
     contacts={[
-      { label: 'Call', value: '+1 (816) 592-9207', href: 'tel:+18165929207' },
-      { label: 'Email', value: 'blaine@imari.cc', href: 'mailto:blaine@imari.cc' },
+      { label: 'Call', value: '+1.310.248.0210', href: 'tel:+13102480210' },
+      { label: 'Email', value: 'amber@imari.cc', href: 'mailto:amber@imari.cc' },
     ]}
     note="Prepared privately for the members of The Executive Branch."
   />
 </PrivatePageLayout>
+
+<style is:global>
+  /* Widen the hero copy box beyond the 1000px canonical cap so the first title
+     line ("A private estate in Georgetown –") keeps the dash instead of wrapping
+     it to a third line. Higher specificity (id + two classes) than
+     CanonicalStyles' `#main-content .hero-content`, so it wins regardless of
+     bundle order. */
+  #main-content .hero .hero-content { max-width: 1220px; }
+</style>
