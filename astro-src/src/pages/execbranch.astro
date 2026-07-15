@@ -167,12 +167,3 @@ const suiteFloors = [
     note="Prepared privately for the members of The Executive Branch."
   />
 </PrivatePageLayout>
-
-<style is:global>
-  /* Widen the hero copy box beyond the 1000px canonical cap so the first title
-     line ("A private estate in Georgetown –") keeps the dash instead of wrapping
-     it to a third line. Higher specificity (id + two classes) than
-     CanonicalStyles' `#main-content .hero-content`, so it wins regardless of
-     bundle order. */
-  #main-content .hero .hero-content { max-width: 1220px; }
-</style>
