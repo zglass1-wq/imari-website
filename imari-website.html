@@ -510,6 +510,10 @@
       display: block;
       margin-bottom: 16px;
     }
+    /* Desktop: brighter, slightly heavier stroke so the numerals are legible on the dark ground */
+    @media (min-width: 1025px) {
+      .ghost-num { -webkit-text-stroke: 1.5px rgba(200,191,176,0.5); }
+    }
     .how-title { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--parchment); margin-bottom: 12px; }
     .how-desc { font-size: 13px; color: var(--tobacco); line-height: 1.75; }
 
@@ -775,7 +779,7 @@
       <div class="value-grid">
         <div class="value-cell reveal">
           <p class="value-title">The House</p>
-          <p class="value-desc">Twelve thousand square feet of main residence and a separate guest house. Six suites and three additional guest bedrooms. A chef's kitchen for the chefs you bring in, and a ballroom proportioned for celebrations at scale.</p>
+          <p class="value-desc">Twelve thousand square feet of main residence and a separate guest house. Six suites and three additional guest bedrooms. A fully equipped kitchen for the chefs you bring in, and a ballroom proportioned for celebrations at scale.</p>
         </div>
         <div class="value-cell reveal d1">
           <p class="value-title">The Grounds</p>
